@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Approach debrief</title>
+<meta name="description" content="Score your stabilized approaches and landings from public ADS-B data. Enter a tail number.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head><body><div class="wrap">
+<header>
+ <div>
+  <h1 id="title">Approach debrief<small id="sum">Stabilized-approach scores for every landing, from public ADS-B data.</small></h1>
+  <form class="search" id="search" autocomplete="off">
+   <label for="tail" class="sr" hidden>Tail number</label>
+   <input id="tail" name="tail" placeholder="N31SF" aria-label="Tail number" spellcheck="false" maxlength="7">
+   <button id="go" type="submit">Score landings</button>
+  </form>
+ </div>
+ <div class="ctl" id="ctl" hidden>
+  <label>Vref <input id="vref" type="range" min="76" max="89" step="1" value="81"><output id="vo">81</output><span id="wt"></span></label>
+  <label id="ownwrap" hidden><input id="own" type="checkbox"> Include earlier owners</label>
+ </div>
+</header>
+
+<div class="status" id="status"></div>
+
+<div id="report" hidden>
+ <div class="grid">
+  <nav class="list" id="list" aria-label="Landings"></nav>
+  <main class="card" id="card"></main>
+ </div>
+ <section class="sec" id="fleetsec" hidden><h2>How you compare</h2><div id="fleet"></div></section>
+ <section class="sec"><h2>Patterns and recommendations</h2><div class="ins" id="ins"></div></section>
+ <section class="sec" id="unsec"><h2>Arrivals the data couldn't score</h2>
+  <p class="note">Receivers lost the airplane before touchdown at these fields, usually small airports with no nearby feeder. The airplane's own data log would fill these in.</p>
+  <div class="tbl"><table class="un" id="un"></table></div></section>
+ <section class="sec"><h2>How this is scored</h2><div class="note" id="method"></div></section>
+</div>
+</div>
+<script src="score.js"></script>
+<script src="app.js"></script>
+</body></html>

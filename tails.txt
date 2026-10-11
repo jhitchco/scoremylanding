@@ -1,0 +1,2 @@
+# Tails the nightly job scores and publishes to GitHub Pages. One per line.
+N31SF

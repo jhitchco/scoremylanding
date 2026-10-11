@@ -1,0 +1,4 @@
+# The pipeline (python -m debrief) uses only the standard library.
+# These are for the optional on-demand server.
+fastapi>=0.110
+uvicorn[standard]>=0.29
