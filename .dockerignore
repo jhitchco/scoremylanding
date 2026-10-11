@@ -1,0 +1,8 @@
+.git
+.cache
+.github
+**/__pycache__
+site/data
+fleet.log
+docs
+tests

@@ -1,0 +1,21 @@
+# docker compose up -d        then open http://localhost:8000/?tail=N31SF
+services:
+  debrief:
+    build: .
+    image: ghcr.io/jhitchco/approach-debrief:latest
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - debrief-data:/data          # traces, weather, runways, results survive restarts
+      - ./tails.txt:/app/tails.txt:ro  # edit to change which tails refresh nightly
+    environment:
+      DEBRIEF_DAYS: "365"           # history window for lookups
+      DEBRIEF_REFRESH_HOURS: "24"   # rescore tracked tails this often (0 turns it off)
+      DEBRIEF_FLEET: "SF50"         # fleet benchmarks to build, comma separated
+      DEBRIEF_FLEET_SAMPLE: "40"
+      DEBRIEF_FLEET_DAYS: "7"       # rebuild each benchmark weekly
+      DEBRIEF_CACHE_HOURS: "6"      # on-demand result cache
+
+volumes:
+  debrief-data:

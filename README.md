@@ -18,6 +18,8 @@ Scoring lives only in `site/score.js`, so the Vref slider re-scores everything i
 
 ## Run it locally
 
+Without Docker:
+
 ```
 python -m debrief N31SF --days 365          # writes site/data/N31SF.json
 python -m http.server -d site 8080          # open http://localhost:8080/?tail=N31SF
@@ -29,18 +31,31 @@ Fleet benchmark (random sample of a type, anonymized):
 python -m debrief.fleet SF50 --sample 40 --days 45 --exclude N31SF --out site/data/fleet
 ```
 
-## Two ways to host
+## Hosting
 
-**Static on GitHub Pages (free).** `.github/workflows/publish.yml` runs nightly, scores every tail in `tails.txt`, rebuilds the fleet benchmark on Sundays and deploys `site/` to Pages. Add a tail by adding a line to `tails.txt`. In the repo settings, set Pages source to "GitHub Actions".
-
-**On-demand server.** Anyone can type any tail and it is computed on the spot (a first lookup takes a few minutes; then it is cached):
+**Docker (recommended).** One container serves the page, answers on-demand lookups for any tail, rescores the tails in `tails.txt` nightly and rebuilds the SF50 fleet benchmark weekly. Everything it downloads lives in the `/data` volume.
 
 ```
-pip install -r requirements.txt
-uvicorn server.app:app --port 8000
+docker compose up -d
+# open http://localhost:8000/?tail=N31SF
 ```
 
-or `docker build -t approach-debrief . && docker run -p 8000:8000 -v debrief-data:/data approach-debrief`. Fly.io, Render or Railway will run the Dockerfile as is.
+Or pull the prebuilt image that `.github/workflows/docker.yml` publishes on every push to `main`:
+
+```
+docker run -d -p 8000:8000 -v debrief-data:/data ghcr.io/jhitchco/approach-debrief:latest
+```
+
+Settings are environment variables (see `docker-compose.yml`): history window, refresh interval, which fleet benchmarks to build and how big. Any host that runs a container works (a home server, a NAS, Fly.io, Render, a small VPS); put it behind HTTPS before sharing the link.
+
+| Endpoint | What it returns |
+|---|---|
+| `/` | The web page |
+| `/api/debrief/{tail}` | Scores for any N-number or ICAO hex, computed on demand (first lookup takes a minute or two, then cached) |
+| `/data/{TAIL}.json`, `/data/fleet/{TYPE}.json` | Nightly results for tracked tails and the fleet benchmark |
+| `/api/health` | Status, tracked tails, last refresh |
+
+**Static on GitHub Pages (no server).** `.github/workflows/publish.yml` does the same nightly scoring in GitHub Actions and deploys `site/` to Pages. Lookups are limited to the tails in `tails.txt`. To use it, set Pages source to "GitHub Actions" in the repo settings.
 
 ## Data sources and limits
 

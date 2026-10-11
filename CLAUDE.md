@@ -12,8 +12,8 @@ He works on a Windows desktop in PowerShell 5.1: give him `;` between commands, 
   - `analyze.py` landing / go-around / coverage-gap detection and gate measurement.
   - `fleet.py` anonymized fleet sample from the FAA registry.
 - `site/` static front end. `score.js` is the only scoring implementation (browser, fleet, tests).
-- `server/app.py` FastAPI on-demand API at `/api/debrief/{tail}`, serves `site/` too.
-- `.github/workflows/publish.yml` nightly scoring of `tails.txt` and GitHub Pages deploy.
+- `server/app.py` FastAPI: page, on-demand `/api/debrief/{tail}`, `/data` results, background nightly refresh + weekly fleet rebuild. Primary hosting is Docker (`Dockerfile`, `docker-compose.yml`, image built to ghcr.io by `.github/workflows/docker.yml`).
+- `.github/workflows/publish.yml` alternative static hosting: nightly scoring of `tails.txt` and GitHub Pages deploy.
 
 ## Conventions
 - Never use em dashes in copy, comments or UI text.
