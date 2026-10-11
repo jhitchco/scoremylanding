@@ -26,7 +26,7 @@ async function load(tail){
  }
  $('go').disabled=false;
  if(!data){showEmpty(`<h2>${esc(tail)} isn't tracked here yet</h2><p>This site scores the tail numbers listed in the repository's <code>tails.txt</code>, refreshed nightly. Add it there, or run the server version to look up any tail on demand.</p>`);return}
- D=data; FLEET=null; history.replaceState(null,'',`?tail=${encodeURIComponent(tail)}`);
+ D=data; FLEET=null; try{history.replaceState(null,'',`?tail=${encodeURIComponent(tail)}`)}catch(e){}
  const v=D.meta.vref; vref=v.default; Object.assign($('vref'),{min:v.vref[0],max:v.vref[1],value:vref});
  $('ownwrap').hidden=D.meta.owners.length<2; $('own').checked=false;
  const L=set(); sel=L.length?L[0].id:null;
