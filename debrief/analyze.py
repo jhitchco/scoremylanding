@@ -206,7 +206,7 @@ def measure(pts, i, rw, db, cache_dir, ref, lowcov):
         if not d:
             return None
         o = {}
-        for k in ("x", "r", "c", "hat", "gs", "ias", "vs", "trkdev", "gp", "ang", "t"):
+        for k in ("x", "c", "hat", "gs", "ias", "vs", "trkdev", "ang", "t"):
             v = d.get(k)
             o[k] = None if v is None else round(v, 2 if k in ("x", "r", "ang") else 0)
         if rows and d.get("t") is not None:
@@ -225,15 +225,27 @@ def measure(pts, i, rw, db, cache_dir, ref, lowcov):
         "tempC": round(tC), "ceil": m["ceil"], "vis": m["vis"], "metar": m["raw"],
         "sun": round(sun_elevation(T, rw["lat"], rw["lon"]), 1),
         "align": round(align, 1), "lowcov": lowcov, "aloft": al is not None,
+        "hae_off": None if lowcov else round(ref - fe),
         "owner": pts[i].get("owner"),
         "gates": {k: g(v) for k, v in gates.items()},
         "thr": g(thr),
         "td": {"ft": tdft, "float": round(td["t"] - thr["t"]) if (thr and "t" in td) else None, "gs": round(td["gs"])} if td else None,
         "stop": {"ft": stopft, "remain": round(rw["len"] - stopft)} if stopft is not None else None,
-        "prof": [[round(cq - c0, 3), q["hat"], round(q["ias"], 1), round(q["c"]), q["gs"], q["vs"], round(q["trkdev"], 1), round(q["x"], 3)]
-                 for q, cq in zip(rows, cum) if cq - c0 <= 7 and q["hat"] is not None and q["hat"] < 2600],
-        "plan": [[round(q["x"], 3), round(q["c"] / FT_PER_NM, 3)] for q in rows if -1 < q["x"] < 7 and abs(q["c"]) < 3.5 * FT_PER_NM],
+        # profile: [track nm to threshold, height, est. IAS, cross-track ft, track error deg, along-track nm]
+        "prof": _thin([[round(cq - c0, 2), round(q["hat"]), round(q["ias"]), round(q["c"]), round(q["trkdev"]), round(q["x"], 2)]
+                       for q, cq in zip(rows, cum) if cq - c0 <= 7 and q["hat"] is not None and q["hat"] < 2600]),
     }
+
+
+def _thin(prof, step=0.1, turn=8):
+    """Keep a point every `step` nm, plus any point where the track changes by `turn` degrees."""
+    out = []
+    for p in prof:
+        if not out or abs(p[0] - out[-1][0]) >= step or abs(p[4] - out[-1][4]) >= turn:
+            out.append(p)
+    if prof and out[-1] is not prof[-1]:
+        out.append(prof[-1])
+    return out
 
 
 def correct_runway_offsets(landings, min_n=3):
@@ -257,29 +269,37 @@ def correct_runway_offsets(landings, min_n=3):
                 gate["c"] = round(gate["c"] - B)
         for p in L["prof"]:
             p[3] = round(p[3] - B)
-        for p in L["plan"]:
-            p[1] = round(p[1] - B / FT_PER_NM, 3)
     return [{"apt": k[0], "rwy": k[1], "ft": round(v)} for k, v in fixes.items()]
 
 
-def analyze(pts, db, cache_dir, log=print):
+def analyze(pts, db, cache_dir, log=print, geoid_table=None, window=None):
+    """geoid_table: {airport: HAE minus field elevation, ft} learned across the fleet, used
+    when coverage ends before touchdown. window: (t0, t1) to keep only events in that span."""
     events = detect_landings(pts, db)
+    if window:
+        events = [(i, rw) for i, rw in events if window[0] <= pts[i]["t"] < window[1]]
     log(f"  {len(events)} landings detected")
     refs = {i: touchdown_reference(pts, i) for i, _ in events}
     # geoid separation + touchdown height, learned from this aircraft's own landings
     offs = [refs[i] - (db.airport(rw["apt"]).get("elev") or rw["elev"] or 0) for i, rw in events if refs[i] is not None]
     geoid = statistics.median(offs) if offs else -100
+    table = geoid_table or {}
     landings = []
     for n, (i, rw) in enumerate(events, 1):
         ref, low = refs[i], False
         if ref is None:
-            ref, low = (db.airport(rw["apt"]).get("elev") or rw["elev"] or 0) + geoid, True
+            g = table.get(rw["apt"], geoid if offs else table.get("_default", -100))
+            ref, low = (db.airport(rw["apt"]).get("elev") or rw["elev"] or 0) + g, True
         log(f"  [{n}/{len(events)}] {utc(pts[i]['t']):%Y-%m-%d} {rw['apt']} {rw['rwy']}")
         landings.append(measure(pts, i, rw, db, cache_dir, ref, low))
     fixes = correct_runway_offsets(landings)
     gas = []
     for i, rw in detect_go_arounds(pts, db):
+        if window and not window[0] <= pts[i]["t"] < window[1]:
+            continue
         fe = db.airport(rw["apt"]).get("elev") or rw["elev"] or 0
         gas.append({"t": int(pts[i]["t"]), "apt": rw["apt"], "rwy": rw["rwy"], "low_ft": round(pts[i]["geom"] - geoid - fe)})
     gaps = detect_coverage_gaps(pts, db, [i for i, _ in events])
+    if window:
+        gaps = [g for g in gaps if window[0] <= g["t"] < window[1]]
     return landings, gas, gaps, fixes

@@ -35,18 +35,23 @@ def faa_registry(cache_dir, max_age=7 * 86400):
 
 def fleet_hexes(cache_dir, model):
     """ICAO hex codes of every valid US registration whose FAA model name matches."""
+    return sorted(fleet_registry(cache_dir, model))
+
+
+def fleet_registry(cache_dir, model):
+    """{icao_hex: tail} for every valid US registration whose FAA model name matches."""
     z = faa_registry(cache_dir)
     codes = set()
     with z.open("ACFTREF.txt") as f:
         for r in csv.reader(io.TextIOWrapper(f, encoding="utf-8-sig")):
             if len(r) > 2 and r[2].strip().upper() == model.upper():
                 codes.add(r[0].strip())
-    out = []
+    out = {}
     with z.open("MASTER.txt") as f:
         for r in csv.reader(io.TextIOWrapper(f, encoding="utf-8-sig")):
             if len(r) > 33 and r[2].strip() in codes and r[20].strip() == "V" and r[33].strip():
-                out.append(r[33].strip().lower())
-    return sorted(set(out))
+                out[r[33].strip().lower()] = "N" + r[0].strip()
+    return out
 
 
 def anonymize(landings, idx):

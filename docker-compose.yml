@@ -2,7 +2,7 @@
 services:
   debrief:
     build: .
-    image: ghcr.io/jhitchco/approach-debrief:latest
+    image: ghcr.io/jhitchco/scoremylanding:latest
     restart: unless-stopped
     ports:
       - "8000:8000"

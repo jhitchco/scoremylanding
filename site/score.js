@@ -59,7 +59,8 @@ function scoreLanding(L,vref){
   if(gustAdd(w)) c.push(`Gusts ${w.spd}G${w.gust}: target raised to Vref+${gustAdd(w)}.`);
   if(Math.abs(w.xw||0)>=10) c.push(`Crosswind ${Math.round(Math.abs(w.xw))} kt.`);
   if((w.hw||0)<=-3) c.push(`Tailwind ${Math.round(-w.hw)} kt.`);
-  if(L.sun<-6) c.push('Night landing.'); else if(L.sun<0) c.push('Dusk landing.');
+  const light=L.light||(L.sun==null?null:L.sun<-6?'night':L.sun<0?'dusk':'day');
+  if(light==='night') c.push('Night landing.'); else if(light==='dusk') c.push('Dusk landing.');
   if(L.ceil<1500||(L.vis!=null&&L.vis<3)) c.push(`IMC or low ceiling (ceiling ${L.ceil<99999?L.ceil.toLocaleString()+' ft':'none'}, vis ${L.vis} sm).`);
   if(L.airline) c.push('Airline field: ATC speed requests are likely (not visible in ADS-B).');
   if(L.rlen<5000) c.push(`Shorter runway (${L.rlen.toLocaleString()} ft).`);
@@ -68,7 +69,7 @@ function scoreLanding(L,vref){
 }
 
 const _avg=(a,f)=>a.length?a.reduce((s,x)=>s+f(x),0)/a.length:0;
-const _label=L=>L.apt?`${L.apt} ${L.rwy}`:'landing';
+const _label=L=>L.apt?`${L.apt} ${L.rwy}`:(L.d?`Landing on ${L.d}`:'landing');
 
 function insights(Ls,vref,opts={}){
   const S=Ls.map(L=>({L,s:scoreLanding(L,vref)}));
@@ -111,19 +112,17 @@ function insights(Ls,vref,opts={}){
   return {S,out};
 }
 
-// Fleet comparison: per-aircraft averages from an anonymized fleet file, scored at the same Vref.
-function fleetStats(fleet,myLandings,vref,minLandings=3){
-  const by={};
-  for(const L of fleet.landings){(by[L.ac]=by[L.ac]||[]).push(scoreLanding(L,vref))}
-  const ac=Object.values(by).filter(a=>a.length>=minLandings).map(a=>({avg:_avg(a,s=>s.score),stab:a.filter(s=>s.stable).length/a.filter(s=>s.stable!==null).length||0,n:a.length}));
-  const mine=myLandings.map(L=>scoreLanding(L,vref));
-  const me={avg:_avg(mine,s=>s.score),stab:mine.filter(s=>s.stable).length/(mine.filter(s=>s.stable!==null).length||1),n:mine.length};
-  const pct=(arr,v)=>arr.length?Math.round(100*arr.filter(x=>x<v).length/arr.length+50*arr.filter(x=>x===v).length/arr.length):null;
-  const allScores=Object.values(by).flat().map(s=>s.score);
-  return {aircraft:ac.length,landings:allScores.length,me,
-    pctScore:pct(ac.map(a=>a.avg),me.avg),pctStable:pct(ac.map(a=>a.stab),me.stab),
-    fleetAvg:_avg(ac,a=>a.avg),fleetStable:_avg(ac,a=>a.stab),
-    dist:ac.map(a=>a.avg).sort((a,b)=>a-b),landingScores:allScores};
+// Fleet comparison from fleet.json: each aircraft's average score at this Vref (current owner, last 12 months).
+function fleetCompare(fleet,myLandings,vref,myPid,minLandings=3){
+  const i=fleet.vrefs.indexOf(vref); if(i<0) return null;
+  const others=fleet.aircraft.filter(a=>a.n>=minLandings&&a.pid!==myPid&&a.s);
+  const mine=myLandings.map(L=>scoreLanding(L,vref)); if(!mine.length) return null;
+  const judged=mine.filter(s=>s.stable!==null);
+  const me={avg:_avg(mine,s=>s.score),stab:judged.length?judged.filter(s=>s.stable).length/judged.length:0,n:mine.length};
+  const avgs=others.map(a=>a.s[i]), stabs=others.map(a=>a.st[i]).filter(x=>x!==null);
+  const pct=(arr,v)=>arr.length?Math.round(100*(arr.filter(x=>x<v).length+0.5*arr.filter(x=>x===v).length)/arr.length):null;
+  return {aircraft:others.length,me,pctScore:pct(avgs,me.avg),pctStable:pct(stabs,me.stab),
+    fleetAvg:_avg(avgs,x=>x),fleetStable:_avg(stabs,x=>x),dist:avgs.slice().sort((a,b)=>a-b)};
 }
 
-if(typeof module!=='undefined') module.exports={scoreLanding,insights,gustAdd,fleetStats};
+if(typeof module!=='undefined') module.exports={scoreLanding,insights,gustAdd,fleetCompare};

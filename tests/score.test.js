@@ -1,6 +1,6 @@
 // node tests/score.test.js
 const assert = require('assert');
-const {scoreLanding, insights, fleetStats} = require('../site/score.js');
+const {scoreLanding, insights, fleetCompare} = require('../site/score.js');
 
 const gate = (o) => Object.assign({x: 1, r: 1, c: 0, hat: 500, gs: 90, ias: 85, vs: -600, trkdev: 0, gp: 0, ang: 3.0, t: -30, dtg: 1}, o);
 const base = () => ({
@@ -41,8 +41,13 @@ assert.ok(I.out.find(o => o.h.startsWith('Tight visual patterns')));
 
 // fleet percentile: a perfect pilot beats a fleet of unstable ones
 const bad = base(); bad.gates['500ft'].trkdev = 30;
-const fleet = {landings: [0, 1, 2, 3, 4].flatMap(ac => [0, 1, 2].map(() => Object.assign(JSON.parse(JSON.stringify(bad)), {ac})))};
-const F = fleetStats(fleet, [base(), base(), base()], 81);
-assert.strictEqual(F.aircraft, 5); assert.strictEqual(F.pctScore, 100);
+const badScore = scoreLanding(bad, 81).score;
+const fleet = {vrefs: [80, 81, 82], aircraft: [0, 1, 2, 3, 4].map(k => ({pid: 'sf50-' + k, n: 5, s: [badScore, badScore, badScore], st: [0, 0, 0]}))};
+const F = fleetCompare(fleet, [base(), base(), base()], 81, 'sf50-me');
+assert.strictEqual(F.aircraft, 5); assert.strictEqual(F.pctScore, 100); assert.strictEqual(F.pctStable, 100);
+
+// withheld airports and light category are handled
+L = base(); L.apt = null; L.rwy = null; delete L.sun; L.light = 'night';
+s = scoreLanding(L, 81); assert.ok(s.context.includes('Night landing.'));
 
 console.log('score.js: all tests passed');

@@ -1,28 +1,29 @@
 # Notes for Claude
 
-Owner: Jeremy Hitchcock (GitHub jhitchco). Started from scoring his Cirrus SF50, N31SF (ICAO a3460e, home base KASH).
-He works on a Windows desktop in PowerShell 5.1: give him `;` between commands, never `&&`.
+Repo: jhitchco/scoremylanding (public). Site: https://jhitchco.github.io/scoremylanding/
+Owner: Jeremy Hitchcock. His aircraft is N31SF (SF50, on LADD); it is anonymized like every other aircraft.
+He works on Windows PowerShell 5.1: give him `;` between commands, never `&&`.
 
 ## Layout
-- `debrief/` Python pipeline, standard library only. `pipeline.run(tail)` returns the JSON the site reads.
-  - `nnumber.py` N-number to ICAO hex (arithmetic, tested).
-  - `sources.py` trace sources. `adsbx` works; `adsblol` is a stub that needs a bulk ingest job.
-  - `airports.py` OurAirports runways, matching a point to a runway end.
-  - `weather.py` IEM METAR + Open-Meteo winds aloft (has a quota breaker on HTTP 429).
-  - `analyze.py` landing / go-around / coverage-gap detection and gate measurement.
-  - `fleet.py` anonymized fleet sample from the FAA registry.
-- `site/` static front end. `score.js` is the only scoring implementation (browser, fleet, tests).
-- `server/app.py` FastAPI: page, on-demand `/api/debrief/{tail}`, `/data` results, background nightly refresh + weekly fleet rebuild. Primary hosting is Docker (`Dockerfile`, `docker-compose.yml`, image built to ghcr.io by `.github/workflows/docker.yml`).
-- `.github/workflows/publish.yml` alternative static hosting: nightly scoring of `tails.txt` and GitHub Pages deploy.
+- `debrief/collect.py` fleet collector: day queue, adsb.lol ingest, per-aircraft encrypted state, `publish()` writes anonymized `data/public`.
+- `debrief/adsblol.py` streams a day's adsb.lol release (split tar, resumable range requests) and extracts tracked ICAO addresses.
+- `debrief/anon.py` pseudonyms (HMAC of ICAO with SML_SECRET), AES-GCM seal/unseal (gzip inside), LADD/PIA flags.
+- `debrief/analyze.py` landing / go-around / coverage-gap detection, gate measurement. Profile rows are `[track nm, height, est IAS, cross-track ft, track error deg, along-track nm]`.
+- `debrief/fleet.py` FAA registry (`fleet_registry(cache, "SF50")` returns {hex: tail}).
+- `site/` static front end. `score.js` is the only scoring implementation; `app.js` is the leaderboard, detail view and owner unlock (WebCrypto).
+- `tools/summarize.js` fleet.json (per-aircraft averages at every Vref). `tools/privacy_check.py` deploy gate.
+- `.github/workflows/collect.yml` every 3 h; state on the `data` branch (force-pushed single commit).
+- `server/` + Docker: private on-demand lookup by tail from ADS-B Exchange. Not used by the public site.
 
-## Conventions
+## Rules
 - Never use em dashes in copy, comments or UI text.
-- Landing JSON shape is a contract between `analyze.measure()` and `site/score.js` / `site/app.js`. Change both together and keep `tests/score.test.js` passing.
-- Fleet files must stay anonymized: no tails, timestamps, airports or METARs (see `fleet.KEEP`).
+- Nothing identifying may reach `data/public`: no tail, ICAO, owner, exact time, METAR; no airport/runway/elevation for LADD/PIA aircraft. Extend `tools/privacy_check.py` when adding fields.
+- Landing JSON is a contract between `analyze.measure()`, `collect.public_landing()`, `site/score.js` and `site/app.js`. Change them together; keep tests passing.
+- Never print or commit SML_SECRET.
 - Run `python -m unittest discover -s tests` and `node tests/score.test.js` before committing.
 
 ## Ideas not built yet
-- adsb.lol ingest so a public version doesn't depend on ADS-B Exchange terms.
-- G3000 / avionics data-log import (real IAS, flaps, gear, N1) to replace estimated speeds.
-- Per-type stabilized criteria and per-pilot Vref saved in the browser.
-- Monthly email summary alongside the Cirrus IQ engine-hours read.
+- Non-US SF50s (needs a type lookup beyond the FAA registry, e.g. the tar1090 aircraft database).
+- Other types (`--type` works if aircraft.py has a Vref table), with a type switcher on the site.
+- Baro altitude plus METAR altimeter as the touchdown reference when coverage ends early.
+- Avionics data-log import for real IAS, flaps and gear.

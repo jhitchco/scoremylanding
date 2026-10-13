@@ -1,0 +1,113 @@
+name: Collect landings and publish
+
+# Every 3 hours: score the newest unprocessed days from adsb.lol (yesterday first, then
+# backfill toward BACKFILL_SINCE), save state to the `data` branch, deploy GitHub Pages.
+on:
+  schedule:
+    - cron: "23 */3 * * *"
+  workflow_dispatch:
+    inputs:
+      days:
+        description: "Most days to process this run"
+        default: "10"
+      day:
+        description: "Process one specific day (YYYY-MM-DD) instead of the queue"
+        default: ""
+  push:
+    branches: [main]
+    paths: ["site/**", "tools/**", "debrief/**", ".github/workflows/collect.yml"]
+
+env:
+  FLEET_TYPE: SF50
+  BACKFILL_SINCE: "2025-10-13"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: collect
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch saved state (data branch)
+        run: git clone --depth 1 --branch data "https://github.com/${{ github.repository }}" data || mkdir -p data
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: pip install cryptography
+
+      - name: Tests
+        run: |
+          python -m unittest discover -s tests -v
+          node tests/score.test.js
+
+      - name: Restore cache (FAA registry, runways, weather, last raw days)
+        uses: actions/cache@v4
+        with:
+          path: .cache
+          key: collect-${{ github.run_id }}
+          restore-keys: collect-
+
+      - name: Collect
+        env:
+          SML_SECRET: ${{ secrets.SML_SECRET }}
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            python -m debrief.collect --type "$FLEET_TYPE" --data data --cache .cache --publish-only
+          elif [ -n "${{ inputs.day }}" ]; then
+            python -m debrief.collect --type "$FLEET_TYPE" --data data --cache .cache --day "${{ inputs.day }}"
+          else
+            python -m debrief.collect --type "$FLEET_TYPE" --data data --cache .cache \
+              --since "$BACKFILL_SINCE" --max-days "${{ inputs.days || '10' }}" --max-minutes 200
+          fi
+
+      - name: Summarize fleet
+        run: node tools/summarize.js data/public
+
+      - name: Privacy gate
+        run: python tools/privacy_check.py data/public --type "$FLEET_TYPE" --cache .cache
+
+      - name: Save state to the data branch
+        if: github.event_name != 'push'
+        run: |
+          cd data
+          rm -rf .git
+          git init -q -b data
+          git add -A
+          git -c user.name="scoremylanding bot" -c user.email="actions@users.noreply.github.com" \
+            commit -q -m "Data through $(python3 -c 'import json;d=json.load(open("meta/days.json"));print(max(d) if d else "none")')"
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}" data
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp -r site/* _site/
+          rm -rf _site/data
+          cp -r data/public _site/data
+          touch _site/.nojekyll
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: collect
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -72,7 +72,7 @@ ul.cx li::before{background:var(--path);border-radius:0;width:7px;height:7px}
 .note p{margin:8px 0}
 .un td,.un th{text-align:left}
 .search{display:flex;gap:8px;align-items:center;margin-top:14px}
-.search input{font-family:var(--fc);font-size:24px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;width:9ch;padding:6px 10px;border:2px solid var(--ink);background:var(--panel);color:var(--ink)}
+.search input{font-family:var(--fc);font-size:24px;font-weight:600;letter-spacing:.02em;width:14ch;padding:6px 10px;border:2px solid var(--ink);background:var(--panel);color:var(--ink)}
 .search input:focus-visible{outline:2px solid var(--mag);outline-offset:2px}
 .search button{all:unset;cursor:pointer;font-weight:600;padding:10px 16px;background:var(--ink);color:var(--paper)}
 .search button:focus-visible{outline:2px solid var(--mag);outline-offset:2px}
@@ -87,3 +87,27 @@ ul.cx li::before{background:var(--path);border-radius:0;width:7px;height:7px}
 .fleet .pct small{font-size:24px}
 .fleet p{margin:6px 0}
 [hidden]{display:none!important}
+
+h1 a{color:inherit;text-decoration:none}
+h1 a:hover{color:var(--path)}
+.linkbtn{all:unset;cursor:pointer;color:var(--path);font-weight:600;font-size:14px;border-bottom:1px solid currentColor}
+.linkbtn:focus-visible{outline:2px solid var(--mag);outline-offset:3px}
+.unlock{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:14px;padding:12px 14px;background:var(--panel);border:1px solid var(--rule)}
+.unlock label{font-weight:600;font-size:14px}
+.unlock input{font:inherit;padding:6px 8px;border:1px solid var(--ink2);background:var(--paper);color:var(--ink);min-width:16ch;flex:1 1 220px;max-width:360px}
+.unlock button{all:unset;cursor:pointer;font-weight:600;padding:7px 14px;background:var(--ink);color:var(--paper)}
+.unlock button:focus-visible,.unlock input:focus-visible{outline:2px solid var(--mag);outline-offset:2px}
+.sec.first{margin-top:28px}
+.pid{font-family:var(--fc);font-weight:600;letter-spacing:.02em;color:var(--path)}
+.tail{font-family:var(--fc);font-weight:700;margin-left:6px}
+table.lb td,table.lb th{white-space:nowrap}
+table.lb th.l,table.lb td.l{text-align:left}
+table.lb tbody tr{cursor:pointer}
+table.lb tbody tr:hover{background:var(--wash)}
+table.lb tbody tr:focus-visible{outline:2px solid var(--mag);outline-offset:-2px}
+button.sort{all:unset;cursor:pointer;font:inherit;color:inherit}
+button.sort:focus-visible{outline:2px solid var(--mag)}
+.back{color:var(--path);font-weight:600;text-decoration:none;font-size:15px}
+.back::before{content:"← "}
+.back:hover{text-decoration:underline}
+#report>p{margin:20px 0 0}
