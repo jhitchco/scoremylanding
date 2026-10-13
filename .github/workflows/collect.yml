@@ -13,6 +13,9 @@ on:
       day:
         description: "Process one specific day (YYYY-MM-DD) instead of the queue"
         default: ""
+      repeat:
+        description: "Runs to chain back to back (each starts the next when it finishes)"
+        default: "1"
   push:
     branches: [main]
     paths: ["site/**", "tools/**", "debrief/**", ".github/workflows/collect.yml"]
@@ -26,6 +29,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  actions: write
 
 concurrency:
   group: collect
@@ -112,3 +116,17 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # Back-to-back backfill: start the next run as soon as this one has deployed.
+  chain:
+    needs: deploy
+    if: github.event_name == 'workflow_dispatch' && fromJSON(inputs.repeat || '1') > 1
+    runs-on: ubuntu-latest
+    steps:
+      - name: Start the next run
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run collect.yml -R "${{ github.repository }}" --ref main \
+            -f days="${{ inputs.days }}" -f repeat="$(( ${{ inputs.repeat }} - 1 ))"
+          echo "Started the next run; $(( ${{ inputs.repeat }} - 1 )) to go."
