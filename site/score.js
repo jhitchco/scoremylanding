@@ -139,4 +139,19 @@ function trendOf(pts,minN=4,minSpan=21){
 }
 const dayOf=L=>Math.floor((L.t?L.t*1000:Date.parse(L.d+'T12:00:00Z'))/864e5);
 
-if(typeof module!=='undefined') module.exports={scoreLanding,insights,gustAdd,fleetCompare,trendOf,dayOf};
+// Best/worst: which landings qualify, and a one-line reason for each.
+function rankable(L){return !!(L.gates&&L.gates['500ft']&&L.thr)}
+function whyLine(L,s,vref){
+  if(s.score>=80){
+    const g=L.gates['500ft'], bits=[];
+    bits.push(L.align>=3?`stable from ${L.align} nm`:`rolled out at ${L.align} nm`);
+    bits.push(`Vref${g.ias-vref>=0?'+':''}${Math.round(g.ias-vref)} at 500 ft`);
+    if(L.td&&L.td.ft!=null) bits.push(`touchdown ${L.td.ft.toLocaleString()} ft`);
+    return bits.join(', ');
+  }
+  const f=s.findings.find(x=>x.k==='bad')||s.findings.find(x=>x.k==='warn');
+  const t=f?f.t.replace(/\.$/,''):'';
+  return (L.align<1&&/Not lined up/.test(t))?`Circling or tight pattern. ${t}`:t;
+}
+
+if(typeof module!=='undefined') module.exports={scoreLanding,insights,gustAdd,fleetCompare,trendOf,dayOf,rankable,whyLine};

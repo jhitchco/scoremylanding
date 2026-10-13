@@ -121,3 +121,15 @@ button.sort:focus-visible{outline:2px solid var(--mag)}
 .trendhead b{font-weight:600}
 .dim{color:var(--ink2)}
 #fleettrend{margin-top:22px}
+
+.bw{display:grid;grid-template-columns:1fr 1fr;gap:12px 36px;margin-top:8px}
+@media (max-width:760px){.bw{grid-template-columns:1fr}}
+.bwcol h3{font-family:var(--fc);font-size:22px;font-weight:700;margin:6px 0 4px}
+.bwcol ol{list-style:none;margin:0;padding:0}
+.bwcol li{border-bottom:1px solid var(--grid)}
+.bwrow{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:start;width:100%;padding:9px 4px}
+.bwrow:hover{background:var(--wash)}
+.bwrow:focus-visible{outline:2px solid var(--mag);outline-offset:-2px}
+.bwsc{font-family:var(--fc);font-size:26px;font-weight:700;line-height:1}
+.bwbody b{display:block;font-family:var(--fc);font-weight:600;font-size:17px}
+.bwbody .meta{display:block;font-size:14px;color:var(--ink2);margin-top:2px}

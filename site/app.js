@@ -68,7 +68,7 @@ function renderHome(){
   const t=document.createElementNS(NS,'title');t.textContent=`${nameOf(a.pid)||a.pid}: ${v}`;c.appendChild(t)}
  const med=vals.length?vals.slice().sort((a,b)=>a-b)[vals.length>>1]:null;
  if(med!=null){el('line',{x1:sx(med),x2:sx(med),y1:12,y2:104,stroke:css('--mag'),'stroke-width':2},s);txt(s,sx(med),9,`median ${med}`,{'text-anchor':'middle',fill:css('--mag'),'font-weight':600})}
- $('dist').innerHTML='';$('dist').appendChild(s); renderFleetTrend();
+ $('dist').innerHTML='';$('dist').appendChild(s); renderFleetTrend(); renderBestWorst();
  const st=R.map(a=>a.st[i]).filter(x=>x!=null);
  $('distnote').textContent=R.length?`${R.length} aircraft with 3 or more landings. The typical airplane is stable at 500 ft on ${Math.round(100*st.sort((a,b)=>a-b)[st.length>>1])}% of approaches.`:'';
  // table
@@ -84,6 +84,20 @@ function renderHome(){
  $('lb').querySelectorAll('tr[data-pid]').forEach(tr=>{const go=()=>open(tr.dataset.pid); tr.onclick=go; tr.onkeydown=e=>{if(e.key==='Enter')go()}});
 }
 
+function bwList(title,cls,items,showAc){
+ const li=items.map(e=>`<li><button type="button" class="bwrow" data-pid="${e.pid}" data-id="${e.id}"><span class="bwsc ${vc(e.verdict)}">${e.score}</span><span class="bwbody"><b>${showAc?`<span class="pid">${nameOf(e.pid)?esc(nameOf(e.pid)):e.pid}</span> `:''}${e.apt?esc(e.apt)+' '+esc(e.rwy):'Airport withheld'}</b><span class="meta">${esc(e.when||e.d)}${e.why?'. '+esc(e.why):''}</span></span></button></li>`).join('');
+ return `<div class="bwcol"><h3 class="${cls}">${title}</h3>${items.length?`<ol>${li}</ol>`:'<p class="note">Not enough landings yet.</p>'}</div>`;
+}
+function wireBw(box){box.querySelectorAll('.bwrow').forEach(b=>b.onclick=()=>{
+ if(D&&b.dataset.pid===D.pid){goTo(b.dataset.id);return}
+ history.pushState(null,'',`?ac=${encodeURIComponent(b.dataset.pid)}&l=${encodeURIComponent(b.dataset.id)}`); route().then(()=>window.scrollTo(0,0))})}
+function renderBestWorst(){
+ const B=FLEET.bestworst, box=$('bw'); if(!B){box.innerHTML='';return}
+ const i=vi();
+ $('bwnote').textContent=`Across the fleet in the last ${B.days} days, at the Vref above, no more than 2 per airplane. A best landing needs a scored touchdown. Most of the worst are arrivals still turning at 500 ft: low base legs and circling approaches.`;
+ box.innerHTML=bwList('Best','c-Good',B.best[i],true)+bwList('Worst','c-Needs',B.worst[i],true);
+ wireBw(box);
+}
 function trendCell(x){
  if(x==null) return '<span class="dim">not enough</span>';
  if(Math.abs(x)<1.5) return `<span class="dim">steady</span>`;
@@ -140,6 +154,7 @@ async function showAircraft(q){
  }
  if(!doc){status(`<h2>No aircraft called ${esc(q)}</h2><p>Search by the aircraft's ID (like <span class="pid">sf50-1a2b3c4d</span>)${KEY?' or its tail number':''}, or pick one from <a href="./">the list</a>.</p>`);return}
  D=doc; const L0=set(); sel=L0.length?L0[0].id:(D.landings.length?D.landings[D.landings.length-1].id:null);
+ const want=new URLSearchParams(location.search).get('l'); if(want&&D.landings.find(x=>x.id===want)){ if(!L0.find(x=>x.id===want)) $('own').checked=true; sel=want }
  $('ownwrap').hidden=!(D.current_owner>0); $('own').checked=false;
  status(''); $('home').hidden=true; $('report').hidden=false;
  if(!D.landings.length){status(`<h2>${esc(D.tail||D.pid)}: no complete landings yet</h2>`);$('report').hidden=true;return}
@@ -154,7 +169,7 @@ function renderList(){
   b.onclick=()=>{sel=l.id;renderAll()};el.appendChild(b)}
  const sc=L.map(l=>scoreLanding(l,vref)); const st=sc.filter(s=>s.stable).length;
  $('title').firstChild.textContent=D.tail&&KEY?`${D.tail}`:D.pid;
- $('sum').textContent=`${D.tail&&D.tail!==D.pid?D.pid+'. ':''}${D.restricted?'Owner requested limited tracking (LADD/PIA), so airports are withheld. ':''}${L.length} landings scored, ${st} stable at 500 ft, average score ${L.length?Math.round(sc.reduce((a,s)=>a+s.score,0)/L.length):'–'}.`;
+ $('sum').textContent=`${D.tail&&D.tail!==D.pid?D.pid+'. ':''}${D.restricted?'Owner requested limited tracking (LADD/PIA), so airports are withheld. ':''}${L.length} landing${L.length===1?'':'s'} scored, ${st} stable at 500 ft, average score ${L.length?Math.round(sc.reduce((a,s)=>a+s.score,0)/L.length):'–'}.`;
 }
 
 const NS='http://www.w3.org/2000/svg';
@@ -290,12 +305,20 @@ function renderTrend(){
   const t=document.createElementNS(NS,'title');t.textContent=`${new Date(p.day*864e5).toISOString().slice(0,10)}: ${p.score} (${p.verdict})`;c.appendChild(t);c.onclick=()=>goTo(p.id)}
  $('trend').innerHTML='';$('trend').appendChild(s);
 }
+function renderAcBestWorst(){
+ const L=set().filter(rankable).map(l=>{const s=scoreLanding(l,vref);return {pid:D.pid,id:l.id,apt:l.apt,rwy:l.rwy,d:l.d,when:fmtD(l),score:s.score,verdict:s.verdict,td:!!(l.td&&l.td.ft!=null),why:whyLine(l,s,vref)}});
+ const sec=$('bwsec'); if(L.length<4){sec.hidden=true;return} sec.hidden=false;
+ const best=L.filter(x=>x.td).sort((a,b)=>b.score-a.score).slice(0,3);
+ const worst=L.slice().sort((a,b)=>a.score-b.score).slice(0,3);
+ $('bwac').innerHTML=bwList('Best 3','c-Good',best,false)+bwList('Worst 3','c-Needs',worst,false);
+ wireBw($('bwac'));
+}
 function renderUn(){
  const U=D.unscored||[]; $('unsec').hidden=!U.length;
  $('un').innerHTML='<thead><tr><th>Date</th><th>Airport</th><th>What happened</th></tr></thead><tbody>'+U.map(u=>`<tr><td>${esc(u.d)}</td><td>${u.apt?esc(u.apt)+(u.name?', '+esc(u.name):''):'withheld'}</td><td>${esc(u.why||'')}</td></tr>`).join('')+'</tbody>';
 }
 function renderAll(){
- if(D&&!$('report').hidden){renderList();renderCard();renderTrend();renderIns();renderFleet()}
+ if(D&&!$('report').hidden){renderList();renderCard();renderTrend();renderAcBestWorst();renderIns();renderFleet()}
  else if(FLEET&&!$('home').hidden) renderHome();
  $('vo').textContent=vref; const wt=FLEET?weightFor(vref):null; $('wt').textContent=wt?`(~${wt.toLocaleString()} lb)`:'';
 }
