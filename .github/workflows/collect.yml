@@ -18,6 +18,7 @@ on:
     paths: ["site/**", "tools/**", "debrief/**", ".github/workflows/collect.yml"]
 
 env:
+  PYTHONUNBUFFERED: "1"
   FLEET_TYPE: SF50
   BACKFILL_SINCE: "2025-10-13"
 
