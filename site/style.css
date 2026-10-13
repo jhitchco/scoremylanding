@@ -111,3 +111,13 @@ button.sort:focus-visible{outline:2px solid var(--mag)}
 .back::before{content:"← "}
 .back:hover{text-decoration:underline}
 #report>p{margin:20px 0 0}
+
+.seg{display:inline-flex;border:1px solid var(--rule);margin:6px 0 4px}
+.seg button{all:unset;cursor:pointer;padding:6px 12px;font-size:14px;color:var(--ink2);border-right:1px solid var(--rule)}
+.seg button:last-child{border-right:none}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.seg button:focus-visible{outline:2px solid var(--mag);outline-offset:-2px}
+.trendhead{margin:10px 0 6px;font-size:16px;max-width:80ch}
+.trendhead b{font-weight:600}
+.dim{color:var(--ink2)}
+#fleettrend{margin-top:22px}

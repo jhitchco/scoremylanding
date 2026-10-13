@@ -1,7 +1,7 @@
 // Score my landing: fleet leaderboard + per-aircraft debrief.
 // Data: data/fleet.json, data/ac/<pid>.json (public), data/ac/<pid>.bin and data/names.bin (owner-only, AES-GCM).
 // Server mode (Docker) also answers api/debrief/<tail> with full, non-anonymized data.
-let FLEET=null, NAMES=null, KEY=null, D=null, vref=81, sel=null, sortBy='score', sortDir=-1;
+let FLEET=null, NAMES=null, KEY=null, D=null, vref=81, sel=null, sortBy='score', sortDir=-1, trendWin=90;
 const $=id=>document.getElementById(id);
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -68,20 +68,43 @@ function renderHome(){
   const t=document.createElementNS(NS,'title');t.textContent=`${nameOf(a.pid)||a.pid}: ${v}`;c.appendChild(t)}
  const med=vals.length?vals.slice().sort((a,b)=>a-b)[vals.length>>1]:null;
  if(med!=null){el('line',{x1:sx(med),x2:sx(med),y1:12,y2:104,stroke:css('--mag'),'stroke-width':2},s);txt(s,sx(med),9,`median ${med}`,{'text-anchor':'middle',fill:css('--mag'),'font-weight':600})}
- $('dist').innerHTML='';$('dist').appendChild(s);
+ $('dist').innerHTML='';$('dist').appendChild(s); renderFleetTrend();
  const st=R.map(a=>a.st[i]).filter(x=>x!=null);
  $('distnote').textContent=R.length?`${R.length} aircraft with 3 or more landings. The typical airplane is stable at 500 ft on ${Math.round(100*st.sort((a,b)=>a-b)[st.length>>1])}% of approaches.`:'';
  // table
- const rows=FLEET.aircraft.filter(a=>a.n>0).map(a=>({a,rank:rank.get(a.pid)||null,score:a.s?a.s[i]:null,stab:a.st?a.st[i]:null}));
- const key={score:r=>r.score??-1,stab:r=>r.stab??-1,n:r=>r.a.n,last:r=>r.a.last||'',pid:r=>nameOf(r.a.pid)||r.a.pid,pattern:r=>r.a.pattern??-1}[sortBy];
+ const rows=FLEET.aircraft.filter(a=>a.n>0).map(a=>({a,rank:rank.get(a.pid)||null,score:a.s?a.s[i]:null,stab:a.st?a.st[i]:null,trend:a.tr?a.tr[i]:null}));
+ const key={score:r=>r.score??-1,stab:r=>r.stab??-1,n:r=>r.a.n,last:r=>r.a.last||'',pid:r=>nameOf(r.a.pid)||r.a.pid,pattern:r=>r.a.pattern??-1,trend:r=>r.trend??-99}[sortBy];
  if(sortBy==='score') rows.sort((x,y)=>((x.rank==null)-(y.rank==null)) || (sortDir<0?x.rank-y.rank:y.rank-x.rank) || y.a.n-x.a.n);
  else rows.sort((x,y)=>{const a=key(x),b=key(y);return (a<b?-1:a>b?1:0)*sortDir || (y.a.n-x.a.n)});
  const th=(k,l,cls='')=>`<th class="${cls}"><button class="sort" data-k="${k}" aria-sort="${sortBy===k?(sortDir<0?'descending':'ascending'):'none'}">${l}${sortBy===k?(sortDir<0?' ▾':' ▴'):''}</button></th>`;
- $('lb').innerHTML=`<thead><tr><th>Rank</th>${th('pid','Aircraft','l')}${th('n','Landings')}${th('score','Avg score')}${th('stab','Stable at 500 ft')}${th('pattern','Pattern arrivals')}${th('last','Last landing')}</tr></thead><tbody>`+
+ $('lb').innerHTML=`<thead><tr><th>Rank</th>${th('pid','Aircraft','l')}${th('n','Landings')}${th('score','Avg score')}${th('stab','Stable at 500 ft')}${th('trend','3-month trend')}${th('pattern','Pattern arrivals')}${th('last','Last landing')}</tr></thead><tbody>`+
   rows.map(r=>{const v=r.score==null?null:Math.round(r.score); const nm=nameOf(r.a.pid);
-   return `<tr data-pid="${r.a.pid}" tabindex="0"><td>${r.rank??'–'}</td><td class="l"><span class="pid">${r.a.pid}</span>${nm?` <b class="tail">${esc(nm)}</b>`:''}</td><td>${r.a.n}</td><td class="${v==null?'':v>=80?'c-Good':v>=65?'c-Fair':'c-Needs'}">${v??''}</td><td>${r.stab==null?'':Math.round(100*r.stab)+'%'}</td><td>${r.a.pattern==null?'':r.a.pattern+'%'}</td><td>${r.a.last||''}</td></tr>`}).join('')+'</tbody>';
+   return `<tr data-pid="${r.a.pid}" tabindex="0"><td>${r.rank??'–'}</td><td class="l"><span class="pid">${r.a.pid}</span>${nm?` <b class="tail">${esc(nm)}</b>`:''}</td><td>${r.a.n}</td><td class="${v==null?'':v>=80?'c-Good':v>=65?'c-Fair':'c-Needs'}">${v??''}</td><td>${r.stab==null?'':Math.round(100*r.stab)+'%'}</td><td>${trendCell(r.trend)}</td><td>${r.a.pattern==null?'':r.a.pattern+'%'}</td><td>${r.a.last||''}</td></tr>`}).join('')+'</tbody>';
  $('lb').querySelectorAll('button.sort').forEach(b=>b.onclick=()=>{const k=b.dataset.k; if(sortBy===k) sortDir=-sortDir; else {sortBy=k; sortDir=(k==='pid')?1:-1} renderHome()});
  $('lb').querySelectorAll('tr[data-pid]').forEach(tr=>{const go=()=>open(tr.dataset.pid); tr.onclick=go; tr.onkeydown=e=>{if(e.key==='Enter')go()}});
+}
+
+function trendCell(x){
+ if(x==null) return '<span class="dim">not enough</span>';
+ if(Math.abs(x)<1.5) return `<span class="dim">steady</span>`;
+ return x>0?`<span class="c-Good">▲ +${x.toFixed(1)}/mo</span>`:`<span class="c-Needs">▼ ${x.toFixed(1)}/mo</span>`;
+}
+function renderFleetTrend(){
+ const box=$('fleettrend'); box.innerHTML=''; const W=FLEET.weekly; if(!W||W.week.length<3) return;
+ const i=vi(), xs=W.week, ys=W.med.map(m=>m[i]);
+ const Wd=900,H=200,m={l:44,r:16,t:16,b:34}, x0=xs[0], x1=xs[xs.length-1]+6;
+ const lo=Math.max(0,Math.floor((Math.min(...ys)-8)/10)*10), hi=Math.min(100,Math.ceil((Math.max(...ys)+8)/10)*10);
+ const sx=d=>m.l+(d-x0)/(x1-x0||1)*(Wd-m.l-m.r), sy=v=>H-m.b-(v-lo)/(hi-lo)*(H-m.t-m.b);
+ const s=svg(Wd,H); s.setAttribute('role','img'); s.setAttribute('aria-label','Fleet median approach score by week');
+ for(let v=lo;v<=hi;v+=10){el('line',{x1:m.l,x2:Wd-m.r,y1:sy(v),y2:sy(v),stroke:css('--grid')},s);txt(s,m.l-6,sy(v)+4,v,{'text-anchor':'end'})}
+ const step=Math.max(1,Math.ceil(xs.length/8));
+ xs.forEach((d,k)=>{if(k%step===0) txt(s,sx(d),H-m.b+18,new Date(d*864e5).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}),{'text-anchor':'middle'})});
+ el('path',{d:xs.map((d,k)=>(k?'L':'M')+sx(d+3).toFixed(1)+' '+sy(ys[k]).toFixed(1)).join(' '),fill:'none',stroke:css('--mag'),'stroke-width':2.5,'stroke-linejoin':'round'},s);
+ xs.forEach((d,k)=>{const c=el('circle',{cx:sx(d+3),cy:sy(ys[k]),r:3.5,fill:css('--mag')},s);const t=document.createElementNS(NS,'title');t.textContent=`Week of ${new Date(d*864e5).toISOString().slice(0,10)}: median ${ys[k]} (${W.n[k]} landings)`;c.appendChild(t)});
+ const T=trendOf(xs.map((d,k)=>({day:d,score:ys[k]})),3,14);
+ const h=document.createElement('p'); h.className='trendhead';
+ h.innerHTML=`<b class="${T.slope==null?'':T.slope>=1.5?'c-Good':T.slope<=-1.5?'c-Needs':''}">Fleet: ${T.slope==null?'too early to call':T.label.toLowerCase()}</b>${T.slope==null?'':`, ${T.slope>0?'+':''}${T.slope} points per month in the weekly median`}.`;
+ box.appendChild(h); box.appendChild(s);
 }
 
 // ---------------------------------------------------------------- detail: one aircraft
@@ -236,12 +259,43 @@ function renderFleet(){
  txt(s,sx(F.me.avg),10,`${D.tail&&KEY?D.tail:D.pid} ${Math.round(F.me.avg)}`,{'text-anchor':sx(F.me.avg)>W-100?'end':sx(F.me.avg)<100?'start':'middle',fill:css('--mag'),'font-weight':600});
  $('fleetplot').appendChild(s);
 }
+function renderTrend(){
+ const wins=[[30,'1 month'],[90,'3 months'],[180,'6 months'],[365,'12 months']];
+ $('trendwin').innerHTML=wins.map(([d,l])=>`<button type="button" data-d="${d}" aria-pressed="${d===trendWin}">${l}</button>`).join('');
+ $('trendwin').querySelectorAll('button').forEach(b=>b.onclick=()=>{trendWin=+b.dataset.d;renderTrend()});
+ const today=Math.floor(Date.now()/864e5), from=today-trendWin;
+ const L=set().filter(l=>dayOf(l)>=from).reverse();
+ const pts=L.map(l=>{const s=scoreLanding(l,vref);return {day:dayOf(l),score:s.score,verdict:s.verdict,id:l.id}});
+ const T=trendOf(pts);
+ const span=wins.find(w=>w[0]===trendWin)[1];
+ const cls=T.slope==null?'':T.slope>=1.5?'c-Good':T.slope<=-1.5?'c-Needs':'';
+ $('trendhead').innerHTML=T.slope==null
+  ?`<b>${T.label}</b> for the last ${span}: ${pts.length} landing${pts.length===1?'':'s'}${pts.length?'':''}. A trend needs 4 or more landings spread over at least 3 weeks.`
+  :`<b class="${cls}">${T.label}</b>: ${T.slope>0?'+':''}${T.slope} points per month over the last ${span}, across ${T.n} landings averaging ${Math.round(T.mean)}.`;
+ const W=900,H=300,m={l:44,r:16,t:16,b:36};
+ const lo=30,hi=100, sx=d=>m.l+(d-from)/(trendWin||1)*(W-m.l-m.r), sy=v=>H-m.b-(Math.max(lo,v)-lo)/(hi-lo)*(H-m.t-m.b);
+ const s=svg(W,H); s.setAttribute('role','img'); s.setAttribute('aria-label',`Landing scores over the last ${span}`);
+ for(let v=40;v<=100;v+=20){el('line',{x1:m.l,x2:W-m.r,y1:sy(v),y2:sy(v),stroke:css('--grid')},s);txt(s,m.l-6,sy(v)+4,v,{'text-anchor':'end'})}
+ el('line',{x1:m.l,x2:W-m.r,y1:sy(69.5),y2:sy(69.5),stroke:css('--bad'),'stroke-dasharray':'2 4',opacity:.6},s); txt(s,W-m.r-2,sy(69.5)-5,'unstable cap',{'text-anchor':'end'});
+ const ticks=trendWin<=30?7:trendWin<=90?14:trendWin<=180?30:60;
+ for(let d=today;d>=from;d-=ticks) txt(s,sx(d),H-m.b+18,new Date(d*864e5).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}),{'text-anchor':'middle'});
+ // fleet weekly median
+ if(FLEET&&FLEET.weekly){const i=vi(); const F=FLEET.weekly.week.map((w,k)=>[w+3,FLEET.weekly.med[k][i]]).filter(p=>p[0]>=from);
+  if(F.length>1) el('path',{d:F.map((p,k)=>(k?'L':'M')+sx(p[0]).toFixed(1)+' '+sy(p[1]).toFixed(1)).join(' '),fill:'none',stroke:css('--mag'),'stroke-width':1.8,'stroke-dasharray':'6 5'},s)}
+ // rolling mean of last 5
+ if(pts.length>=3){const r=pts.map((p,k)=>{const w=pts.slice(Math.max(0,k-4),k+1);return [p.day,w.reduce((a,b)=>a+b.score,0)/w.length]});
+  el('path',{d:r.map((p,k)=>(k?'L':'M')+sx(p[0]).toFixed(1)+' '+sy(p[1]).toFixed(1)).join(' '),fill:'none',stroke:css('--path'),'stroke-width':3,'stroke-linejoin':'round'},s)}
+ const col={Good:css('--good'),Fair:css('--warn'),Needs:css('--bad'),Unstable:css('--bad')};
+ for(const p of pts){const c=el('circle',{cx:sx(p.day),cy:sy(p.score),r:5,fill:col[p.verdict.split(' ')[0]],stroke:css('--panel'),'stroke-width':1.5,style:'cursor:pointer'},s);
+  const t=document.createElementNS(NS,'title');t.textContent=`${new Date(p.day*864e5).toISOString().slice(0,10)}: ${p.score} (${p.verdict})`;c.appendChild(t);c.onclick=()=>goTo(p.id)}
+ $('trend').innerHTML='';$('trend').appendChild(s);
+}
 function renderUn(){
  const U=D.unscored||[]; $('unsec').hidden=!U.length;
  $('un').innerHTML='<thead><tr><th>Date</th><th>Airport</th><th>What happened</th></tr></thead><tbody>'+U.map(u=>`<tr><td>${esc(u.d)}</td><td>${u.apt?esc(u.apt)+(u.name?', '+esc(u.name):''):'withheld'}</td><td>${esc(u.why||'')}</td></tr>`).join('')+'</tbody>';
 }
 function renderAll(){
- if(D&&!$('report').hidden){renderList();renderCard();renderIns();renderFleet()}
+ if(D&&!$('report').hidden){renderList();renderCard();renderTrend();renderIns();renderFleet()}
  else if(FLEET&&!$('home').hidden) renderHome();
  $('vo').textContent=vref; const wt=FLEET?weightFor(vref):null; $('wt').textContent=wt?`(~${wt.toLocaleString()} lb)`:'';
 }

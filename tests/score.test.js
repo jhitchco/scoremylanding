@@ -1,6 +1,6 @@
 // node tests/score.test.js
 const assert = require('assert');
-const {scoreLanding, insights, fleetCompare} = require('../site/score.js');
+const {scoreLanding, insights, fleetCompare, trendOf} = require('../site/score.js');
 
 const gate = (o) => Object.assign({x: 1, r: 1, c: 0, hat: 500, gs: 90, ias: 85, vs: -600, trkdev: 0, gp: 0, ang: 3.0, t: -30, dtg: 1}, o);
 const base = () => ({
@@ -49,5 +49,12 @@ assert.strictEqual(F.aircraft, 5); assert.strictEqual(F.pctScore, 100); assert.s
 // withheld airports and light category are handled
 L = base(); L.apt = null; L.rwy = null; delete L.sun; L.light = 'night';
 s = scoreLanding(L, 81); assert.ok(s.context.includes('Night landing.'));
+
+// trend: rising scores over 60 days read as trending better, flat as steady, few points as not enough
+const up = [0, 10, 20, 30, 40, 50, 60].map((d, i) => ({day: 20000 + d, score: 60 + i * 4}));
+let T = trendOf(up); assert.strictEqual(T.label, 'Trending better'); assert.ok(Math.abs(T.slope - 12) < 0.01);
+T = trendOf(up.map(p => ({day: p.day, score: 80}))); assert.strictEqual(T.label, 'Holding steady');
+T = trendOf(up.slice(0, 3)); assert.strictEqual(T.slope, null);
+T = trendOf(up.map((p, i) => ({day: 20000 + i, score: p.score}))); assert.strictEqual(T.slope, null);
 
 console.log('score.js: all tests passed');

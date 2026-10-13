@@ -125,4 +125,18 @@ function fleetCompare(fleet,myLandings,vref,myPid,minLandings=3){
     fleetAvg:_avg(avgs,x=>x),fleetStable:_avg(stabs,x=>x),dist:avgs.slice().sort((a,b)=>a-b)};
 }
 
-if(typeof module!=='undefined') module.exports={scoreLanding,insights,gustAdd,fleetCompare};
+// Trend: least-squares slope of score against date, in points per 30 days.
+// pts: [{day: days since epoch, score}]. Needs 4+ landings spread over 3+ weeks.
+function trendOf(pts,minN=4,minSpan=21){
+  const n=pts.length; if(n<minN) return {n,slope:null,label:'Not enough landings yet'};
+  const xs=pts.map(p=>p.day), ys=pts.map(p=>p.score);
+  const span=Math.max(...xs)-Math.min(...xs); if(span<minSpan) return {n,span,slope:null,label:'Not enough time yet'};
+  const mx=_avg(xs,x=>x), my=_avg(ys,y=>y);
+  let sxy=0,sxx=0; for(let i=0;i<n;i++){sxy+=(xs[i]-mx)*(ys[i]-my);sxx+=(xs[i]-mx)**2}
+  const slope=30*sxy/sxx;
+  const label=Math.abs(slope)<1.5?'Holding steady':slope>0?'Trending better':'Trending worse';
+  return {n,span,slope:Math.round(slope*10)/10,label,first:my-slope/30*(mx-Math.min(...xs)),mean:my};
+}
+const dayOf=L=>Math.floor((L.t?L.t*1000:Date.parse(L.d+'T12:00:00Z'))/864e5);
+
+if(typeof module!=='undefined') module.exports={scoreLanding,insights,gustAdd,fleetCompare,trendOf,dayOf};
