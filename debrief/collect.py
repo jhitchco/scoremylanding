@@ -72,12 +72,32 @@ def save_state(key, data_dir, pid, rec):
 
 # --------------------------------------------------------------------------- collection
 
-def _days_to_do(done, since, max_days):
+def _priority_days(path, done):
+    """Days listed in priority_days.txt that haven't been processed, oldest first."""
+    try:
+        with open(path) as f:
+            days = {l.split("#")[0].strip() for l in f}
+    except FileNotFoundError:
+        return []
+    out = []
+    for d in sorted(x for x in days if x):
+        try:
+            day = dt.date.fromisoformat(d)
+        except ValueError:
+            continue
+        if d not in done and day < dt.datetime.now(dt.timezone.utc).date():
+            out.append(day)
+    return out
+
+
+def _days_to_do(done, since, max_days, priority=()):
+    """Priority days first (all of them), then the newest unprocessed days."""
     today = dt.datetime.now(dt.timezone.utc).date()
     d = today - dt.timedelta(days=1)
-    out = []
+    out = list(priority)
+    max_days = max_days + len(out)
     while d >= since and len(out) < max_days:
-        if str(d) not in done:
+        if str(d) not in done and d not in out:
             out.append(d)
         d -= dt.timedelta(days=1)
     return out
@@ -287,6 +307,7 @@ def main(argv=None):
     ap.add_argument("--max-days", type=int, default=6, help="days to process this run")
     ap.add_argument("--max-minutes", type=float, default=150, help="stop starting new days after this")
     ap.add_argument("--day", action="append", help="process this day (repeatable), ignoring the queue")
+    ap.add_argument("--priority", default="priority_days.txt", help="file of days to process before the queue")
     ap.add_argument("--publish-only", action="store_true")
     a = ap.parse_args(argv)
 
@@ -297,7 +318,10 @@ def main(argv=None):
     if not a.publish_only:
         reg = fleet_registry(a.cache, a.type)
         print(f"{a.type}: {len(reg)} US registrations")
-        todo = [dt.date.fromisoformat(d) for d in a.day] if a.day else _days_to_do(days_meta, dt.date.fromisoformat(a.since), a.max_days)
+        prio = _priority_days(a.priority, days_meta)
+        if prio:
+            print(f"priority days first: {len(prio)}")
+        todo = [dt.date.fromisoformat(d) for d in a.day] if a.day else _days_to_do(days_meta, dt.date.fromisoformat(a.since), a.max_days, prio)
         print("days to process:", ", ".join(map(str, todo)) or "none")
         for day in todo:
             if (time.time() - t_start) / 60 > a.max_minutes:
