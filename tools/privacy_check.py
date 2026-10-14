@@ -29,8 +29,11 @@ def main():
     for f in files:
         text = open(f).read()
         low = text.lower()
+        # whole hex tokens only: pseudonyms and landing ids are hex too, and a 6-char
+        # address turns up inside them by chance once there are enough of them
+        hexes = set(re.findall(r"(?<![0-9a-f])[0-9a-f]{6}(?![0-9a-f])", low))
         for h, tail in reg.items():
-            if h in low:
+            if h in hexes:
                 problems.append(f"{f}: ICAO address {h}")
             if re.search(r"(?<![A-Za-z0-9])" + re.escape(tail) + r"(?![A-Za-z0-9])", text):
                 problems.append(f"{f}: tail {tail}")

@@ -15,8 +15,8 @@ let scored = 0;
 const today = Math.floor(now / 864e5);
 const weekOf = d => d - ((d + 3) % 7);           // Monday of the week (days since epoch)
 const weekly = {};                                // week -> [scores per vref]
-const cand = vrefs.map(() => []);                // per vref: rankable landings in the last 90 days
-const BW_DAYS = 90, BW_N = 10, BW_PER_AC = 2;
+const cand = vrefs.map(() => []);                // per vref: rankable landings in the longest window
+const BW_WINDOWS = [30, 90], BW_N = 10, BW_PER_AC = 2, BW_MAX = Math.max(...BW_WINDOWS);
 for (const a of idx.aircraft) {
   const doc = JSON.parse(fs.readFileSync(path.join(pub, 'ac', a.pid + '.json')));
   // current owner only, last 12 months: the leaderboard is about how the airplane is flown now
@@ -28,8 +28,8 @@ for (const a of idx.aircraft) {
     const pts = L.map((l, k) => ({day: dayOf(l), score: sc[k].score}));
     const t = trendOf(pts.filter(p => today - p.day <= 90));
     L.forEach((l, k) => {
-      if (today - pts[k].day > BW_DAYS || !rankable(l)) return;
-      cand[vrefs.indexOf(v)].push({pid: a.pid, id: l.id, d: l.d, apt: l.apt, rwy: l.rwy, score: sc[k].score,
+      if (today - pts[k].day > BW_MAX || !rankable(l)) return;
+      cand[vrefs.indexOf(v)].push({pid: a.pid, id: l.id, d: l.d, age: today - pts[k].day, apt: l.apt, rwy: l.rwy, score: sc[k].score,
         verdict: sc[k].verdict, td: !!(l.td && l.td.ft != null), why: whyLine(l, sc[k], v)});
     });
     tr.push(t.slope);
@@ -49,12 +49,16 @@ function pick(list, better) {
   for (const c of list.slice().sort((x, y) => better ? y.score - x.score : x.score - y.score)) {
     if (better && !c.td) continue;                 // a best landing needs a scored touchdown
     if ((per[c.pid] = (per[c.pid] || 0) + 1) > BW_PER_AC) continue;
-    const {td, ...e} = c; out.push(e);
+    const {td, age, ...e} = c; out.push(e);
     if (out.length >= BW_N) break;
   }
   return out;
 }
-const bestworst = {days: BW_DAYS, best: cand.map(c => pick(c, true)), worst: cand.map(c => pick(c, false))};
+// one set per window: {days, best[vref][], worst[vref][]}
+const bestworst = {windows: BW_WINDOWS.map(days => {
+  const inWin = cand.map(c => c.filter(x => x.age <= days));
+  return {days, best: inWin.map(c => pick(c, true)), worst: inWin.map(c => pick(c, false))};
+})};
 const out = {meta: Object.assign({}, idx.meta, {scored_landings_12mo: scored}), vrefs, aircraft: rows, weekly: fleetWeekly, bestworst};
 fs.writeFileSync(path.join(pub, 'fleet.json'), JSON.stringify(out));
 console.log(`fleet.json: ${rows.filter(r => r.n).length} aircraft with landings, ${scored} landings in the last 12 months`);

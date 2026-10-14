@@ -66,6 +66,7 @@ jobs:
           restore-keys: collect-
 
       - name: Collect
+        id: collect
         env:
           SML_SECRET: ${{ secrets.SML_SECRET }}
         run: |
@@ -82,12 +83,16 @@ jobs:
         run: node tools/summarize.js data/public
 
       - name: Privacy gate
+        id: privacy
         run: python tools/privacy_check.py data/public --type "$FLEET_TYPE" --cache .cache
 
+      # Runs even when the privacy gate fails, so hours of collection aren't thrown away.
+      # The encrypted state is kept; the public folder is dropped (it's rebuilt every run).
       - name: Save state to the data branch
-        if: github.event_name != 'push'
+        if: ${{ !cancelled() && github.event_name != 'push' && steps.collect.outcome == 'success' }}
         run: |
           cd data
+          if [ "${{ steps.privacy.outcome }}" != "success" ]; then rm -rf public; echo "Privacy gate failed: saved state only"; fi
           rm -rf .git
           git init -q -b data
           git add -A

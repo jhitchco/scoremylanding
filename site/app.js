@@ -91,11 +91,17 @@ function bwList(title,cls,items,showAc){
 function wireBw(box){box.querySelectorAll('.bwrow').forEach(b=>b.onclick=()=>{
  if(D&&b.dataset.pid===D.pid){goTo(b.dataset.id);return}
  history.pushState(null,'',`?ac=${encodeURIComponent(b.dataset.pid)}&l=${encodeURIComponent(b.dataset.id)}`); route().then(()=>window.scrollTo(0,0))})}
+let bwWin=30;
 function renderBestWorst(){
- const B=FLEET.bestworst, box=$('bw'); if(!B){box.innerHTML='';return}
- const i=vi();
- $('bwnote').textContent=`Across the fleet in the last ${B.days} days, at the Vref above, no more than 2 per airplane. A best landing needs a scored touchdown. Most of the worst are arrivals still turning at 500 ft: low base legs and circling approaches.`;
- box.innerHTML=bwList('Best','c-Good',B.best[i],true)+bwList('Worst','c-Needs',B.worst[i],true);
+ const B=FLEET.bestworst, box=$('bw'); if(!B){box.innerHTML='';$('bwwin').innerHTML='';return}
+ // older fleet.json had a single 90-day set
+ const W=B.windows||[{days:B.days,best:B.best,worst:B.worst}];
+ if(!W.find(w=>w.days===bwWin)) bwWin=W[0].days;
+ $('bwwin').innerHTML=W.map(w=>`<button type="button" data-d="${w.days}" aria-pressed="${w.days===bwWin}">Last ${w.days} days</button>`).join('');
+ $('bwwin').querySelectorAll('button').forEach(b=>b.onclick=()=>{bwWin=+b.dataset.d;renderBestWorst()});
+ const S=W.find(w=>w.days===bwWin), i=vi();
+ $('bwnote').textContent=`Across the fleet in the last ${S.days} days, at the Vref above, no more than 2 per airplane. A best landing needs a scored touchdown. Most of the worst are arrivals still turning at 500 ft: low base legs and circling approaches.`;
+ box.innerHTML=bwList('Best','c-Good',S.best[i],true)+bwList('Worst','c-Needs',S.worst[i],true);
  wireBw(box);
 }
 function trendCell(x){
