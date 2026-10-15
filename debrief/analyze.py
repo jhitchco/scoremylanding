@@ -237,6 +237,34 @@ def measure(pts, i, rw, db, cache_dir, ref, lowcov):
     }
 
 
+def measure_go_around(pts, i, rw, db, cache_dir, ref):
+    """Measure the approach that ended in a go-around exactly like a landing, up to the
+    lowest point. ga.low_ft is the height where the climb began, ga.low_x how far from
+    the threshold (nm, negative past it)."""
+    G = measure(pts, i, rw, db, cache_dir, ref, False)
+    G["td"], G["stop"], G["hae_off"], G["lowcov"] = None, None, None, False
+    p = pts[i]
+    x, c = runway_frame(p["lat"], p["lon"], rw)
+    low = round(p["geom"] - ref) if p["geom"] is not None else None
+    if low is None or low > MAX_GA_FT:
+        return None  # a descent and climb this high near a runway is overflight, not an approach
+    # bottoming out over the runway within 50 ft is a touch-and-go the ground flag missed
+    kind = "touch" if (low is not None and low < 50 and x < 0) else "go-around"
+    G["ga"] = {"low_ft": low, "low_x": round(x, 2), "kind": kind}
+    return G
+
+
+SESSION_S = 45 * 60
+MAX_GA_FT = 1500
+
+
+def _mark_sessions(events):
+    """rep: arrivals (landings plus go-arounds) at the same airport within 45 minutes either
+    side. Three or more is pattern work or practice approaches."""
+    for e in events:
+        e["rep"] = sum(1 for o in events if o["apt"] == e["apt"] and abs(o["t"] - e["t"]) <= SESSION_S)
+
+
 def _thin(prof, step=0.1, turn=8):
     """Keep a point every `step` nm, plus any point where the track changes by `turn` degrees."""
     out = []
@@ -298,7 +326,11 @@ def analyze(pts, db, cache_dir, log=print, geoid_table=None, window=None):
         if window and not window[0] <= pts[i]["t"] < window[1]:
             continue
         fe = db.airport(rw["apt"]).get("elev") or rw["elev"] or 0
-        gas.append({"t": int(pts[i]["t"]), "apt": rw["apt"], "rwy": rw["rwy"], "low_ft": round(pts[i]["geom"] - geoid - fe)})
+        ref = fe + table.get(rw["apt"], geoid if offs else table.get("_default", -100))
+        G = measure_go_around(pts, i, rw, db, cache_dir, ref)
+        if G:
+            gas.append(G)
+    _mark_sessions(landings + gas)
     gaps = detect_coverage_gaps(pts, db, [i for i, _ in events])
     if window:
         gaps = [g for g in gaps if window[0] <= g["t"] < window[1]]

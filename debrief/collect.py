@@ -31,6 +31,9 @@ from .pipeline import airport_db
 from .sources import flatten
 
 FT_PER_NM = 6076.1
+# Bump when analysis changes what is stored per event; older days are re-queued behind new ones.
+# 2: go-arounds measured like approaches (gates, decision height), practice-session counts.
+ANALYSIS_VERSION = 2
 
 
 # --------------------------------------------------------------------------- state io
@@ -91,15 +94,23 @@ def _priority_days(path, done):
 
 
 def _days_to_do(done, since, max_days, priority=()):
-    """Priority days first (all of them), then the newest unprocessed days."""
+    """Priority days first (all of them), then the newest unprocessed days, then days
+    processed under an older ANALYSIS_VERSION (newest first) to fill the budget."""
     today = dt.datetime.now(dt.timezone.utc).date()
-    d = today - dt.timedelta(days=1)
     out = list(priority)
     max_days = max_days + len(out)
+    d = today - dt.timedelta(days=1)
     while d >= since and len(out) < max_days:
         if str(d) not in done and d not in out:
             out.append(d)
         d -= dt.timedelta(days=1)
+    stale = sorted((k for k, v in done.items() if (v or {}).get("v", 1) < ANALYSIS_VERSION), reverse=True)
+    for k in stale:
+        if len(out) >= max_days:
+            break
+        day = dt.date.fromisoformat(k)
+        if day not in out:
+            out.append(day)
     return out
 
 
@@ -118,7 +129,7 @@ def collect_day(key, day, reg, type_code, data_dir, cache_dir, geoid, log=print)
     db = airport_db(cache_dir)
     t0 = dt.datetime.combine(day, dt.time(), dt.timezone.utc).timestamp()
     window = (t0, t0 + 86400)
-    stats = {"tag": tag, "aircraft": found, "landings": 0, "lowcov": 0, "at": int(time.time())}
+    stats = {"tag": tag, "aircraft": found, "landings": 0, "go_arounds": 0, "lowcov": 0, "at": int(time.time()), "v": ANALYSIS_VERSION}
     for path in sorted(glob.glob(os.path.join(raw_dir, "*", f"{day}.json"))):
         hex_ = os.path.basename(os.path.dirname(path))
         if hex_ not in reg:
@@ -151,7 +162,11 @@ def collect_day(key, day, reg, type_code, data_dir, cache_dir, geoid, log=print)
             if L.get("hae_off") is not None:
                 geoid.setdefault("_obs", {}).setdefault(L["apt"], []).append(L["hae_off"])
         for g in gas:
-            rec["go_arounds"][anon.landing_id(key, hex_, g["t"])] = g
+            g["og"] = _owner_index(rec, g.pop("owner", None) or meta.get("ownOp"))
+            gid = anon.landing_id(key, hex_, g["t"])
+            g["id"] = gid
+            rec["go_arounds"][gid] = g
+            stats["go_arounds"] += g["ga"]["kind"] == "go-around"
         for g in gaps:
             rec["unscored"][anon.landing_id(key, hex_, g["t"])] = g
         save_state(key, data_dir, pid, rec)
@@ -231,6 +246,22 @@ def public_landing(L, restricted):
     return d
 
 
+def _day(t):
+    return dt.datetime.fromtimestamp(t, dt.timezone.utc).strftime("%Y-%m-%d")
+
+
+def public_go_around(gid, G, restricted):
+    """Measured go-arounds publish like landings. Ones stored before ANALYSIS_VERSION 2
+    carry only time, runway and low point until their day is reprocessed."""
+    if "gates" in G:
+        return public_landing(dict(G, id=gid), restricted)
+    d = {"id": gid, "d": dt.datetime.fromtimestamp(G["t"], dt.timezone.utc).strftime("%Y-%m-%d"),
+         "legacy": True, "ga": {"low_ft": G.get("low_ft"), "low_x": None, "kind": "go-around"}}
+    if not restricted:
+        d.update({"apt": G.get("apt"), "rwy": G.get("rwy")})
+    return d
+
+
 def _public_event(e, restricted):
     out = {"d": dt.datetime.fromtimestamp(e["t"], dt.timezone.utc).strftime("%Y-%m-%d"), "why": e.get("why")}
     if not restricted:
@@ -248,6 +279,7 @@ def publish(key, data_dir, type_code, days_meta):
         with open(path) as f:
             records.append(_open(key, f.read()))
     fixes = _runway_fixes(records)
+    current = {k for k, v in days_meta.items() if (v or {}).get("v", 1) >= ANALYSIS_VERSION}
     index, names = [], {}
     ac = aircraft.info(type_code)
     for rec in records:
@@ -262,15 +294,22 @@ def publish(key, data_dir, type_code, days_meta):
             "pid": rec["pid"], "type": rec["type"], "desc": rec.get("desc"),
             "restricted": restricted, "current_owner": cur,
             "landings": out,
-            "go_arounds": [_public_event(e, restricted) for e in sorted(rec["go_arounds"].values(), key=lambda e: e["t"])],
+            "go_arounds": [],  # filled below, after the runway fix
             "unscored": [_public_event(e, restricted) for e in sorted(rec["unscored"].values(), key=lambda e: e["t"])],
         }
+        for G in rec["go_arounds"].values():
+            B = fixes.get((G.get("apt"), G.get("rwy")))
+            if B and "gates" in G:
+                G.update(_apply_fix(G, B))
+        # an unmeasured go-around on a day that has since been reprocessed wasn't detected again: drop it
+        gas = {gid: G for gid, G in rec["go_arounds"].items() if "gates" in G or _day(G["t"]) not in current}
+        doc["go_arounds"] = [public_go_around(gid, G, restricted) for gid, G in sorted(gas.items(), key=lambda kv: kv[1]["t"])]
         _write_json(os.path.join(pub, "ac", f"{rec['pid']}.json"), doc)
         # the owner-only file the site decrypts: tail plus everything withheld above
         detail = {
             "tail": rec.get("tail"), "hex": rec.get("hex"), "year": rec.get("year"), "owners": rec.get("owners"),
             "landings": {L["id"]: {k: L.get(k) for k in ("t", "apt", "rwy", "apt_name", "metar", "fe", "airline")} for L in Ls},
-            "go_arounds": [{k: e.get(k) for k in ("t", "apt", "rwy")} for e in rec["go_arounds"].values()],
+            "go_arounds": {gid: {k: G.get(k) for k in ("t", "apt", "rwy", "apt_name", "metar", "fe", "airline")} for gid, G in gas.items()},
             "unscored": [{k: e.get(k) for k in ("t", "apt", "name", "why")} for e in rec["unscored"].values()],
         }
         with open(os.path.join(pub, "ac", f"{rec['pid']}.bin"), "w") as f:
@@ -286,6 +325,9 @@ def publish(key, data_dir, type_code, days_meta):
         "generated": int(time.time()),
         "days": len(done), "first_day": done[0] if done else None, "last_day": done[-1] if done else None,
         "aircraft_seen": len(records), "landings": sum(e["n"] for e in index),
+        "analysis_version": ANALYSIS_VERSION,
+        # days whose go-arounds are measured; go-around rates only use landings from these days
+        "current_days": sorted(current),
         "restricted": sum(e["restricted"] for e in index),
         "source": "adsb.lol open data (ODbL)",
     }

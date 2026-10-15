@@ -44,8 +44,8 @@ def main():
         if os.path.basename(os.path.dirname(f)) == "ac":
             d = json.loads(text)
             if d.get("restricted"):
-                for L in d["landings"]:
-                    if L.get("apt") or L.get("rwy") or L.get("fe"):
+                for L in d["landings"] + d.get("go_arounds", []) + d.get("unscored", []):
+                    if L.get("apt") or L.get("rwy") or L.get("fe") or L.get("name"):
                         problems.append(f"{f}: airport on a LADD/PIA aircraft")
                         break
     if problems:

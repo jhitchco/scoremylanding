@@ -68,7 +68,7 @@ function renderHome(){
   const t=document.createElementNS(NS,'title');t.textContent=`${nameOf(a.pid)||a.pid}: ${v}`;c.appendChild(t)}
  const med=vals.length?vals.slice().sort((a,b)=>a-b)[vals.length>>1]:null;
  if(med!=null){el('line',{x1:sx(med),x2:sx(med),y1:12,y2:104,stroke:css('--mag'),'stroke-width':2},s);txt(s,sx(med),9,`median ${med}`,{'text-anchor':'middle',fill:css('--mag'),'font-weight':600})}
- $('dist').innerHTML='';$('dist').appendChild(s); renderFleetTrend(); renderBestWorst();
+ $('dist').innerHTML='';$('dist').appendChild(s); renderFleetTrend(); renderBestWorst(); renderTab();
  const st=R.map(a=>a.st[i]).filter(x=>x!=null);
  $('distnote').textContent=R.length?`${R.length} aircraft with 3 or more landings. The typical airplane is stable at 500 ft on ${Math.round(100*st.sort((a,b)=>a-b)[st.length>>1])}% of approaches.`:'';
  // table
@@ -91,7 +91,91 @@ function bwList(title,cls,items,showAc){
 function wireBw(box){box.querySelectorAll('.bwrow').forEach(b=>b.onclick=()=>{
  if(D&&b.dataset.pid===D.pid){goTo(b.dataset.id);return}
  history.pushState(null,'',`?ac=${encodeURIComponent(b.dataset.pid)}&l=${encodeURIComponent(b.dataset.id)}`); route().then(()=>window.scrollTo(0,0))})}
-let bwWin=30;
+let bwWin=30, homeTab='board', gaSort='g', gaDir=-1;
+function setTab(t,push){homeTab=t;
+ document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===t));
+ for(const k of ['board','ga','gust']) $('tab-'+k).hidden=k!==t;
+ if(push){const u=new URL(location.href); if(t==='board') u.searchParams.delete('tab'); else u.searchParams.set('tab',t); history.replaceState(null,'',u)}
+ renderTab()}
+function renderTab(){if(homeTab==='ga') renderGa(); else if(homeTab==='gust') renderGust()}
+const pct=x=>x==null?'–':(Math.round(x*10)/10)+'%';
+function renderGa(){
+ const G=FLEET.goarounds, m=FLEET.meta;
+ if(!G||!G.days){$('ganote').textContent='Go-arounds are measured as each day of data is reprocessed. None are ready yet; check back in a few hours.';
+  for(const id of ['gatiles','gabands','gawhy','galb','gacats']) $(id).innerHTML=''; return}
+ const P=G.per[vi()];
+ $('ganote').textContent=`Measured on ${G.days} of ${m.days} days so far${G.days<m.days?' (older days are being reprocessed)':''}, last 12 months. Practice instrument approaches and touch-and-goes are left out of the rates. Unstable means the 500 ft definition at the Vref above.`;
+ const tile=(k,n,sub)=>`<div class="tile"><div class="k">${k}</div><div class="n">${n}</div><div class="s">${sub}</div></div>`;
+ $('gatiles').innerHTML=
+  tile('Go-around rate',pct(P.rate),`${P.ga.toLocaleString()} go-arounds in ${(P.ga+P.land).toLocaleString()} approaches`)+
+  tile('Unstable at 500 ft that went around',pct(P.unstable_went),`${P.ga_unstable} went around, ${P.land_unstable.toLocaleString()} continued to land. Another ${P.ga_before_500} climbed away before reaching 500 ft.`)+
+  tile('Average score of the approach',P.avg_ga??'–',`when it ended in a go-around. Unstable approaches that landed averaged ${P.avg_pushed??'–'}; stable ones ${P.avg_stable??'–'}.`)+
+  tile('Aircraft that went around',`${G.with_ga} of ${G.aircraft}`,'at least once on measured days');
+ // where the climb began
+ {const W=760,row=34,mL=150,mR=60,H=G.bands.length*row+8,max=Math.max(1,...G.bands);
+  const s=svg(W,H); s.setAttribute('role','img'); s.setAttribute('aria-label','Go-arounds by height where the climb began');
+  G.band_names.forEach((nm,k)=>{const y=k*row+6,w=(W-mL-mR)*G.bands[k]/max;
+   txt(s,mL-10,y+row/2,nm,{'text-anchor':'end','dominant-baseline':'middle'});
+   const r=el('rect',{x:mL,y:y+6,width:Math.max(w,1),height:row-14,rx:3,fill:css('--path')},s);
+   const t=document.createElementNS(NS,'title');t.textContent=`${nm}: ${G.bands[k]}`;r.appendChild(t);
+   txt(s,mL+w+8,y+row/2,G.bands[k],{'dominant-baseline':'middle',fill:css('--ink')})});
+  $('gabands').innerHTML='';$('gabands').appendChild(s)}
+ // what was wrong at 500 ft
+ {const names=['Not lined up','Off the 3° path','Sink over 1,000 fpm','Speed out of range'],W=760,row=56,mL=150,mR=60,H=names.length*row+8;
+  const s=svg(W,H); s.setAttribute('role','img'); s.setAttribute('aria-label','Failed checks at 500 ft, went around versus continued to land');
+  const ser=[['Went around',P.why_ga,css('--path')],['Continued to land',P.why_pushed,css('--mag')]];
+  names.forEach((nm,k)=>{const y=k*row+4; txt(s,mL-10,y+row/2-2,nm,{'text-anchor':'end','dominant-baseline':'middle'});
+   ser.forEach(([lab,v,c],j)=>{const val=v[k]; if(val==null) return; const w=(W-mL-mR)*val/100, yy=y+6+j*22;
+    const r=el('rect',{x:mL,y:yy,width:Math.max(w,1),height:18,rx:3,fill:c},s);
+    const t=document.createElementNS(NS,'title');t.textContent=`${nm}, ${lab.toLowerCase()}: ${val}%`;r.appendChild(t);
+    txt(s,mL+w+8,yy+9,val+'%',{'dominant-baseline':'middle',fill:css('--ink')})})});
+  $('gawhy').innerHTML=`<div class="legend"><span><i style="background:${css('--path')}"></i>Went around (${P.ga_unstable})</span><span><i style="background:${css('--mag')}"></i>Continued to land (${P.land_unstable.toLocaleString()})</span></div>`;
+  $('gawhy').appendChild(s)}
+ // who goes around
+ const i=vi();
+ const rows=FLEET.aircraft.filter(a=>a.a>=5).map(a=>{const u=a.gu[i]+a.lu[i];return {a,g:a.g,n:a.a,rate:100*a.g/a.a,u,went:u?100*a.gu[i]/u:null}});
+ const key={pid:r=>nameOf(r.a.pid)||r.a.pid,n:r=>r.n,g:r=>r.g,rate:r=>r.rate,u:r=>r.u,went:r=>r.went??-1}[gaSort];
+ rows.sort((x,y)=>{const a=key(x),b=key(y);return (a<b?-1:a>b?1:0)*gaDir||(y.n-x.n)});
+ const th=(k,l,cls='')=>`<th class="${cls}"><button class="sort" data-k="${k}" aria-sort="${gaSort===k?(gaDir<0?'descending':'ascending'):'none'}">${l}${gaSort===k?(gaDir<0?' ▾':' ▴'):''}</button></th>`;
+ $('galb').innerHTML=`<thead><tr>${th('pid','Aircraft','l')}${th('n','Approaches')}${th('g','Go-arounds')}${th('rate','Rate')}${th('u','Unstable at 500 ft')}${th('went','Went around when unstable')}</tr></thead><tbody>`+
+  rows.map(r=>{const nm=nameOf(r.a.pid);return `<tr data-pid="${r.a.pid}" tabindex="0"><td class="l"><span class="pid">${r.a.pid}</span>${nm?` <b class="tail">${esc(nm)}</b>`:''}</td><td>${r.n}</td><td>${r.g}</td><td>${pct(r.rate)}</td><td>${r.u}</td><td>${r.went==null?'<span class="dim">none unstable</span>':pct(r.went)}</td></tr>`}).join('')+'</tbody>';
+ $('galb').querySelectorAll('button.sort').forEach(b=>b.onclick=()=>{const k=b.dataset.k; if(gaSort===k) gaDir=-gaDir; else {gaSort=k; gaDir=k==='pid'?1:-1} renderGa()});
+ $('galb').querySelectorAll('tr[data-pid]').forEach(tr=>{const go=()=>open(tr.dataset.pid); tr.onclick=go; tr.onkeydown=e=>{if(e.key==='Enter')go()}});
+ const C=G.cats, c=k=>(C[k]||0).toLocaleString();
+ $('gacats').innerHTML=`<p>ADS-B shows a descent toward a runway and a climb away without touching down. It can't show intent, so each one is sorted by where it happened and the weather:</p>
+ <ul class="fd">
+ <li><b>Go-around</b> (${c('goaround')}): climbed away before the threshold, in weather good enough to land, and not at a typical decision height on a straight-in. Counted.</li>
+ <li><b>Over the runway</b> (${c('runway')}): the climb began past the threshold, a late go-around or a low pass. Counted.</li>
+ <li><b>Missed approach, low weather</b> (${c('weather')}): ceiling under 1,000 ft or visibility under 3 miles. Counted.</li>
+ <li><b>Likely practice approach</b> (${c('practice')}): a straight-in in good weather that climbed away between 150 and 500 ft, where a decision height or MDA usually sits. Left out of the rates, since most are planned missed approaches.</li>
+ <li><b>Touch-and-go</b> (${c('touch')}): bottomed out on the runway; the ground flag was missed. Left out.</li></ul>`;
+}
+function renderGust(){
+ const G=FLEET.gusts; if(!G){$('gusthead').textContent='No data yet.';return}
+ const v=vref;
+ $('gusthead').innerHTML=G.slopeThr==null?'Not enough gusty landings yet.':`<b>Partly.</b> For every knot the gust rule calls for (half the gust factor), pilots carry about ${G.slopeThr} kt more over the threshold and ${G.slope500} kt more at 500 ft.`;
+ const W=860,row=64,mL=170,mR=24,mT=10,H=G.bins.length*row+mT+40,lo=-10,hi=35;
+ const sx=k=>mL+(k-lo)/(hi-lo)*(W-mL-mR);
+ const s=svg(W,H); s.setAttribute('role','img'); s.setAttribute('aria-label','Estimated speed over Vref at 500 ft and at the threshold, by gust factor');
+ for(let k=lo;k<=hi;k+=5){el('line',{x1:sx(k),x2:sx(k),y1:mT,y2:H-34,stroke:k===0?css('--ink2'):css('--grid')},s);txt(s,sx(k),H-16,(k>0?'+':'')+k,{'text-anchor':'middle'})}
+ txt(s,(mL+W-mR)/2,H-1,`knots over Vref ${v} (estimated)`,{'text-anchor':'middle'});
+ G.bins.forEach((b,j)=>{const y=mT+j*row; txt(s,mL-12,y+row/2-8,b.label,{'text-anchor':'end','dominant-baseline':'middle',fill:css('--ink')});
+  txt(s,mL-12,y+row/2+10,`${b.n.toLocaleString()} landings`,{'text-anchor':'end','dominant-baseline':'middle'});
+  const tip=(e,t)=>{const x=document.createElementNS(NS,'title');x.textContent=t;e.appendChild(x)};
+  // target band: Vref to Vref + gust add, the rule's target
+  const tg=el('line',{x1:sx(b.book),x2:sx(b.book),y1:y+8,y2:y+row-8,stroke:css('--good'),'stroke-width':3},s); tip(tg,`Gust rule target: Vref+${b.book}`);
+  const ya=y+row/2-9, yb=y+row/2+9;
+  const [a0,a1,a2]=b.ias500.map(x=>x-v), [t0,t1,t2]=b.iasThr.map(x=>x-v);
+  el('line',{x1:sx(a0),x2:sx(a2),y1:ya,y2:ya,stroke:css('--path'),'stroke-width':2,opacity:.55},s);
+  tip(el('circle',{cx:sx(a1),cy:ya,r:6,fill:css('--path'),stroke:css('--paper'),'stroke-width':2},s),`500 ft: median Vref${a1>=0?'+':''}${a1} (middle half ${a0} to ${a2})`);
+  el('line',{x1:sx(t0),x2:sx(t2),y1:yb,y2:yb,stroke:css('--mag'),'stroke-width':2,opacity:.55},s);
+  tip(el('rect',{x:sx(t1)-6,y:yb-6,width:12,height:12,rx:2,fill:css('--mag'),stroke:css('--paper'),'stroke-width':2},s),`Threshold: median Vref${t1>=0?'+':''}${t1} (middle half ${t0} to ${t2})`);
+ });
+ $('gustplot').innerHTML=`<div class="legend"><span><i style="background:${css('--path')};border-radius:50%"></i>At 500 ft</span><span><i style="background:${css('--mag')}"></i>Over the threshold</span><span><i style="background:${css('--good')};width:4px"></i>Gust rule target (Vref + half the gust factor)</span><span>Lines span the middle half of landings</span></div>`;
+ $('gustplot').appendChild(s);
+ const fl=G.flips[vi()];
+ $('gustnote').textContent=`${G.gusty.toLocaleString()} of ${G.total.toLocaleString()} landings in the last 12 months had gusts in the METAR. The score widens the speed band by half the gust factor, up to 10 kt; at Vref ${v} that allowance kept ${fl} approaches from being marked unstable on speed. Speeds are estimated from groundspeed and the wind, and everyone is held to the same Vref, so a heavy airplane flying its own Vref reads a few knots fast. Compare the spacing between rows rather than the absolute numbers.`;
+}
 function renderBestWorst(){
  const B=FLEET.bestworst, box=$('bw'); if(!B){box.innerHTML='';$('bwwin').innerHTML='';return}
  // older fleet.json had a single 90-day set
@@ -140,6 +224,7 @@ async function loadAircraft(pid){
 function mergePrivate(doc,p){
  doc.tail=p.tail;
  for(const l of doc.landings){const x=p.landings[l.id]; if(x) Object.assign(l,x)}
+ const pg=p.go_arounds; if(pg&&!Array.isArray(pg)) for(const g of doc.go_arounds||[]){const x=pg[g.id]; if(x) Object.assign(g,x)}
  doc.unscored=p.unscored.slice().sort((a,b)=>a.t-b.t).map(u=>Object.assign({d:new Date(u.t*1000).toISOString().slice(0,10)},u));
 }
 function fromApi(r){ // server mode: full data for a tail
@@ -227,12 +312,12 @@ function speed(l,sc){
  return s}
 function cell(v,cls=''){return `<td class="${cls}">${v}</td>`}
 function renderCard(){
- const l=D.landings.find(x=>x.id===sel); if(!l) return; const s=scoreLanding(l,vref); const c=$('card');
+ const l=D.landings.find(x=>x.id===sel)||(D.go_arounds||[]).find(x=>x.id===sel); if(!l) return; const s=scoreLanding(l,vref); const c=$('card'); const GA=l.ga?gaInfo(l):null;
  const w=l.wind||{}; const wtxt=w.spd?`${String(Math.round(w.dir)).padStart(3,'0')}° at ${w.spd}${w.gust?' G'+w.gust:''} kt`:'calm';
  const where=l.apt?`${esc(l.apt)} runway ${esc(l.rwy)}`:'Airport withheld';
  const when=[fmtD(l),fmtT(l)].filter(Boolean).join(', ');
- c.innerHTML=`<div class="ttl"><div><h2>${where}</h2><div class="sub">${l.apt_name?esc(l.apt_name)+'. ':''}${when}. ${l.align>=3?`Straight-in, established ${l.align} nm out`:`Visual pattern, rolled out on final ${l.align} nm out`}. Wind ${wtxt}, ${Math.round(w.hw||0)>=0?Math.round(w.hw||0)+' kt head':Math.round(-w.hw)+' kt tail'}, ${Math.round(Math.abs(w.xw||0))} kt cross. Runway ${l.apt?'':'about '}${(l.rlen||0).toLocaleString()} ft.</div></div>
- <div class="big"><div class="n ${vc(s.verdict)}">${s.score}</div><div class="v ${vc(s.verdict)}">${s.verdict}</div></div></div>
+ c.innerHTML=`<div class="ttl"><div><h2>${where}</h2><div class="sub">${GA?`<b>${GA.cat}.</b> ${GA.where}. `:''}${l.apt_name?esc(l.apt_name)+'. ':''}${when}. ${l.align>=3?`Straight-in, established ${l.align} nm out`:`Visual pattern, rolled out on final ${l.align} nm out`}. Wind ${wtxt}, ${Math.round(w.hw||0)>=0?Math.round(w.hw||0)+' kt head':Math.round(-w.hw)+' kt tail'}, ${Math.round(Math.abs(w.xw||0))} kt cross. Runway ${l.apt?'':'about '}${(l.rlen||0).toLocaleString()} ft.</div></div>
+ <div class="big"><div class="n ${vc(s.verdict)}">${s.score}</div><div class="v ${vc(s.verdict)}">${GA?'Go-around, ':''}${s.verdict}</div></div></div>
  <div class="fig"><h3>Vertical profile</h3><div id="pf"></div><p class="cap">Blue is the flown path, amber where the airplane was still turning onto final. Circles mark the 1,000 and 500 ft gates; the green dot is the estimated touchdown.</p></div>
  <div class="two"><div class="fig"><h3>From above</h3><div id="pl"></div><p class="cap">Runway points up. Dashed magenta is the extended centerline.</p></div>
  <div class="fig"><h3>Estimated airspeed</h3><div id="sp"></div><p class="cap">Green band: Vref−5 to target+10. Amber: up to target+20, the stable limit. Target here is ${s.va} KIAS.</p></div></div>
@@ -247,8 +332,19 @@ function renderCard(){
   const turning=Math.abs(g.trkdev)>12; const pd=g.ang!=null&&!turning?(g.ang-3):null; const dv=g.ias-vref;
   h+=`<tr>${cell(n)}${cell(Math.round(g.hat).toLocaleString()+' ft')}${cell(pd==null?(turning?'turning':''):(pd>=0?'+':'')+pd.toFixed(1)+'°',pd!=null&&Math.abs(pd)>1?'o':pd!=null&&Math.abs(pd)>.5?'w':'')}${cell(Math.round(g.ias))}${cell((dv>=0?'+':'')+Math.round(dv),k==='500ft'&&g.ias>s.va+20?'o':k==='500ft'&&g.ias>s.va+10?'w':'')}${cell(Math.round(-(g.vs||0)),-(g.vs||0)>1000?'o':'')}${cell(Math.round(Math.abs(g.trkdev))+'°',k==='500ft'&&Math.abs(g.trkdev)>10?'o':turning?'w':'')}${cell(Math.round(Math.abs(g.c)).toLocaleString()+' ft')}</tr>`}
  const t=l.thr; if(t) h+=`<tr>${cell('Threshold')}${cell(Math.round(t.hat)+' ft',t.hat>75||t.hat<20?'w':'')}${cell('')}${cell(Math.round(t.ias))}${cell((t.ias-vref>=0?'+':'')+Math.round(t.ias-vref),t.ias>s.va+12?'w':'')}${cell(Math.round(-(t.vs||0)))}${cell('')}${cell(Math.round(Math.abs(t.c))+' ft')}</tr>`;
- h+= l.td&&l.td.ft!=null?`<tr>${cell('Touchdown')}<td colspan="7" style="text-align:left">about ${l.td.ft.toLocaleString()} ft past the threshold${l.td.float!=null?` after ${l.td.float} s of flare`:''}${l.stop&&l.stop.remain?`. Down to taxi speed by ${l.stop.ft.toLocaleString()} ft, ${l.stop.remain.toLocaleString()} ft of runway left`:''}.</td></tr>`:`<tr>${cell('Touchdown')}<td colspan="7" style="text-align:left;color:var(--ink2)">coverage lost before touchdown</td></tr>`;
+ h+= GA?`<tr>${cell('Climb began')}<td colspan="7" style="text-align:left">${GA.where}</td></tr>`:l.td&&l.td.ft!=null?`<tr>${cell('Touchdown')}<td colspan="7" style="text-align:left">about ${l.td.ft.toLocaleString()} ft past the threshold${l.td.float!=null?` after ${l.td.float} s of flare`:''}${l.stop&&l.stop.remain?`. Down to taxi speed by ${l.stop.ft.toLocaleString()} ft, ${l.stop.remain.toLocaleString()} ft of runway left`:''}.</td></tr>`:`<tr>${cell('Touchdown')}<td colspan="7" style="text-align:left;color:var(--ink2)">coverage lost before touchdown</td></tr>`;
  $('gt').innerHTML=h;
+}
+function gaInfo(g){const a=g.ga||{}; const cat=GA_CATS[gaCategory(g)];
+ const pos=a.low_x==null?'':a.low_x<0?`${Math.round(-a.low_x*6076).toLocaleString()} ft past the threshold`:`${a.low_x.toFixed(1)} nm before the threshold`;
+ return {cat, where:a.low_ft==null?'Height not measured':`Climb began at ${Math.max(0,a.low_ft).toLocaleString()} ft above the field${pos?', '+pos:''}`}}
+function renderGaList(){
+ const G=(D.go_arounds||[]).slice().reverse(); $('gasec').hidden=!G.length; if(!G.length) return;
+ $('gat').innerHTML='<thead><tr><th>Date</th><th>Airport</th><th>Kind</th><th>Climb began</th><th>At 500 ft</th><th>Score</th></tr></thead><tbody>'+G.map(g=>{
+  if(g.legacy) return `<tr><td>${esc(g.d)}</td><td>${g.apt?esc(g.apt)+' '+esc(g.rwy):'withheld'}</td><td class="dim">Not yet measured</td><td>${g.ga&&g.ga.low_ft!=null?Math.max(0,g.ga.low_ft)+' ft':''}</td><td></td><td></td></tr>`;
+  const s=scoreLanding(g,vref), a=g.ga, at=g.gates&&g.gates['500ft']?(s.stable?'Stable':'Unstable'):'Not reached';
+  return `<tr data-id="${g.id}" tabindex="0"><td>${esc(fmtD(g))}</td><td>${g.apt?esc(g.apt)+' '+esc(g.rwy):'withheld'}</td><td>${GA_CATS[gaCategory(g)]}</td><td>${a.low_x!=null&&a.low_x<0?'over the runway':Math.max(0,a.low_ft).toLocaleString()+' ft'}</td><td class="${at==='Unstable'?'c-Needs':''}">${at}</td><td class="${vc(s.verdict)}">${s.score}</td></tr>`}).join('')+'</tbody>';
+ $('gat').querySelectorAll('tr[data-id]').forEach(tr=>{const go=()=>goTo(tr.dataset.id);tr.onclick=go;tr.onkeydown=e=>{if(e.key==='Enter')go()}});
 }
 function goTo(id){sel=id;renderAll();$('card').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
 function renderIns(){
@@ -324,7 +420,7 @@ function renderUn(){
  $('un').innerHTML='<thead><tr><th>Date</th><th>Airport</th><th>What happened</th></tr></thead><tbody>'+U.map(u=>`<tr><td>${esc(u.d)}</td><td>${u.apt?esc(u.apt)+(u.name?', '+esc(u.name):''):'withheld'}</td><td>${esc(u.why||'')}</td></tr>`).join('')+'</tbody>';
 }
 function renderAll(){
- if(D&&!$('report').hidden){renderList();renderCard();renderTrend();renderAcBestWorst();renderIns();renderFleet()}
+ if(D&&!$('report').hidden){renderList();renderCard();renderTrend();renderAcBestWorst();renderIns();renderFleet();renderGaList()}
  else if(FLEET&&!$('home').hidden) renderHome();
  $('vo').textContent=vref; const wt=FLEET?weightFor(vref):null; $('wt').textContent=wt?`(~${wt.toLocaleString()} lb)`:'';
 }
@@ -344,7 +440,7 @@ async function route(){
  const p=new URLSearchParams(location.search), ac=p.get('ac')||p.get('tail');
  if(ac){await showAircraft(ac)}
  else{ $('report').hidden=true; D=null; $('ownwrap').hidden=true; $('title').firstChild.textContent='Score my landing';
-  if(FLEET){status('');$('home').hidden=false;renderHome()}
+  if(FLEET){status('');$('home').hidden=false;const t=p.get('tab');setTab(['ga','gust'].includes(t)?t:'board',false);renderHome()}
   else status('<h2>No fleet data yet</h2><p>The collector publishes here after its first run.</p>') }
  renderAll();
 }
@@ -361,5 +457,6 @@ $('search').onsubmit=e=>{e.preventDefault();const q=$('q').value.trim(); if(q) o
 $('lockbtn').onclick=()=>{if(KEY) lock(); else {$('unlock').hidden=!$('unlock').hidden; if(!$('unlock').hidden) $('secret').focus()}};
 $('unlock').onsubmit=async e=>{e.preventDefault(); $('unlockmsg').textContent=''; if(await unlock($('secret').value)){$('secret').value=''; await route()}};
 window.onpopstate=()=>route();
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>setTab(b.dataset.tab,true));
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>renderAll());
 init();

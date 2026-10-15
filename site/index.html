@@ -33,6 +33,12 @@
 <div class="status" id="status"></div>
 
 <section id="home" hidden>
+ <div class="tabs" role="tablist" aria-label="Fleet views">
+  <button type="button" role="tab" data-tab="board" aria-selected="true">Leaderboard</button>
+  <button type="button" role="tab" data-tab="ga" aria-selected="false">Go-arounds</button>
+  <button type="button" role="tab" data-tab="gust" aria-selected="false">Gusts</button>
+ </div>
+ <div id="tab-board">
  <div class="sec first"><h2>How the fleet flies</h2>
   <div id="dist"></div>
   <p class="note" id="distnote"></p>
@@ -46,6 +52,27 @@
  <div class="sec"><h2>Every aircraft</h2>
   <p class="note">Each airplane appears under a pseudonym, a keyed hash of its transponder address. It stays the same from day to day, but it can't be turned back into a tail number. Ranked on the current owner's landings in the last 12 months, at the Vref above. Aircraft with fewer than 3 landings are listed but not ranked.</p>
   <div class="tbl"><table class="lb" id="lb"></table></div>
+ </div>
+ </div>
+ <div id="tab-ga" hidden>
+  <div class="sec first"><h2>Who goes around, and when</h2>
+   <p class="note" id="ganote"></p>
+   <div class="tiles" id="gatiles"></div>
+  </div>
+  <div class="sec"><h2>Where the climb began</h2><div id="gabands"></div>
+   <p class="note">Height above the field at the lowest point, for go-arounds that count (see below). Over the runway means the airplane was already past the threshold.</p></div>
+  <div class="sec"><h2>What was wrong at 500 ft</h2><div id="gawhy"></div>
+   <p class="note">Share of unstable approaches failing each check, comparing those that went around with those that continued to land. An approach can fail more than one.</p></div>
+  <div class="sec"><h2>Who goes around</h2>
+   <p class="note">Aircraft with 5 or more approaches on measured days in the last 12 months, at the Vref above.</p>
+   <div class="tbl"><table class="lb" id="galb"></table></div></div>
+  <div class="sec"><h2>What counts as a go-around</h2><div class="note" id="gacats"></div></div>
+ </div>
+ <div id="tab-gust" hidden>
+  <div class="sec first"><h2>Do pilots add for gusts?</h2>
+   <p class="trendhead" id="gusthead"></p>
+   <div id="gustplot"></div>
+   <p class="note" id="gustnote"></p></div>
  </div>
 </section>
 
@@ -64,6 +91,9 @@
  <section class="sec" id="bwsec"><h2>This aircraft's best and worst</h2><div class="bw" id="bwac"></div></section>
  <section class="sec" id="fleetsec" hidden><h2>How this aircraft compares</h2><div id="fleet"></div></section>
  <section class="sec"><h2>Patterns and recommendations</h2><div class="ins" id="ins"></div></section>
+ <section class="sec" id="gasec" hidden><h2>Go-arounds</h2>
+  <p class="note">Click one to open its approach above.</p>
+  <div class="tbl"><table class="un" id="gat"></table></div></section>
  <section class="sec" id="unsec"><h2>Arrivals the data couldn't score</h2>
   <p class="note">Receivers lost the airplane before touchdown, usually at small fields with no nearby feeder.</p>
   <div class="tbl"><table class="un" id="un"></table></div></section>

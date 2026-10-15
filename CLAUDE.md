@@ -8,12 +8,14 @@ He works on Windows PowerShell 5.1: give him `;` between commands, never `&&`.
 - `debrief/collect.py` fleet collector: day queue, adsb.lol ingest, per-aircraft encrypted state, `publish()` writes anonymized `data/public`.
 - `debrief/adsblol.py` streams a day's adsb.lol release (split tar, resumable range requests) and extracts tracked ICAO addresses.
 - `debrief/anon.py` pseudonyms (HMAC of ICAO with SML_SECRET), AES-GCM seal/unseal (gzip inside), LADD/PIA flags.
-- `debrief/analyze.py` landing / go-around / coverage-gap detection, gate measurement. Profile rows are `[track nm, height, est IAS, cross-track ft, track error deg, along-track nm]`.
+- `debrief/analyze.py` landing / go-around / coverage-gap detection, gate measurement. Go-arounds are measured like landings up to the low point (`ga.low_ft`, `ga.low_x`, `ga.kind`); `rep` counts arrivals at the same airport within 45 min. Profile rows are `[track nm, height, est IAS, cross-track ft, track error deg, along-track nm]`.
 - `debrief/fleet.py` FAA registry (`fleet_registry(cache, "SF50")` returns {hex: tail}).
 - `site/` static front end. `score.js` is the only scoring implementation; `app.js` is the leaderboard, detail view and owner unlock (WebCrypto).
 - `tools/summarize.js` fleet.json (per-aircraft averages at every Vref). `tools/privacy_check.py` deploy gate.
 - `.github/workflows/collect.yml` every 3 h; state on the `data` branch (force-pushed single commit).
 - `server/` + Docker: private on-demand lookup by tail from ADS-B Exchange. Not used by the public site.
+
+- `ANALYSIS_VERSION` in collect.py: bump it when stored fields change; days processed under an older version are re-queued behind new days. Go-around categories (practice, weather, over the runway) live in `site/score.js` so they can be tuned without reprocessing.
 
 ## Rules
 - Never use em dashes in copy, comments or UI text.

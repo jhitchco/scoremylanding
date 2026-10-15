@@ -65,7 +65,7 @@ function scoreLanding(L,vref){
   if(L.airline) c.push('Airline field: ATC speed requests are likely (not visible in ADS-B).');
   if(L.rlen<5000) c.push(`Shorter runway (${L.rlen.toLocaleString()} ft).`);
   if(L.lowcov) c.push('ADS-B coverage dropped below about 250 ft; touchdown not scored.');
-  return {score,raw,stable,verdict,findings:f,context:c,va};
+  return {score,raw,stable,verdict,findings:f,context:c,va,crit};
 }
 
 const _avg=(a,f)=>a.length?a.reduce((s,x)=>s+f(x),0)/a.length:0;
@@ -154,4 +154,23 @@ function whyLine(L,s,vref){
   return (L.align<1&&/Not lined up/.test(t))?`Circling or tight pattern. ${t}`:t;
 }
 
-if(typeof module!=='undefined') module.exports={scoreLanding,insights,gustAdd,fleetCompare,trendOf,dayOf,rankable,whyLine};
+// Go-arounds. ADS-B can't see intent, so each one is sorted by where it happened and the
+// weather. Planned missed approaches on practice instrument approaches look like a stable
+// approach that climbs away near a decision height in good weather.
+const GA_CATS={goaround:'Go-around',runway:'Over the runway',weather:'Missed approach, low weather',practice:'Likely practice approach',touch:'Touch-and-go',legacy:'Not yet measured'};
+function gaCategory(G){
+  if(G.legacy||!G.ga) return 'legacy';
+  const g=G.ga; if(g.kind==='touch') return 'touch';
+  if(g.low_x!=null&&g.low_x<0) return 'runway';
+  if((G.ceil!=null&&G.ceil<1000)||(G.vis!=null&&G.vis<3)) return 'weather';
+  const vmc=(G.ceil==null||G.ceil>=3000)&&(G.vis==null||G.vis>=5);
+  if(vmc&&G.align>=3&&g.low_ft>=150&&g.low_ft<=500) return 'practice';
+  return 'goaround';
+}
+// counts toward go-around rates: real decisions, not practice or missed ground contact
+const gaReal=G=>['goaround','runway','weather'].includes(gaCategory(G));
+const GA_BANDS=['Above 1,000 ft','500 to 1,000 ft','200 to 500 ft','Below 200 ft','Over the runway'];
+function gaBand(G){const g=G.ga||{}; if(g.low_x!=null&&g.low_x<0) return 4; const h=g.low_ft;
+  return h==null?null:h>1000?0:h>500?1:h>200?2:3}
+
+if(typeof module!=='undefined') module.exports={scoreLanding,insights,gustAdd,fleetCompare,trendOf,dayOf,rankable,whyLine,gaCategory,gaReal,gaBand,GA_CATS,GA_BANDS};

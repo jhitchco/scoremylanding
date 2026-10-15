@@ -58,3 +58,17 @@ T = trendOf(up.slice(0, 3)); assert.strictEqual(T.slope, null);
 T = trendOf(up.map((p, i) => ({day: 20000 + i, score: p.score}))); assert.strictEqual(T.slope, null);
 
 console.log('score.js: all tests passed');
+
+// go-around categories
+const {gaCategory, gaReal, gaBand} = require('../site/score.js');
+const ga = (o, x) => Object.assign(base(), {td: null, stop: null, ga: Object.assign({low_ft: 300, low_x: 1, kind: 'go-around'}, o)}, x || {});
+assert.strictEqual(gaCategory(ga({}, {align: 6, ceil: 99999, vis: 10})), 'practice');
+assert.strictEqual(gaCategory(ga({low_ft: 700})), 'goaround');
+assert.strictEqual(gaCategory(ga({}, {ceil: 600})), 'weather');
+assert.strictEqual(gaCategory(ga({low_x: -0.2, low_ft: 80})), 'runway');
+assert.strictEqual(gaCategory(ga({kind: 'touch', low_x: -0.2})), 'touch');
+assert.strictEqual(gaCategory({legacy: true}), 'legacy');
+assert.ok(!gaReal(ga({}, {align: 6})) && gaReal(ga({low_ft: 700})));
+assert.strictEqual(gaBand(ga({low_ft: 700})), 1);
+assert.strictEqual(scoreLanding(ga({low_ft: 700}), 81).score > 0, true);
+console.log('go-around categories: passed');
