@@ -13,6 +13,7 @@ He works on Windows PowerShell 5.1: give him `;` between commands, never `&&`.
 - `site/` static front end. `score.js` is the only scoring implementation; `app.js` is the leaderboard, detail view and owner unlock (WebCrypto).
 - `tools/summarize.js` fleet.json (per-aircraft averages at every Vref). `tools/privacy_check.py` deploy gate.
 - `.github/workflows/collect.yml` every 3 h; state on the `data` branch (force-pushed single commit).
+- `debrief/notify.py` + `tools/notify_render.js` post-flight email after each run. Secrets: SML_SUBSCRIBERS (`TAIL[:VREF]=email`), SMTP_USER, SMTP_PASS (Gmail app password), optional SMTP_HOST/SMTP_FROM. Only flights from the last 4 days are sent; sent state is `state/notify.bin`. Logs must never name a tail or address (Actions logs are public).
 - `server/` + Docker: private on-demand lookup by tail from ADS-B Exchange. Not used by the public site.
 
 - `ANALYSIS_VERSION` in collect.py: bump it when stored fields change; days processed under an older version are re-queued behind new days. Go-around categories (practice, weather, over the runway) live in `site/score.js` so they can be tuned without reprocessing.

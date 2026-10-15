@@ -2,7 +2,7 @@
 // Scores every aircraft at every Vref in its type's range with site/score.js, so the
 // leaderboard and percentiles use exactly the same rules as the detail view.
 const fs = require('fs'), path = require('path');
-const {scoreLanding, trendOf, dayOf, rankable, whyLine, gustAdd, gaCategory, gaReal, gaBand, GA_BANDS} = require('../site/score.js');
+const {scoreLanding, trendOf, dayOf, rankable, whyLine, gustAdd, gaCategory, gaReal, gaBand, GA_BANDS, closeCall} = require('../site/score.js');
 
 const pub = process.argv[2] || 'data/public';
 const idx = JSON.parse(fs.readFileSync(path.join(pub, 'index.json')));
@@ -47,6 +47,28 @@ function gaAircraft(a, doc) {
   gaCache.set(a.pid, {g: real.length, a: Ld.length + real.length, gu, lu, gp: Gd.filter(g => gaCategory(g) === 'practice').length});
 }
 const gaRow = doc => gaCache.get(doc.pid) || {};
+// ---- runways: every landing with a known runway (LADD/PIA aircraft have none published)
+const RW = new Map();
+const AFTER = {kinds: {}, next: vrefs.map(() => ({n: 0, sum: 0})), min: []};
+function runwayAircraft(doc) {
+  for (const l of doc.landings) {
+    if (!l.apt || !inYear(l)) continue;
+    const k = l.apt + ' ' + l.rwy;
+    const r = RW.get(k) || {apt: l.apt, rwy: l.rwy, rlen: l.rlen, n: 0, ac: new Set(), sum: vrefs.map(() => 0), uns: vrefs.map(() => 0), cc: vrefs.map(() => 0), left: [], ga: 0};
+    r.n++; r.ac.add(doc.pid); if (l.td && l.td.ft != null && l.td.ft >= 0 && l.rlen) r.left.push(l.rlen - l.td.ft);
+    vrefs.forEach((v, j) => { const sc = scoreLanding(l, v); r.sum[j] += sc.score; if (sc.stable === false) r.uns[j]++; if (closeCall(l, v).length) r.cc[j]++; });
+    RW.set(k, r);
+  }
+  const byId = new Map(doc.landings.map(l => [l.id, l]));
+  for (const g of doc.go_arounds || []) {
+    if (!CUR.has(g.d) || !inYear(g) || !gaReal(g)) continue;
+    if (g.apt) { const r = RW.get(g.apt + ' ' + g.rwy); if (r) r.ga++; else RW.set(g.apt + ' ' + g.rwy, {apt: g.apt, rwy: g.rwy, rlen: g.rlen, n: 0, ac: new Set(), sum: vrefs.map(() => 0), uns: vrefs.map(() => 0), cc: vrefs.map(() => 0), left: [], ga: 1}); }
+    const a = g.after || {kind: 'unseen'}; AFTER.kinds[a.kind] = (AFTER.kinds[a.kind] || 0) + 1;
+    if (a.min != null) AFTER.min.push(a.min);
+    const nx = a.kind === 'landed' && byId.get(a.id);
+    if (nx) vrefs.forEach((v, j) => { AFTER.next[j].n++; AFTER.next[j].sum += scoreLanding(nx, v).score; });
+  }
+}
 // ---- gusts: how much speed pilots carry against the gust factor
 const gustRows = [];
 
@@ -54,7 +76,7 @@ for (const a of idx.aircraft) {
   const doc = JSON.parse(fs.readFileSync(path.join(pub, 'ac', a.pid + '.json')));
   // current owner only, last 12 months: the leaderboard is about how the airplane is flown now
   const L = doc.landings.filter(l => l.og === doc.current_owner && now - Date.parse(l.d) < YEAR);
-  gaAircraft(a, doc);
+  gaAircraft(a, doc); runwayAircraft(doc);
   if (!L.length) { rows.push(Object.assign({pid: a.pid, n: 0, last: a.last}, gaRow(doc))); continue; }
   const s = [], st = [], tr = [];
   for (const v of vrefs) {
@@ -76,6 +98,7 @@ for (const a of idx.aircraft) {
   for (const l of L) if (l.wind && l.wind.spd != null && l.gates && l.gates['500ft']) gustRows.push(l);
   rows.push(Object.assign({pid: a.pid, n: L.length, last: a.last, s, st, tr, pattern: Math.round(100 * L.filter(l => l.align < 3).length / L.length)}, gaRow(doc)));
 }
+const qt = (a, p) => { a = a.filter(x => x != null && isFinite(x)).sort((x, y) => x - y); return a.length ? a[Math.floor(p * (a.length - 1))] : null; };
 const med = a => { const b = a.slice().sort((x, y) => x - y); return b.length ? b[b.length >> 1] : null; };
 const weeks = Object.keys(weekly).map(Number).sort((a, b) => a - b).filter(w => weekly[w][0].length >= 5);
 const fleetWeekly = {week: weeks, med: weeks.map(w => weekly[w].map(med)), n: weeks.map(w => weekly[w][0].length)};
@@ -102,9 +125,13 @@ const goarounds = {days: CUR.size, cats: GA.cats, bands: GA.bands, band_names: G
     avg_ga: N.ga ? r1(N.sumGa / N.ga) : null, avg_pushed: N.landU ? r1(N.sumU / N.landU) : null, avg_stable: N.nS ? r1(N.sumS / N.nS) : null,
     why_ga: GA.why[k].ga.map(x => GA.why[k].gaN ? Math.round(100 * x / GA.why[k].gaN) : null),
     why_pushed: GA.why[k].pushed.map(x => GA.why[k].pushedN ? Math.round(100 * x / GA.why[k].pushedN) : null)}))};
+goarounds.after = {kinds: AFTER.kinds, min_median: qt(AFTER.min, .5), next_avg: AFTER.next.map(x => x.n ? r1(x.sum / x.n) : null), next_n: AFTER.next[0].n};
+// runways with 5+ landings; aircraft count only, never which aircraft
+// 2+ aircraft keeps this a fleet view rather than one owner's home strip
+const runways = [...RW.values()].filter(r => r.n >= 5 && r.ac.size >= 2).map(r => ({apt: r.apt, rwy: r.rwy, rlen: r.rlen, n: r.n, ac: r.ac.size, ga: r.ga,
+  avg: r.sum.map(x => r1(x / r.n)), uns: r.uns, cc: r.cc, left: qt(r.left, .5)})).sort((a, b) => b.n - a.n);
 // gust additive: median estimated IAS at 500 ft and the threshold, by gust factor
 const gf = l => (l.wind.gust && l.wind.gust > l.wind.spd) ? l.wind.gust - l.wind.spd : 0;
-const qt = (a, p) => { a = a.filter(x => x != null && isFinite(x)).sort((x, y) => x - y); return a.length ? a[Math.floor(p * (a.length - 1))] : null; };
 const slope = (xs, ys) => { const n = xs.length; if (n < 10) return null; const mx = xs.reduce((a, b) => a + b) / n, my = ys.reduce((a, b) => a + b) / n;
   let sxy = 0, sxx = 0; for (let k = 0; k < n; k++) { sxy += (xs[k] - mx) * (ys[k] - my); sxx += (xs[k] - mx) ** 2; } return sxx ? Math.round(100 * sxy / sxx) / 100 : null; };
 const GBINS = [[0, 0, 'No gusts'], [1, 7, 'Gusting 1 to 7 kt'], [8, 11, 'Gusting 8 to 11 kt'], [12, 99, 'Gusting 12 kt or more']];
@@ -121,6 +148,6 @@ const gusts = {
     const a = scoreLanding(l, v).stable, b = scoreLanding(Object.assign({}, l, {wind: Object.assign({}, l.wind, {gust: null})}), v).stable;
     return n + (a === true && b === false); }, 0)),
 };
-const out = {meta: Object.assign({}, idx.meta, {scored_landings_12mo: scored, current_days: undefined}), vrefs, aircraft: rows, weekly: fleetWeekly, bestworst, goarounds, gusts};
+const out = {meta: Object.assign({}, idx.meta, {scored_landings_12mo: scored, current_days: undefined}), vrefs, aircraft: rows, weekly: fleetWeekly, bestworst, goarounds, gusts, runways};
 fs.writeFileSync(path.join(pub, 'fleet.json'), JSON.stringify(out));
 console.log(`fleet.json: ${rows.filter(r => r.n).length} aircraft with landings, ${scored} landings in the last 12 months; go-arounds measured on ${CUR.size} days`);

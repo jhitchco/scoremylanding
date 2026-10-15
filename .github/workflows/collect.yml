@@ -86,6 +86,22 @@ jobs:
         id: privacy
         run: python tools/privacy_check.py data/public --type "$FLEET_TYPE" --cache .cache
 
+      # Post-flight email to subscribed owners. Skips quietly without SML_SUBSCRIBERS and
+      # SMTP secrets; never fails the run. Logs never name a tail or an address.
+      - name: Post-flight emails
+        if: github.event_name != 'push' && steps.privacy.outcome == 'success'
+        continue-on-error: true
+        env:
+          SML_SECRET: ${{ secrets.SML_SECRET }}
+          SML_SUBSCRIBERS: ${{ secrets.SML_SUBSCRIBERS }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_FROM: ${{ secrets.SMTP_FROM }}
+        run: |
+          if [ -z "$SML_SUBSCRIBERS" ] || [ -z "$SMTP_USER" ]; then echo "post-flight email not configured"; exit 0; fi
+          python -m debrief.notify --type "$FLEET_TYPE" --data data --cache .cache --out /tmp/notify_out
+
       # Runs even when the privacy gate fails, so hours of collection aren't thrown away.
       # The encrypted state is kept; the public folder is dropped (it's rebuilt every run).
       - name: Save state to the data branch

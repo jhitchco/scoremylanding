@@ -37,6 +37,7 @@
   <button type="button" role="tab" data-tab="board" aria-selected="true">Leaderboard</button>
   <button type="button" role="tab" data-tab="ga" aria-selected="false">Go-arounds</button>
   <button type="button" role="tab" data-tab="gust" aria-selected="false">Gusts</button>
+  <button type="button" role="tab" data-tab="rwy" aria-selected="false">Runways</button>
  </div>
  <div id="tab-board">
  <div class="sec first"><h2>How the fleet flies</h2>
@@ -63,10 +64,21 @@
    <p class="note">Height above the field at the lowest point, for go-arounds that count (see below). Over the runway means the airplane was already past the threshold.</p></div>
   <div class="sec"><h2>What was wrong at 500 ft</h2><div id="gawhy"></div>
    <p class="note">Share of unstable approaches failing each check, comparing those that went around with those that continued to land. An approach can fail more than one.</p></div>
+  <div class="sec"><h2>What happened next</h2><div id="gaafter"></div>
+   <p class="note">The airplane's next arrival within an hour of the go-around. Not seen usually means receivers lost it.</p></div>
   <div class="sec"><h2>Who goes around</h2>
    <p class="note">Aircraft with 5 or more approaches on measured days in the last 12 months, at the Vref above.</p>
    <div class="tbl"><table class="lb" id="galb"></table></div></div>
   <div class="sec"><h2>What counts as a go-around</h2><div class="note" id="gacats"></div></div>
+ </div>
+ <div id="tab-rwy" hidden>
+  <div class="sec first"><h2>Where the close calls are</h2>
+   <p class="note" id="rwynote"></p>
+   <div id="rwyplot"></div></div>
+  <div class="sec"><h2>Runways by close calls</h2>
+   <p class="note">Runways with 5 or more landings by 2 or more aircraft in the last 12 months, at the Vref above. Sorted by the share of landings that were close calls.</p>
+   <div class="seg" id="rwyfilter" role="group" aria-label="Runway length"></div>
+   <div class="tbl"><table class="lb" id="rwylb"></table></div></div>
  </div>
  <div id="tab-gust" hidden>
   <div class="sec first"><h2>Do pilots add for gusts?</h2>

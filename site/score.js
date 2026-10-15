@@ -173,4 +173,17 @@ const GA_BANDS=['Above 1,000 ft','500 to 1,000 ft','200 to 500 ft','Below 200 ft
 function gaBand(G){const g=G.ga||{}; if(g.low_x!=null&&g.low_x<0) return 4; const h=g.low_ft;
   return h==null?null:h>1000?0:h>500?1:h>200?2:3}
 
-if(typeof module!=='undefined') module.exports={scoreLanding,insights,gustAdd,fleetCompare,trendOf,dayOf,rankable,whyLine,gaCategory,gaReal,gaBand,GA_CATS,GA_BANDS};
+// Close calls: the same sloppy approach matters more on a short runway. A landing is a
+// close call when it leaves little runway, or arrives unstable or fast where there is
+// little to spare. Thresholds are deliberately simple; SF50 ground roll is roughly
+// 1,500 to 2,000 ft, so under 2,500 ft left at touchdown is thin.
+const CC={short:5000,leftAtTd:2500};
+function closeCall(L,vref){
+  const out=[], s=scoreLanding(L,vref), short=L.rlen&&L.rlen<CC.short;
+  if(L.td&&L.td.ft!=null&&L.rlen&&L.rlen-L.td.ft<CC.leftAtTd) out.push(`touched down with about ${(Math.round((L.rlen-L.td.ft)/100)*100).toLocaleString()} ft of runway left`);
+  if(short&&s.stable===false) out.push(`unstable at 500 ft on a ${L.rlen.toLocaleString()} ft runway`);
+  if(short&&L.thr&&L.thr.ias>s.va+12) out.push(`Vref+${Math.round(L.thr.ias-vref)} over the threshold of a ${L.rlen.toLocaleString()} ft runway`);
+  return out;
+}
+
+if(typeof module!=='undefined') module.exports={closeCall,CC,scoreLanding,insights,gustAdd,fleetCompare,trendOf,dayOf,rankable,whyLine,gaCategory,gaReal,gaBand,GA_CATS,GA_BANDS};

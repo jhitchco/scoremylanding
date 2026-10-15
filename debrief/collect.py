@@ -246,6 +246,28 @@ def public_landing(L, restricted):
     return d
 
 
+AFTER_S = 3600
+
+
+def link_after(rec):
+    """For each go-around, what came next for this airplane within an hour: landed back at
+    the same airport, went around again, or landed somewhere else (diverted)."""
+    events = [("L", lid, L) for lid, L in rec["landings"].items()] + [("G", gid, G) for gid, G in rec["go_arounds"].items()]
+    events.sort(key=lambda e: e[2]["t"])
+    out = {}
+    for k, (typ, gid, G) in enumerate(events):
+        if typ != "G":
+            continue
+        nxt = next((e for e in events[k + 1:] if 0 < e[2]["t"] - G["t"] <= AFTER_S), None)
+        if not nxt:
+            out[gid] = {"kind": "unseen"}
+            continue
+        same = nxt[2].get("apt") == G.get("apt")
+        kind = ("landed" if same else "diverted") if nxt[0] == "L" else ("again" if same else "diverted")
+        out[gid] = {"kind": kind, "id": nxt[1], "min": round((nxt[2]["t"] - G["t"]) / 60)}
+    return out
+
+
 def _day(t):
     return dt.datetime.fromtimestamp(t, dt.timezone.utc).strftime("%Y-%m-%d")
 
@@ -256,7 +278,7 @@ def public_go_around(gid, G, restricted):
     if "gates" in G:
         return public_landing(dict(G, id=gid), restricted)
     d = {"id": gid, "d": dt.datetime.fromtimestamp(G["t"], dt.timezone.utc).strftime("%Y-%m-%d"),
-         "legacy": True, "ga": {"low_ft": G.get("low_ft"), "low_x": None, "kind": "go-around"}}
+         "legacy": True, "after": G.get("after"), "ga": {"low_ft": G.get("low_ft"), "low_x": None, "kind": "go-around"}}
     if not restricted:
         d.update({"apt": G.get("apt"), "rwy": G.get("rwy")})
     return d
@@ -303,6 +325,8 @@ def publish(key, data_dir, type_code, days_meta):
                 G.update(_apply_fix(G, B))
         # an unmeasured go-around on a day that has since been reprocessed wasn't detected again: drop it
         gas = {gid: G for gid, G in rec["go_arounds"].items() if "gates" in G or _day(G["t"]) not in current}
+        after = link_after({"landings": rec["landings"], "go_arounds": gas})
+        gas = {gid: dict(G, after=after.get(gid)) for gid, G in gas.items()}
         doc["go_arounds"] = [public_go_around(gid, G, restricted) for gid, G in sorted(gas.items(), key=lambda kv: kv[1]["t"])]
         _write_json(os.path.join(pub, "ac", f"{rec['pid']}.json"), doc)
         # the owner-only file the site decrypts: tail plus everything withheld above

@@ -21,5 +21,24 @@ class DaysToDo(unittest.TestCase):
         self.assertEqual(len(todo), 3)
 
 
+class Subscribers(unittest.TestCase):
+    def test_parse(self):
+        from debrief.notify import parse_subscribers
+        s = parse_subscribers("n31sf:84=a@x.com, b@y.com;\nN2=c@z.com; junk")
+        self.assertEqual(s[0], {"tail": "N31SF", "vref": 84, "to": ["a@x.com", "b@y.com"]})
+        self.assertEqual(s[1], {"tail": "N2", "vref": None, "to": ["c@z.com"]})
+        self.assertEqual(len(s), 2)
+
+
+class AfterGoAround(unittest.TestCase):
+    def test_link(self):
+        rec = {"landings": {"l1": {"t": 1000 + 600, "apt": "KASH"}, "l2": {"t": 9000, "apt": "KMHT"}},
+               "go_arounds": {"g1": {"t": 1000, "apt": "KASH"}, "g2": {"t": 8000, "apt": "KASH"}, "g3": {"t": 50000, "apt": "KASH"}}}
+        a = collect.link_after(rec)
+        self.assertEqual(a["g1"], {"kind": "landed", "id": "l1", "min": 10})
+        self.assertEqual(a["g2"]["kind"], "diverted")
+        self.assertEqual(a["g3"], {"kind": "unseen"})
+
+
 if __name__ == "__main__":
     unittest.main()
