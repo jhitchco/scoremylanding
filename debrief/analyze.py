@@ -89,8 +89,33 @@ def detect_coverage_gaps(pts, db, landed_idx=()):
             why = f"Coverage lost about {dd:.0f} nm out, roughly {round(agl, -2):,.0f} ft above the field"
         else:
             why = f"Coverage lost at about {round(alt, -2):,.0f} ft; next seen on the ground here"
-        out.append({"t": int(a["t"]), "apt": apt["ident"], "name": apt["name"], "why": why})
+        out.append({"t": int(a["t"]), "apt": apt["ident"], "name": apt["name"], "why": why, "_i": i - 1})
     return out
+
+
+SHORT_FINAL_FT = 800
+
+
+def score_short_final(pts, k, db, cache_dir, table, geoid, has_offs):
+    """Coverage ended on final: the airplane was last seen lined up with a runway and low.
+    Score the approach gates it did show (1,000 ft, 500 ft, often the threshold) as a
+    partial landing, the same way a landing whose coverage ends before touchdown is scored."""
+    a = pts[k]
+    if a.get("geom") is None or a.get("trk") is None:
+        return None
+    rw = db.match(a, max_out_nm=3.0)
+    if not rw:
+        return None
+    fe = db.airport(rw["apt"]).get("elev") or rw["elev"] or 0
+    ref = fe + table.get(rw["apt"], geoid if has_offs else table.get("_default", -100))
+    if a["geom"] - ref > SHORT_FINAL_FT:
+        return None
+    end = dict(a, gnd=True, t=a["t"] + 10)  # stands in for the unseen touchdown
+    L = measure(pts[:k + 1] + [end], k + 1, rw, db, cache_dir, ref, True)
+    if not (L["gates"].get("500ft") or L["gates"].get("1000ft")):
+        return None
+    L["seen_to_ft"] = round(a["geom"] - ref)
+    return L
 
 
 # --------------------------------------------------------------------------- metrics
@@ -320,6 +345,25 @@ def analyze(pts, db, cache_dir, log=print, geoid_table=None, window=None):
             ref, low = (db.airport(rw["apt"]).get("elev") or rw["elev"] or 0) + g, True
         log(f"  [{n}/{len(events)}] {utc(pts[i]['t']):%Y-%m-%d} {rw['apt']} {rw['rwy']}")
         landings.append(measure(pts, i, rw, db, cache_dir, ref, low))
+    # arrivals that disappear on short final still show the gates: score those too
+    gaps, kept = detect_coverage_gaps(pts, db, [i for i, _ in events]), []
+    if window:
+        gaps = [g for g in gaps if window[0] <= g["t"] < window[1]]
+    for g in gaps:
+        k = g.pop("_i")
+        L = score_short_final(pts, k, db, cache_dir, table, geoid, bool(offs))
+        if L:
+            landings.append(L)
+        else:
+            kept.append(g)
+    # the track simply ends low on final (receivers lost it and never saw it again that day);
+    # skip the last 10 minutes of the day, where the next day's file carries the landing
+    last = pts[-1] if pts else None
+    if last and not last["gnd"] and (not window or window[0] <= last["t"] < window[1] - 600) \
+            and not any(pts[i]["t"] >= last["t"] - 120 for i, _ in events):
+        L = score_short_final(pts, len(pts) - 1, db, cache_dir, table, geoid, bool(offs))
+        if L:
+            landings.append(L)
     fixes = correct_runway_offsets(landings)
     gas = []
     for i, rw in detect_go_arounds(pts, db):
@@ -331,7 +375,5 @@ def analyze(pts, db, cache_dir, log=print, geoid_table=None, window=None):
         if G:
             gas.append(G)
     _mark_sessions(landings + gas)
-    gaps = detect_coverage_gaps(pts, db, [i for i, _ in events])
-    if window:
-        gaps = [g for g in gaps if window[0] <= g["t"] < window[1]]
-    return landings, gas, gaps, fixes
+    landings.sort(key=lambda L: L["t"])
+    return landings, gas, kept, fixes

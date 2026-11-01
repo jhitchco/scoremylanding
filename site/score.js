@@ -64,7 +64,7 @@ function scoreLanding(L,vref){
   if(L.ceil<1500||(L.vis!=null&&L.vis<3)) c.push(`IMC or low ceiling (ceiling ${L.ceil<99999?L.ceil.toLocaleString()+' ft':'none'}, vis ${L.vis} sm).`);
   if(L.airline) c.push('Airline field: ATC speed requests are likely (not visible in ADS-B).');
   if(L.rlen<5000) c.push(`Shorter runway (${L.rlen.toLocaleString()} ft).`);
-  if(L.lowcov) c.push('ADS-B coverage dropped below about 250 ft; touchdown not scored.');
+  if(L.lowcov) c.push(L.seen_to_ft!=null?`Receivers lost the airplane about ${Math.max(0,Math.round(L.seen_to_ft/50)*50)} ft above the runway; gates scored, touchdown not.`:'ADS-B coverage dropped below about 250 ft; touchdown not scored.');
   return {score,raw,stable,verdict,findings:f,context:c,va,crit};
 }
 

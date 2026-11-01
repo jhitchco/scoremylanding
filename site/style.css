@@ -147,3 +147,11 @@ button.sort:focus-visible{outline:2px solid var(--mag)}
 .legend i{display:inline-block;width:12px;height:12px;border-radius:2px;margin-right:6px;vertical-align:-1px}
 table.un tbody tr[data-id]{cursor:pointer}
 table.un tbody tr[data-id]:hover{background:var(--wash)}
+
+.strip{position:relative}
+.tip{position:absolute;z-index:5;background:var(--panel);border:1px solid var(--rule);box-shadow:0 4px 14px rgba(0,0,0,.18);padding:8px 12px;font-size:14px;display:flex;flex-direction:column;gap:2px;min-width:150px;pointer-events:auto}
+.tip b{font-family:var(--fc);font-size:20px;font-weight:700}
+.tip .pid{font-size:13px}
+.tip a{color:var(--path);font-weight:600;margin-top:4px}
+.tip a::after{content:" \2192"}
+.list .divider{font-size:13px;color:var(--mag);font-weight:600;padding:10px 12px 4px;border-top:2px dashed var(--mag);margin-top:6px}

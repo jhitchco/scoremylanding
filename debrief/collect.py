@@ -23,7 +23,7 @@ import statistics
 import time
 from collections import defaultdict
 
-from . import aircraft, anon
+from . import aircraft, anon, owners
 from .adsblol import ingest_day
 from .analyze import analyze
 from .fleet import fleet_registry
@@ -33,7 +33,9 @@ from .sources import flatten
 FT_PER_NM = 6076.1
 # Bump when analysis changes what is stored per event; older days are re-queued behind new ones.
 # 2: go-arounds measured like approaches (gates, decision height), practice-session counts.
-ANALYSIS_VERSION = 2
+ANALYSIS_VERSION = 3
+# 3: arrivals that vanish on short final are scored from the gates they show.
+GA_VERSION = 2  # first version that measures go-arounds
 
 
 # --------------------------------------------------------------------------- state io
@@ -76,7 +78,7 @@ def save_state(key, data_dir, pid, rec):
 # --------------------------------------------------------------------------- collection
 
 def _priority_days(path, done):
-    """Days listed in priority_days.txt that haven't been processed, oldest first."""
+    """Days listed in priority_days.txt not yet processed under this ANALYSIS_VERSION, oldest first."""
     try:
         with open(path) as f:
             days = {l.split("#")[0].strip() for l in f}
@@ -88,7 +90,8 @@ def _priority_days(path, done):
             day = dt.date.fromisoformat(d)
         except ValueError:
             continue
-        if d not in done and day < dt.datetime.now(dt.timezone.utc).date():
+        stale = d in done and (done[d] or {}).get("v", 1) < ANALYSIS_VERSION
+        if (d not in done or stale) and day < dt.datetime.now(dt.timezone.utc).date():
             out.append(day)
     return out
 
@@ -144,10 +147,14 @@ def collect_day(key, day, reg, type_code, data_dir, cache_dir, geoid, log=print)
         if not pts:
             continue
         landings, gas, gaps, _ = analyze(pts, db, cache_dir, log=lambda *a: None, geoid_table=geoid, window=window)
-        if not (landings or gas or gaps):
-            continue
         pid = anon.pseudonym(key, hex_, type_code)
-        rec = load_state(key, data_dir, pid) or {"pid": pid, "hex": hex_, "type": type_code, "landings": {}, "go_arounds": {}, "unscored": {}}
+        rec = load_state(key, data_dir, pid)
+        if rec is None and not (landings or gas or gaps):
+            continue
+        rec = rec or {"pid": pid, "hex": hex_, "type": type_code, "landings": {}, "go_arounds": {}, "unscored": {}}
+        # reprocessing a day replaces what an older analysis stored for it
+        for k in ("landings", "go_arounds", "unscored"):
+            rec[k] = {i: e for i, e in rec.get(k, {}).items() if not window[0] <= e["t"] < window[1]}
         rec["tail"] = reg[hex_]
         rec["db_flags"] = days[-1].get("dbFlags", 0)
         rec["desc"] = meta.get("desc")
@@ -300,8 +307,10 @@ def publish(key, data_dir, type_code, days_meta):
     for path in sorted(glob.glob(os.path.join(data_dir, "state", f"{type_code.lower()}-*.bin"))):
         with open(path) as f:
             records.append(_open(key, f.read()))
+    overrides = owners.load(key)
+    records = [owners.apply(r, overrides) for r in records]
     fixes = _runway_fixes(records)
-    current = {k for k, v in days_meta.items() if (v or {}).get("v", 1) >= ANALYSIS_VERSION}
+    current = {k for k, v in days_meta.items() if (v or {}).get("v", 1) >= GA_VERSION}
     index, names = [], {}
     ac = aircraft.info(type_code)
     for rec in records:
@@ -332,6 +341,7 @@ def publish(key, data_dir, type_code, days_meta):
         # the owner-only file the site decrypts: tail plus everything withheld above
         detail = {
             "tail": rec.get("tail"), "hex": rec.get("hex"), "year": rec.get("year"), "owners": rec.get("owners"),
+            "owner_since": overrides.get((rec.get("tail") or "").upper()),
             "landings": {L["id"]: {k: L.get(k) for k in ("t", "apt", "rwy", "apt_name", "metar", "fe", "airline")} for L in Ls},
             "go_arounds": {gid: {k: G.get(k) for k in ("t", "apt", "rwy", "apt_name", "metar", "fe", "airline")} for gid, G in gas.items()},
             "unscored": [{k: e.get(k) for k in ("t", "apt", "name", "why")} for e in rec["unscored"].values()],

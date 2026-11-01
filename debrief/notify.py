@@ -24,7 +24,7 @@ import tempfile
 import time
 from email.message import EmailMessage
 
-from . import aircraft, anon
+from . import aircraft, anon, owners
 from .collect import load_state, _open, _seal
 from .fleet import fleet_registry
 
@@ -118,6 +118,7 @@ def main(argv=None):
         rec = load_state(key, a.data, pid)
         if not rec:
             continue
+        rec = owners.apply(rec, owners.load(key))
         last = sent.get(tail, {}).get("last_t") or now - FIRST_LOOKBACK_S
         ev = pending(rec, last, now)
         if not ev:

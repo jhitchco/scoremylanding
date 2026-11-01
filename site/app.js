@@ -56,19 +56,10 @@ function renderHome(){
  const m=FLEET.meta;
  $('sum').textContent=`${m.desc||m.type} fleet. ${FLEET.aircraft.filter(a=>a.n).length} aircraft with landings in the last 12 months, ${m.scored_landings_12mo.toLocaleString()} landings scored, from ${m.days} day${m.days===1?'':'s'} of open ADS-B data (${m.first_day} to ${m.last_day}).`;
  // distribution
- const vals=R.map(a=>a.s[i]); const W=900,H=150,mL=24,mR=24,lo=Math.min(40,...vals)-2,hi=100;
- const sx=v=>mL+(v-lo)/(hi-lo)*(W-mL-mR);
- const s=svg(W,H); s.setAttribute('role','img'); s.setAttribute('aria-label',`Average approach score for each of ${R.length} ranked aircraft`);
- el('line',{x1:mL,x2:W-mR,y1:100,y2:100,stroke:css('--rule')},s);
- for(let v=Math.ceil(lo/10)*10;v<=100;v+=10){el('line',{x1:sx(v),x2:sx(v),y1:96,y2:104,stroke:css('--ink2')},s);txt(s,sx(v),122,v,{'text-anchor':'middle'})}
- txt(s,W/2,145,'average approach score per aircraft',{'text-anchor':'middle'});
- const bins={};
- for(const a of R){const v=a.s[i],b=Math.round(v);const k=bins[b]=(bins[b]||0)+1;
-  const c=el('circle',{cx:sx(v),cy:100-k*8,r:3.6,fill:css('--path'),opacity:.75},s);
-  const t=document.createElementNS(NS,'title');t.textContent=`${nameOf(a.pid)||a.pid}: ${v}`;c.appendChild(t)}
+ const vals=R.map(a=>a.s[i]);
  const med=vals.length?vals.slice().sort((a,b)=>a-b)[vals.length>>1]:null;
- if(med!=null){el('line',{x1:sx(med),x2:sx(med),y1:12,y2:104,stroke:css('--mag'),'stroke-width':2},s);txt(s,sx(med),9,`median ${med}`,{'text-anchor':'middle',fill:css('--mag'),'font-weight':600})}
- $('dist').innerHTML='';$('dist').appendChild(s); renderFleetTrend(); renderBestWorst(); renderTab();
+ dotStrip($('dist'),R.map(a=>({pid:a.pid,v:a.s[i],n:a.n,rank:rank.get(a.pid)})),{mark:med,markLabel:`median ${med}`});
+ renderFleetTrend(); renderBestWorst(); renderTab();
  const st=R.map(a=>a.st[i]).filter(x=>x!=null);
  $('distnote').textContent=R.length?`${R.length} aircraft with 3 or more landings. The typical airplane is stable at 500 ft on ${Math.round(100*st.sort((a,b)=>a-b)[st.length>>1])}% of approaches.`:'';
  // table
@@ -233,6 +224,44 @@ function renderBestWorst(){
  box.innerHTML=bwList('Best','c-Good',S.best[i],true)+bwList('Worst','c-Needs',S.worst[i],true);
  wireBw(box);
 }
+
+// ---------------------------------------------------------------- dot strip with hover card
+// items: [{pid, v, n}] average score per aircraft. Hover or tap a dot for the tail (when
+// unlocked) and a link to the airplane; clicking a dot opens it.
+function dotStrip(box,items,opt={}){
+ const W=opt.w||900,mL=24,mR=24,step=7,r=3.4,vals=items.map(a=>a.v).concat(opt.mark!=null?[opt.mark]:[]);
+ const lo=Math.min(40,...vals)-2,hi=100,sx=v=>mL+(v-lo)/(hi-lo)*(W-mL-mR);
+ const bins={}; for(const a of items){a._b=Math.round(a.v*2)/2; a._k=bins[a._b]=(bins[a._b]||0)+1}
+ const maxK=Math.max(1,...Object.values(bins)), top=24, base=top+maxK*step+6, H=base+48;
+ const s=svg(W,H); s.setAttribute('role','img'); s.setAttribute('aria-label',opt.label||`Average approach score for each of ${items.length} aircraft`);
+ el('line',{x1:mL,x2:W-mR,y1:base,y2:base,stroke:css('--rule')},s);
+ for(let v=Math.ceil(lo/10)*10;v<=100;v+=10){el('line',{x1:sx(v),x2:sx(v),y1:base-4,y2:base+4,stroke:css('--ink2')},s);txt(s,sx(v),base+22,v,{'text-anchor':'middle'})}
+ txt(s,W/2,H-4,'average approach score per aircraft',{'text-anchor':'middle'});
+ if(opt.mark!=null){el('line',{x1:sx(opt.mark),x2:sx(opt.mark),y1:14,y2:base+4,stroke:css('--mag'),'stroke-width':2},s);
+  txt(s,sx(opt.mark),10,opt.markLabel,{'text-anchor':sx(opt.mark)>W-110?'end':sx(opt.mark)<110?'start':'middle',fill:css('--mag'),'font-weight':600})}
+ const g=el('g',{},s);
+ for(const a of items){const cy=base-a._k*step;
+  el('circle',{cx:sx(a._b),cy,r,fill:a.pid===opt.self?css('--mag'):css(opt.color||'--path'),opacity:.8},g);
+  const hit=el('circle',{cx:sx(a._b),cy,r:4.5,fill:'transparent',style:'cursor:pointer','data-pid':a.pid,tabindex:0},g);
+  const t=document.createElementNS(NS,'title');t.textContent=`${nameOf(a.pid)||a.pid}: ${a.v}`;hit.appendChild(t)}
+ box.innerHTML=''; box.classList.add('strip'); box.appendChild(s);
+ const tip=document.createElement('div'); tip.className='tip'; tip.hidden=true; box.appendChild(tip);
+ let hideT=null; const byPid=new Map(items.map(a=>[a.pid,a]));
+ const show=hit=>{clearTimeout(hideT); const a=byPid.get(hit.dataset.pid), nm=nameOf(a.pid);
+  tip.innerHTML=`<b>${esc(nm||a.pid)}</b>${nm?`<span class="pid">${a.pid}</span>`:''}<span>Average ${a.v}${a.n?`, ${a.n} landing${a.n===1?'':'s'}`:''}${a.rank?`, #${a.rank}`:''}</span><a href="?ac=${encodeURIComponent(a.pid)}" data-pid="${a.pid}">Open aircraft</a>`;
+  tip.querySelector('a').onclick=e=>{e.preventDefault();open(a.pid)};
+  const br=box.getBoundingClientRect(), hr=hit.getBoundingClientRect();
+  tip.hidden=false; const tw=tip.offsetWidth;
+  tip.style.left=Math.max(0,Math.min(br.width-tw,hr.left-br.left+hr.width/2-tw/2))+'px';
+  tip.style.top=(hr.top-br.top-tip.offsetHeight-8)+'px'};
+ const hide=()=>{hideT=setTimeout(()=>{tip.hidden=true},250)};
+ g.querySelectorAll('[data-pid]').forEach(h=>{const t=h.querySelector('title'); h.addEventListener('mouseenter',()=>{if(t)t.remove();show(h)});h.addEventListener('mouseleave',hide);
+  h.addEventListener('focus',()=>show(h));h.addEventListener('blur',hide);
+  h.addEventListener('click',e=>{if(matchMedia('(hover: none)').matches&&tip.hidden){show(h);return} open(h.dataset.pid)});
+  h.addEventListener('keydown',e=>{if(e.key==='Enter')open(h.dataset.pid)})});
+ tip.addEventListener('mouseenter',()=>clearTimeout(hideT)); tip.addEventListener('mouseleave',hide);
+}
+
 function trendCell(x){
  if(x==null) return '<span class="dim">not enough</span>';
  if(Math.abs(x)<1.5) return `<span class="dim">steady</span>`;
@@ -267,7 +296,7 @@ async function loadAircraft(pid){
  return doc;
 }
 function mergePrivate(doc,p){
- doc.tail=p.tail;
+ doc.tail=p.tail; doc.ownerSinceExact=p.owner_since||null;
  for(const l of doc.landings){const x=p.landings[l.id]; if(x) Object.assign(l,x)}
  const pg=p.go_arounds; if(pg&&!Array.isArray(pg)) for(const g of doc.go_arounds||[]){const x=pg[g.id]; if(x) Object.assign(g,x)}
  doc.unscored=p.unscored.slice().sort((a,b)=>a.t-b.t).map(u=>Object.assign({d:new Date(u.t*1000).toISOString().slice(0,10)},u));
@@ -291,14 +320,19 @@ async function showAircraft(q){
  if(!doc){status(`<h2>No aircraft called ${esc(q)}</h2><p>Search by the aircraft's ID (like <span class="pid">sf50-1a2b3c4d</span>)${KEY?' or its tail number':''}, or pick one from <a href="./">the list</a>.</p>`);return}
  D=doc; const L0=set(); sel=L0.length?L0[0].id:(D.landings.length?D.landings[D.landings.length-1].id:null);
  const want=new URLSearchParams(location.search).get('l'); if(want&&D.landings.find(x=>x.id===want)){ if(!L0.find(x=>x.id===want)) $('own').checked=true; sel=want }
- $('ownwrap').hidden=!(D.current_owner>0); $('own').checked=false;
+ const firstCur=D.landings.find(l=>l.og===D.current_owner);
+ $('ownwrap').hidden=!D.landings.some(l=>l.og!==D.current_owner); $('own').checked=false;
+ D.ownerSince=D.landings.some(l=>l.og!==D.current_owner)?(D.ownerSinceExact||(firstCur&&firstCur.d)):null;
+ $('ownlbl').textContent=D.ownerSince?`Include earlier owners (before ${fmtD({d:D.ownerSince})})`:'Include earlier owners';
  status(''); $('home').hidden=true; $('report').hidden=false;
  if(!D.landings.length){status(`<h2>${esc(D.tail||D.pid)}: no complete landings yet</h2>`);$('report').hidden=true;return}
  renderUn(); renderAll();
 }
 function renderList(){
  const L=set(), el=$('list'); el.innerHTML=''; let m='';
+ let div=false;
  for(const l of L){const s=scoreLanding(l,vref); const mm=fmtM(l);
+  if(!div&&l.og!==D.current_owner){div=true;const h=document.createElement('div');h.className='divider';h.textContent=`Earlier owner, before ${D.ownerSince?fmtD({d:D.ownerSince}):'the current one'}`;el.appendChild(h);m=''}
   if(mm!==m){m=mm;const h=document.createElement('div');h.className='mon';h.textContent=mm;el.appendChild(h)}
   const b=document.createElement('button');b.className='row';b.setAttribute('aria-current',l.id===sel);
   b.innerHTML=`<b>${esc(label(l))}</b><span class="sc ${vc(s.verdict)}">${s.score}</span><span class="meta">${fmtD(l)}, ${l.align>=3?'straight-in':'pattern'}${l.og!==D.current_owner?', prior owner':''}${l.lowcov?', partial':''}</span><span class="vd ${vc(s.verdict)}">${s.verdict}</span>`;
@@ -413,16 +447,8 @@ function renderFleet(){
   <p>Stable at 500 ft: ${Math.round(100*F.me.stab)}% versus ${Math.round(100*F.fleetStable)}% for the fleet (${ord(F.pctStable)} percentile).</p></div>
   <div id="fleetplot"></div></div>
   <p class="note">Current owner's landings in the last 12 months, everyone scored at the same Vref (set above), so weight differences are not accounted for.</p>`;
- const W=760,H=150,mL=20,mR=20,lo=Math.min(40,...F.dist,F.me.avg)-2,hi=100;
- const sx=v=>mL+(v-lo)/(hi-lo)*(W-mL-mR);
- const s=svg(W,H); s.setAttribute('role','img'); s.setAttribute('aria-label',`Average score for each aircraft in the fleet, with this one marked at ${Math.round(F.me.avg)}`);
- el('line',{x1:mL,x2:W-mR,y1:96,y2:96,stroke:css('--rule')},s);
- for(let v=Math.ceil(lo/10)*10;v<=100;v+=10){el('line',{x1:sx(v),x2:sx(v),y1:92,y2:100,stroke:css('--ink2')},s);txt(s,sx(v),118,v,{'text-anchor':'middle'})}
- txt(s,W/2,142,'average approach score per aircraft',{'text-anchor':'middle'});
- const bins={}; for(const v of F.dist){const b=Math.round(v);const k=bins[b]=(bins[b]||0)+1;el('circle',{cx:sx(v),cy:96-k*8,r:3.6,fill:css('--ink2'),opacity:.6},s)}
- el('line',{x1:sx(F.me.avg),x2:sx(F.me.avg),y1:14,y2:100,stroke:css('--mag'),'stroke-width':2.5},s);
- txt(s,sx(F.me.avg),10,`${D.tail&&KEY?D.tail:D.pid} ${Math.round(F.me.avg)}`,{'text-anchor':sx(F.me.avg)>W-100?'end':sx(F.me.avg)<100?'start':'middle',fill:css('--mag'),'font-weight':600});
- $('fleetplot').appendChild(s);
+ const i=vi(), others=FLEET.aircraft.filter(a=>a.n>=3&&a.pid!==D.pid&&a.s).map(a=>({pid:a.pid,v:a.s[i],n:a.n}));
+ dotStrip($('fleetplot'),others,{w:760,color:'--ink2',mark:Math.round(F.me.avg*10)/10,markLabel:`${D.tail&&KEY?D.tail:D.pid} ${Math.round(F.me.avg)}`,label:`Average score for each aircraft in the fleet, with this one marked at ${Math.round(F.me.avg)}`});
 }
 function renderTrend(){
  const wins=[[30,'1 month'],[90,'3 months'],[180,'6 months'],[365,'12 months']];
@@ -444,6 +470,9 @@ function renderTrend(){
  el('line',{x1:m.l,x2:W-m.r,y1:sy(69.5),y2:sy(69.5),stroke:css('--bad'),'stroke-dasharray':'2 4',opacity:.6},s); txt(s,W-m.r-2,sy(69.5)-5,'unstable cap',{'text-anchor':'end'});
  const ticks=trendWin<=30?7:trendWin<=90?14:trendWin<=180?30:60;
  for(let d=today;d>=from;d-=ticks) txt(s,sx(d),H-m.b+18,new Date(d*864e5).toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}),{'text-anchor':'middle'});
+ // owner change
+ if(D.ownerSince&&$('own').checked){const od=Math.floor(Date.parse(D.ownerSince+'T00:00:00Z')/864e5);
+  if(od>from){el('line',{x1:sx(od),x2:sx(od),y1:m.t,y2:H-m.b,stroke:css('--mag'),'stroke-width':2,'stroke-dasharray':'3 4'},s);txt(s,sx(od)+6,m.t+12,'New owner',{fill:css('--mag'),'font-weight':600})}}
  // fleet weekly median
  if(FLEET&&FLEET.weekly){const i=vi(); const F=FLEET.weekly.week.map((w,k)=>[w+3,FLEET.weekly.med[k][i]]).filter(p=>p[0]>=from);
   if(F.length>1) el('path',{d:F.map((p,k)=>(k?'L':'M')+sx(p[0]).toFixed(1)+' '+sy(p[1]).toFixed(1)).join(' '),fill:'none',stroke:css('--mag'),'stroke-width':1.8,'stroke-dasharray':'6 5'},s)}
