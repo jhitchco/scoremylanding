@@ -353,7 +353,7 @@ def publish(key, data_dir, type_code, days_meta):
         index.append({"pid": rec["pid"], "n": len(out), "last": last, "restricted": restricted})
     with open(os.path.join(pub, "names.bin"), "w") as f:
         f.write(_seal(key, names))
-    done = sorted(days_meta)
+    done = sorted(k for k, v in days_meta.items() if not (v or {}).get("missing") and not (v or {}).get("failed"))
     meta = {
         "type": type_code, "desc": ac.get("desc"), "vref": ac,
         "generated": int(time.time()),
@@ -403,9 +403,18 @@ def main(argv=None):
             if (time.time() - t_start) / 60 > a.max_minutes:
                 print("time budget reached")
                 break
-            stats = collect_day(key, day, reg, a.type.upper(), a.data, a.cache, geoid)
+            try:
+                stats = collect_day(key, day, reg, a.type.upper(), a.data, a.cache, geoid)
+            except Exception as e:  # a bad release: record it and move on, so it isn't retried every run
+                print(f"{day}: failed ({type(e).__name__}); marked and skipped")
+                days_meta[str(day)] = {"failed": type(e).__name__, "at": int(time.time()), "v": ANALYSIS_VERSION}
+                _write_json(os.path.join(a.data, "meta", "days.json"), days_meta, indent=0)
+                continue
             if stats is None:
                 print(f"{day}: not published yet")
+                if day < dt.datetime.now(dt.timezone.utc).date() - dt.timedelta(days=5):
+                    days_meta[str(day)] = {"missing": True, "at": int(time.time()), "v": ANALYSIS_VERSION}
+                    _write_json(os.path.join(a.data, "meta", "days.json"), days_meta, indent=0)
                 continue
             days_meta[str(day)] = stats
             _refresh_geoid(geoid)

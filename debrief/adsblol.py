@@ -130,7 +130,7 @@ def ingest_day(day, hexes, out_dir, log=print):
         return None, 0
     log(f"{day}: streaming {tag} ({len(urls)} parts)")
     hexes = {h.lower() for h in hexes}
-    found = 0
+    found = bad = 0
     stream = io.BufferedReader(_Concat(urls), buffer_size=4 << 20)
     with tarfile.open(fileobj=stream, mode="r|") as tar:
         for m in tar:
@@ -140,13 +140,17 @@ def ingest_day(day, hexes, out_dir, log=print):
             hex_ = name[len("trace_full_"):].split(".")[0].lower()
             if hex_ not in hexes:
                 continue
-            data = _load(tar.extractfile(m).read())
+            try:
+                data = _load(tar.extractfile(m).read())
+            except Exception:  # one corrupt file in a release shouldn't sink the whole day
+                bad += 1
+                continue
             path = os.path.join(out_dir, hex_, f"{day:%Y-%m-%d}.json")
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, "w") as f:
                 json.dump(data, f, separators=(",", ":"))
             found += 1
-    log(f"{day}: {found} tracked aircraft had data")
+    log(f"{day}: {found} tracked aircraft had data" + (f", {bad} unreadable" if bad else ""))
     os.makedirs(os.path.dirname(marker), exist_ok=True)
     with open(marker, "w") as f:
         f.write(f"{tag} {found}")
