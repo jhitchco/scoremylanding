@@ -1,0 +1,3547 @@
+{
+"2026-10-12": {
+"tag": "v2026.10.12-planes-readsb-prod-0",
+"aircraft": 167,
+"landings": 194,
+"go_arounds": 7,
+"lowcov": 134,
+"at": 1793587669,
+"v": 3
+},
+"2026-10-11": {
+"tag": "v2026.10.11-planes-readsb-prod-0",
+"aircraft": 111,
+"landings": 120,
+"go_arounds": 5,
+"lowcov": 76,
+"at": 1793590214,
+"v": 3
+},
+"2026-10-10": {
+"tag": "v2026.10.10-planes-readsb-prod-0",
+"aircraft": 101,
+"landings": 106,
+"go_arounds": 0,
+"lowcov": 70,
+"at": 1793590744,
+"v": 3
+},
+"2026-10-09": {
+"tag": "v2026.10.09-planes-readsb-prod-0",
+"aircraft": 193,
+"landings": 224,
+"go_arounds": 7,
+"lowcov": 123,
+"at": 1793591465,
+"v": 3
+},
+"2026-10-08": {
+"tag": "v2026.10.08-planes-readsb-prod-0",
+"aircraft": 180,
+"landings": 201,
+"go_arounds": 15,
+"lowcov": 119,
+"at": 1793592195,
+"v": 3
+},
+"2026-10-07": {
+"tag": "v2026.10.07-planes-readsb-prod-0",
+"aircraft": 170,
+"landings": 184,
+"go_arounds": 20,
+"lowcov": 111,
+"at": 1793593127,
+"v": 3
+},
+"2026-10-06": {
+"tag": "v2026.10.06-planes-readsb-prod-0",
+"aircraft": 143,
+"landings": 144,
+"go_arounds": 12,
+"lowcov": 84,
+"at": 1793593908,
+"v": 3
+},
+"2026-10-05": {
+"tag": "v2026.10.05-planes-readsb-prod-0",
+"aircraft": 138,
+"landings": 149,
+"go_arounds": 10,
+"lowcov": 90,
+"at": 1793594515,
+"v": 3
+},
+"2026-10-04": {
+"tag": "v2026.10.04-planes-readsb-prod-0",
+"aircraft": 139,
+"landings": 159,
+"go_arounds": 11,
+"lowcov": 98,
+"at": 1793595109,
+"v": 3
+},
+"2026-10-03": {
+"tag": "v2026.10.03-planes-readsb-prod-0",
+"aircraft": 108,
+"landings": 110,
+"go_arounds": 6,
+"lowcov": 71,
+"at": 1793560989,
+"v": 3
+},
+"2026-10-02": {
+"tag": "v2026.10.02-planes-readsb-prod-0",
+"aircraft": 157,
+"landings": 177,
+"go_arounds": 8,
+"lowcov": 118,
+"at": 1793595597,
+"v": 3
+},
+"2026-10-01": {
+"tag": "v2026.10.01-planes-readsb-prod-0",
+"aircraft": 133,
+"landings": 151,
+"go_arounds": 7,
+"lowcov": 88,
+"at": 1793596321,
+"v": 3
+},
+"2026-09-30": {
+"tag": "v2026.09.30-planes-readsb-prod-0",
+"aircraft": 148,
+"landings": 182,
+"go_arounds": 11,
+"lowcov": 115,
+"at": 1793601797,
+"v": 3
+},
+"2026-09-29": {
+"tag": "v2026.09.29-planes-readsb-prod-0",
+"aircraft": 131,
+"landings": 158,
+"go_arounds": 3,
+"lowcov": 105,
+"at": 1793560600,
+"v": 3
+},
+"2026-09-28": {
+"tag": "v2026.09.28-planes-readsb-prod-0",
+"aircraft": 143,
+"landings": 150,
+"go_arounds": 2,
+"lowcov": 92,
+"at": 1793560117,
+"v": 3
+},
+"2026-09-27": {
+"tag": "v2026.09.27-planes-readsb-prod-0",
+"aircraft": 139,
+"landings": 146,
+"go_arounds": 2,
+"lowcov": 89,
+"at": 1793602492,
+"v": 3
+},
+"2026-09-26": {
+"tag": "v2026.09.26-planes-readsb-prod-0",
+"aircraft": 104,
+"landings": 121,
+"go_arounds": 6,
+"lowcov": 72,
+"at": 1793602987,
+"v": 3
+},
+"2026-09-25": {
+"tag": "v2026.09.25-planes-readsb-prod-0",
+"aircraft": 158,
+"landings": 151,
+"go_arounds": 8,
+"lowcov": 97,
+"at": 1793603618,
+"v": 3
+},
+"2026-09-24": {
+"tag": "v2026.09.24-planes-readsb-prod-0",
+"aircraft": 161,
+"landings": 183,
+"go_arounds": 9,
+"lowcov": 119,
+"at": 1793604178,
+"v": 3
+},
+"2026-09-23": {
+"tag": "v2026.09.23-planes-readsb-prod-0",
+"aircraft": 132,
+"landings": 148,
+"go_arounds": 8,
+"lowcov": 77,
+"at": 1793604943,
+"v": 3
+},
+"2026-09-22": {
+"tag": "v2026.09.22-planes-readsb-prod-0",
+"aircraft": 135,
+"landings": 172,
+"go_arounds": 9,
+"lowcov": 102,
+"at": 1793605555,
+"v": 3
+},
+"2026-09-21": {
+"tag": "v2026.09.21-planes-readsb-prod-0",
+"aircraft": 146,
+"landings": 167,
+"go_arounds": 6,
+"lowcov": 98,
+"at": 1793606330,
+"v": 3
+},
+"2026-09-20": {
+"tag": "v2026.09.20-planes-readsb-prod-0",
+"aircraft": 145,
+"landings": 147,
+"go_arounds": 2,
+"lowcov": 91,
+"at": 1793606989,
+"v": 3
+},
+"2026-05-11": {
+"tag": "v2026.05.11-planes-readsb-prod-0",
+"aircraft": 155,
+"landings": 167,
+"go_arounds": 5,
+"lowcov": 129,
+"at": 1793546802,
+"v": 3
+},
+"2026-05-12": {
+"tag": "v2026.05.12-planes-readsb-prod-0",
+"aircraft": 130,
+"landings": 131,
+"go_arounds": 7,
+"lowcov": 97,
+"at": 1793547377,
+"v": 3
+},
+"2026-05-13": {
+"tag": "v2026.05.13-planes-readsb-prod-0",
+"aircraft": 150,
+"landings": 154,
+"go_arounds": 9,
+"lowcov": 105,
+"at": 1793547887,
+"v": 3
+},
+"2026-05-25": {
+"tag": "v2026.05.25-planes-readsb-prod-0",
+"aircraft": 133,
+"landings": 122,
+"go_arounds": 6,
+"lowcov": 81,
+"at": 1793548452,
+"v": 3
+},
+"2026-05-26": {
+"tag": "v2026.05.26-planes-readsb-prod-0",
+"aircraft": 128,
+"landings": 115,
+"go_arounds": 0,
+"lowcov": 82,
+"at": 1793548893,
+"v": 3
+},
+"2026-07-23": {
+"tag": "v2026.07.23-planes-readsb-prod-0",
+"aircraft": 156,
+"landings": 186,
+"go_arounds": 1,
+"lowcov": 102,
+"at": 1793549270,
+"v": 3
+},
+"2026-07-25": {
+"tag": "v2026.07.25-planes-readsb-prod-0",
+"aircraft": 111,
+"landings": 108,
+"go_arounds": 2,
+"lowcov": 60,
+"at": 1793549788,
+"v": 3
+},
+"2026-07-26": {
+"tag": "v2026.07.26-planes-readsb-prod-0",
+"aircraft": 182,
+"landings": 208,
+"go_arounds": 3,
+"lowcov": 114,
+"at": 1793550091,
+"v": 3
+},
+"2026-08-02": {
+"tag": "v2026.08.02-planes-readsb-prod-0",
+"aircraft": 122,
+"landings": 117,
+"go_arounds": 2,
+"lowcov": 78,
+"at": 1793550692,
+"v": 3
+},
+"2026-08-08": {
+"tag": "v2026.08.08-planes-readsb-prod-0",
+"aircraft": 91,
+"landings": 105,
+"go_arounds": 1,
+"lowcov": 73,
+"at": 1793551212,
+"v": 3
+},
+"2026-08-10": {
+"tag": "v2026.08.10-planes-readsb-prod-0",
+"aircraft": 131,
+"landings": 165,
+"go_arounds": 6,
+"lowcov": 109,
+"at": 1793551659,
+"v": 3
+},
+"2026-08-18": {
+"tag": "v2026.08.18-planes-readsb-prod-0",
+"aircraft": 152,
+"landings": 187,
+"go_arounds": 11,
+"lowcov": 122,
+"at": 1793552503,
+"v": 3
+},
+"2026-09-01": {
+"tag": "v2026.09.01-planes-readsb-prod-0",
+"aircraft": 136,
+"landings": 166,
+"go_arounds": 14,
+"lowcov": 117,
+"at": 1793553661,
+"v": 3
+},
+"2026-09-04": {
+"tag": "v2026.09.04-planes-readsb-prod-0",
+"aircraft": 192,
+"landings": 193,
+"go_arounds": 5,
+"lowcov": 115,
+"at": 1793554896,
+"v": 3
+},
+"2026-09-05": {
+"tag": "v2026.09.05-planes-readsb-prod-0",
+"aircraft": 118,
+"landings": 122,
+"go_arounds": 1,
+"lowcov": 76,
+"at": 1793556068,
+"v": 3
+},
+"2026-09-07": {
+"tag": "v2026.09.07-planes-readsb-prod-0",
+"aircraft": 153,
+"landings": 177,
+"go_arounds": 0,
+"lowcov": 105,
+"at": 1793556831,
+"v": 3
+},
+"2026-09-09": {
+"tag": "v2026.09.09-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 185,
+"go_arounds": 8,
+"lowcov": 124,
+"at": 1793557792,
+"v": 3
+},
+"2026-09-10": {
+"tag": "v2026.09.10-planes-readsb-prod-0",
+"aircraft": 163,
+"landings": 181,
+"go_arounds": 17,
+"lowcov": 122,
+"at": 1793559385,
+"v": 3
+},
+"2026-10-13": {
+"tag": "v2026.10.13-planes-readsb-prod-0",
+"aircraft": 123,
+"landings": 139,
+"go_arounds": 8,
+"lowcov": 79,
+"at": 1793586995,
+"v": 3
+},
+"2026-09-19": {
+"tag": "v2026.09.19-planes-readsb-prod-0",
+"aircraft": 115,
+"landings": 137,
+"go_arounds": 1,
+"lowcov": 88,
+"at": 1793607660,
+"v": 3
+},
+"2026-09-18": {
+"tag": "v2026.09.18-planes-readsb-prod-0",
+"aircraft": 181,
+"landings": 231,
+"go_arounds": 11,
+"lowcov": 141,
+"at": 1793611832,
+"v": 3
+},
+"2026-09-17": {
+"tag": "v2026.09.17-planes-readsb-prod-0",
+"aircraft": 166,
+"landings": 184,
+"go_arounds": 10,
+"lowcov": 103,
+"at": 1793612803,
+"v": 3
+},
+"2026-09-16": {
+"tag": "v2026.09.16-planes-readsb-prod-0",
+"aircraft": 150,
+"landings": 169,
+"go_arounds": 13,
+"lowcov": 105,
+"at": 1793613518,
+"v": 3
+},
+"2026-09-15": {
+"tag": "v2026.09.15-planes-readsb-prod-0",
+"aircraft": 154,
+"landings": 181,
+"go_arounds": 8,
+"lowcov": 115,
+"at": 1793614324,
+"v": 3
+},
+"2026-09-14": {
+"tag": "v2026.09.14-planes-readsb-prod-0",
+"aircraft": 149,
+"landings": 171,
+"go_arounds": 2,
+"lowcov": 110,
+"at": 1793615152,
+"v": 3
+},
+"2026-09-13": {
+"tag": "v2026.09.13-planes-readsb-prod-0",
+"aircraft": 145,
+"landings": 157,
+"go_arounds": 3,
+"lowcov": 96,
+"at": 1793615929,
+"v": 3
+},
+"2026-09-12": {
+"tag": "v2026.09.12-planes-readsb-prod-0",
+"aircraft": 93,
+"landings": 108,
+"go_arounds": 6,
+"lowcov": 58,
+"at": 1793616630,
+"v": 3
+},
+"2026-09-11": {
+"tag": "v2026.09.11-planes-readsb-prod-0",
+"aircraft": 174,
+"landings": 208,
+"go_arounds": 7,
+"lowcov": 124,
+"at": 1793617074,
+"v": 3
+},
+"2026-09-08": {
+"tag": "v2026.09.08-planes-readsb-prod-0",
+"aircraft": 144,
+"landings": 187,
+"go_arounds": 9,
+"lowcov": 135,
+"at": 1793617843,
+"v": 3
+},
+"2026-09-06": {
+"tag": "v2026.09.06-planes-readsb-prod-0",
+"aircraft": 86,
+"landings": 83,
+"go_arounds": 2,
+"lowcov": 50,
+"at": 1793618716,
+"v": 3
+},
+"2026-09-03": {
+"tag": "v2026.09.03-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 147,
+"go_arounds": 2,
+"lowcov": 90,
+"at": 1793622739,
+"v": 3
+},
+"2026-09-02": {
+"tag": "v2026.09.02-planes-readsb-prod-0",
+"aircraft": 149,
+"landings": 158,
+"go_arounds": 9,
+"lowcov": 109,
+"at": 1793623863,
+"v": 3
+},
+"2026-08-31": {
+"tag": "v2026.08.31-planes-readsb-prod-0",
+"aircraft": 142,
+"landings": 162,
+"go_arounds": 4,
+"lowcov": 111,
+"at": 1793623975,
+"v": 3
+},
+"2026-08-30": {
+"tag": "v2026.08.30-planes-readsb-prod-0",
+"aircraft": 146,
+"landings": 156,
+"go_arounds": 6,
+"lowcov": 104,
+"at": 1793624091,
+"v": 3
+},
+"2026-08-29": {
+"tag": "v2026.08.29-planes-readsb-prod-0",
+"aircraft": 87,
+"landings": 86,
+"go_arounds": 2,
+"lowcov": 55,
+"at": 1793624210,
+"v": 3
+},
+"2026-08-28": {
+"tag": "v2026.08.28-planes-readsb-prod-0",
+"aircraft": 165,
+"landings": 176,
+"go_arounds": 9,
+"lowcov": 101,
+"at": 1793624307,
+"v": 3
+},
+"2026-08-27": {
+"tag": "v2026.08.27-planes-readsb-prod-0",
+"aircraft": 166,
+"landings": 195,
+"go_arounds": 12,
+"lowcov": 134,
+"at": 1793624424,
+"v": 3
+},
+"2026-08-26": {
+"tag": "v2026.08.26-planes-readsb-prod-0",
+"aircraft": 125,
+"landings": 168,
+"go_arounds": 6,
+"lowcov": 110,
+"at": 1793624557,
+"v": 3
+},
+"2026-08-25": {
+"tag": "v2026.08.25-planes-readsb-prod-0",
+"aircraft": 129,
+"landings": 146,
+"go_arounds": 12,
+"lowcov": 83,
+"at": 1793624685,
+"v": 3
+},
+"2026-08-24": {
+"tag": "v2026.08.24-planes-readsb-prod-0",
+"aircraft": 144,
+"landings": 187,
+"go_arounds": 1,
+"lowcov": 118,
+"at": 1793624792,
+"v": 3
+},
+"2026-08-23": {
+"tag": "v2026.08.23-planes-readsb-prod-0",
+"aircraft": 147,
+"landings": 149,
+"go_arounds": 8,
+"lowcov": 104,
+"at": 1793633271,
+"v": 3
+},
+"2026-08-22": {
+"tag": "v2026.08.22-planes-readsb-prod-0",
+"aircraft": 110,
+"landings": 119,
+"go_arounds": 1,
+"lowcov": 69,
+"at": 1793633971,
+"v": 3
+},
+"2026-08-21": {
+"tag": "v2026.08.21-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 179,
+"go_arounds": 10,
+"lowcov": 114,
+"at": 1793634533,
+"v": 3
+},
+"2026-08-20": {
+"tag": "v2026.08.20-planes-readsb-prod-0",
+"aircraft": 146,
+"landings": 167,
+"go_arounds": 6,
+"lowcov": 103,
+"at": 1793635907,
+"v": 3
+},
+"2026-08-19": {
+"tag": "v2026.08.19-planes-readsb-prod-0",
+"aircraft": 145,
+"landings": 140,
+"go_arounds": 13,
+"lowcov": 94,
+"at": 1793636772,
+"v": 3
+},
+"2026-08-17": {
+"tag": "v2026.08.17-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 178,
+"go_arounds": 4,
+"lowcov": 106,
+"at": 1793637494,
+"v": 3
+},
+"2026-08-16": {
+"tag": "v2026.08.16-planes-readsb-prod-0",
+"aircraft": 131,
+"landings": 123,
+"go_arounds": 2,
+"lowcov": 73,
+"at": 1793638324,
+"v": 3
+},
+"2026-08-15": {
+"tag": "v2026.08.15-planes-readsb-prod-0",
+"aircraft": 118,
+"landings": 115,
+"go_arounds": 11,
+"lowcov": 83,
+"at": 1793638899,
+"v": 3
+},
+"2026-08-14": {
+"tag": "v2026.08.14-planes-readsb-prod-0",
+"aircraft": 174,
+"landings": 202,
+"go_arounds": 10,
+"lowcov": 122,
+"at": 1793639767,
+"v": 3
+},
+"2026-08-13": {
+"tag": "v2026.08.13-planes-readsb-prod-0",
+"aircraft": 166,
+"landings": 171,
+"go_arounds": 16,
+"lowcov": 122,
+"at": 1793641016,
+"v": 3
+},
+"2026-08-12": {
+"tag": "v2026.08.12-planes-readsb-prod-0",
+"aircraft": 130,
+"landings": 100,
+"go_arounds": 5,
+"lowcov": 68,
+"at": 1793642537,
+"v": 3
+},
+"2026-08-11": {
+"tag": "v2026.08.11-planes-readsb-prod-0",
+"aircraft": 130,
+"landings": 125,
+"go_arounds": 1,
+"lowcov": 84,
+"at": 1793642998,
+"v": 3
+},
+"2026-08-09": {
+"tag": "v2026.08.09-planes-readsb-prod-0",
+"aircraft": 106,
+"landings": 76,
+"go_arounds": 1,
+"lowcov": 47,
+"at": 1793643501,
+"v": 3
+},
+"2026-08-07": {
+"tag": "v2026.08.07-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 162,
+"go_arounds": 6,
+"lowcov": 95,
+"at": 1793643825,
+"v": 3
+},
+"2026-08-06": {
+"tag": "v2026.08.06-planes-readsb-prod-0",
+"aircraft": 148,
+"landings": 154,
+"go_arounds": 3,
+"lowcov": 97,
+"at": 1793644348,
+"v": 3
+},
+"2026-08-05": {
+"tag": "v2026.08.05-planes-readsb-prod-0",
+"aircraft": 155,
+"landings": 157,
+"go_arounds": 9,
+"lowcov": 106,
+"at": 1793644746,
+"v": 3
+},
+"2026-08-04": {
+"tag": "v2026.08.04-planes-readsb-prod-0",
+"aircraft": 126,
+"landings": 131,
+"go_arounds": 2,
+"lowcov": 89,
+"at": 1793645147,
+"v": 3
+},
+"2026-08-03": {
+"tag": "v2026.08.03-planes-readsb-prod-0",
+"aircraft": 129,
+"landings": 135,
+"go_arounds": 11,
+"lowcov": 89,
+"at": 1793645597,
+"v": 3
+},
+"2026-08-01": {
+"tag": "v2026.08.01-planes-readsb-prod-0",
+"aircraft": 68,
+"landings": 40,
+"go_arounds": 0,
+"lowcov": 25,
+"at": 1793646059,
+"v": 3
+},
+"2026-07-31": {
+"tag": "v2026.07.31-planes-readsb-prod-0",
+"aircraft": 169,
+"landings": 166,
+"go_arounds": 12,
+"lowcov": 107,
+"at": 1793646180,
+"v": 3
+},
+"2026-07-30": {
+"tag": "v2026.07.30-planes-readsb-prod-0",
+"aircraft": 166,
+"landings": 172,
+"go_arounds": 13,
+"lowcov": 95,
+"at": 1793647324,
+"v": 3
+},
+"2026-07-29": {
+"tag": "v2026.07.29-planes-readsb-prod-0",
+"aircraft": 142,
+"landings": 151,
+"go_arounds": 5,
+"lowcov": 90,
+"at": 1793648053,
+"v": 3
+},
+"2026-07-28": {
+"tag": "v2026.07.28-planes-readsb-prod-0",
+"aircraft": 146,
+"landings": 152,
+"go_arounds": 13,
+"lowcov": 96,
+"at": 1793648548,
+"v": 3
+},
+"2026-07-27": {
+"tag": "v2026.07.27-planes-readsb-prod-0",
+"aircraft": 138,
+"landings": 143,
+"go_arounds": 2,
+"lowcov": 91,
+"at": 1793649115,
+"v": 3
+},
+"2026-07-24": {
+"tag": "v2026.07.24-planes-readsb-prod-0",
+"aircraft": 154,
+"landings": 182,
+"go_arounds": 11,
+"lowcov": 114,
+"at": 1793649803,
+"v": 3
+},
+"2026-07-22": {
+"tag": "v2026.07.22-planes-readsb-prod-0",
+"aircraft": 166,
+"landings": 210,
+"go_arounds": 5,
+"lowcov": 125,
+"at": 1793650865,
+"v": 3
+},
+"2026-07-21": {
+"tag": "v2026.07.21-planes-readsb-prod-0",
+"aircraft": 119,
+"landings": 125,
+"go_arounds": 1,
+"lowcov": 83,
+"at": 1793652339,
+"v": 3
+},
+"2026-07-20": {
+"tag": "v2026.07.20-planes-readsb-prod-0",
+"aircraft": 156,
+"landings": 168,
+"go_arounds": 2,
+"lowcov": 97,
+"at": 1793653059,
+"v": 3
+},
+"2026-07-19": {
+"tag": "v2026.07.19-planes-readsb-prod-0",
+"aircraft": 168,
+"landings": 192,
+"go_arounds": 6,
+"lowcov": 113,
+"at": 1793654032,
+"v": 3
+},
+"2026-07-18": {
+"tag": "v2026.07.18-planes-readsb-prod-0",
+"aircraft": 114,
+"landings": 149,
+"go_arounds": 1,
+"lowcov": 80,
+"at": 1793655001,
+"v": 3
+},
+"2026-07-17": {
+"tag": "v2026.07.17-planes-readsb-prod-0",
+"aircraft": 156,
+"landings": 173,
+"go_arounds": 3,
+"lowcov": 119,
+"at": 1793656598,
+"v": 3
+},
+"2026-07-16": {
+"tag": "v2026.07.16-planes-readsb-prod-0",
+"aircraft": 178,
+"landings": 191,
+"go_arounds": 3,
+"lowcov": 117,
+"at": 1793657529,
+"v": 3
+},
+"2026-07-15": {
+"tag": "v2026.07.15-planes-readsb-prod-0",
+"aircraft": 146,
+"landings": 157,
+"go_arounds": 9,
+"lowcov": 104,
+"at": 1793658872,
+"v": 3
+},
+"2026-07-14": {
+"tag": "v2026.07.14-planes-readsb-prod-0",
+"aircraft": 139,
+"landings": 153,
+"go_arounds": 5,
+"lowcov": 98,
+"at": 1793660094,
+"v": 3
+},
+"2026-07-13": {
+"tag": "v2026.07.13-planes-readsb-prod-0",
+"aircraft": 130,
+"landings": 145,
+"go_arounds": 3,
+"lowcov": 94,
+"at": 1793661214,
+"v": 3
+},
+"2026-07-12": {
+"tag": "v2026.07.12-planes-readsb-prod-0",
+"aircraft": 156,
+"landings": 179,
+"go_arounds": 7,
+"lowcov": 123,
+"at": 1793662051,
+"v": 3
+},
+"2026-07-11": {
+"tag": "v2026.07.11-planes-readsb-prod-0",
+"aircraft": 129,
+"landings": 145,
+"go_arounds": 6,
+"lowcov": 94,
+"at": 1793663170,
+"v": 3
+},
+"2026-07-10": {
+"tag": "v2026.07.10-planes-readsb-prod-0",
+"aircraft": 153,
+"landings": 195,
+"go_arounds": 13,
+"lowcov": 142,
+"at": 1793663924,
+"v": 3
+},
+"2026-07-09": {
+"tag": "v2026.07.09-planes-readsb-prod-0",
+"aircraft": 150,
+"landings": 176,
+"go_arounds": 10,
+"lowcov": 125,
+"at": 1793665583,
+"v": 3
+},
+"2026-07-08": {
+"tag": "v2026.07.08-planes-readsb-prod-0",
+"aircraft": 160,
+"landings": 172,
+"go_arounds": 7,
+"lowcov": 106,
+"at": 1793667298,
+"v": 3
+},
+"2026-07-07": {
+"tag": "v2026.07.07-planes-readsb-prod-0",
+"aircraft": 134,
+"landings": 145,
+"go_arounds": 9,
+"lowcov": 90,
+"at": 1793670626,
+"v": 3
+},
+"2026-07-06": {
+"tag": "v2026.07.06-planes-readsb-prod-0",
+"aircraft": 159,
+"landings": 180,
+"go_arounds": 0,
+"lowcov": 124,
+"at": 1793671745,
+"v": 3
+},
+"2026-07-05": {
+"tag": "v2026.07.05-planes-readsb-prod-0",
+"aircraft": 139,
+"landings": 132,
+"go_arounds": 0,
+"lowcov": 89,
+"at": 1793673005,
+"v": 3
+},
+"2026-07-04": {
+"tag": "v2026.07.04-planes-readsb-prod-0",
+"aircraft": 58,
+"landings": 55,
+"go_arounds": 0,
+"lowcov": 35,
+"at": 1793673964,
+"v": 3
+},
+"2026-07-03": {
+"tag": "v2026.07.03-planes-readsb-prod-0",
+"aircraft": 117,
+"landings": 133,
+"go_arounds": 1,
+"lowcov": 81,
+"at": 1793674520,
+"v": 3
+},
+"2026-07-02": {
+"tag": "v2026.07.02-planes-readsb-prod-0",
+"aircraft": 156,
+"landings": 166,
+"go_arounds": 7,
+"lowcov": 114,
+"at": 1793675570,
+"v": 3
+},
+"2026-07-01": {
+"tag": "v2026.07.01-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 163,
+"go_arounds": 14,
+"lowcov": 90,
+"at": 1793676957,
+"v": 3
+},
+"2026-06-30": {
+"tag": "v2026.06.30-planes-readsb-prod-0",
+"aircraft": 126,
+"landings": 140,
+"go_arounds": 6,
+"lowcov": 90,
+"at": 1793678145,
+"v": 3
+},
+"2026-06-29": {
+"tag": "v2026.06.29-planes-readsb-prod-0",
+"aircraft": 133,
+"landings": 134,
+"go_arounds": 4,
+"lowcov": 96,
+"at": 1793679174,
+"v": 3
+},
+"2026-06-28": {
+"tag": "v2026.06.28-planes-readsb-prod-0",
+"aircraft": 122,
+"landings": 125,
+"go_arounds": 2,
+"lowcov": 86,
+"at": 1793680643,
+"v": 3
+},
+"2026-06-27": {
+"tag": "v2026.06.27-planes-readsb-prod-0",
+"aircraft": 105,
+"landings": 120,
+"go_arounds": 0,
+"lowcov": 81,
+"at": 1793681833,
+"v": 3
+},
+"2026-06-26": {
+"tag": "v2026.06.26-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 145,
+"go_arounds": 1,
+"lowcov": 101,
+"at": 1793683048,
+"v": 3
+},
+"2026-06-25": {
+"tag": "v2026.06.25-planes-readsb-prod-0",
+"aircraft": 162,
+"landings": 181,
+"go_arounds": 8,
+"lowcov": 98,
+"at": 1793684254,
+"v": 3
+},
+"2026-06-24": {
+"tag": "v2026.06.24-planes-readsb-prod-0",
+"aircraft": 155,
+"landings": 178,
+"go_arounds": 5,
+"lowcov": 117,
+"at": 1793685428,
+"v": 3
+},
+"2026-06-23": {
+"tag": "v2026.06.23-planes-readsb-prod-0",
+"aircraft": 116,
+"landings": 118,
+"go_arounds": 6,
+"lowcov": 79,
+"at": 1793687061,
+"v": 3
+},
+"2026-06-22": {
+"tag": "v2026.06.22-planes-readsb-prod-0",
+"aircraft": 132,
+"landings": 150,
+"go_arounds": 4,
+"lowcov": 98,
+"at": 1793687804,
+"v": 3
+},
+"2026-06-21": {
+"tag": "v2026.06.21-planes-readsb-prod-0",
+"aircraft": 112,
+"landings": 124,
+"go_arounds": 0,
+"lowcov": 71,
+"at": 1793689595,
+"v": 3
+},
+"2026-06-20": {
+"tag": "v2026.06.20-planes-readsb-prod-0",
+"aircraft": 105,
+"landings": 110,
+"go_arounds": 0,
+"lowcov": 73,
+"at": 1793690558,
+"v": 3
+},
+"2026-06-19": {
+"tag": "v2026.06.19-planes-readsb-prod-0",
+"aircraft": 164,
+"landings": 179,
+"go_arounds": 7,
+"lowcov": 120,
+"at": 1793691265,
+"v": 3
+},
+"2026-06-18": {
+"tag": "v2026.06.18-planes-readsb-prod-0",
+"aircraft": 147,
+"landings": 172,
+"go_arounds": 3,
+"lowcov": 116,
+"at": 1793693772,
+"v": 3
+},
+"2026-06-17": {
+"tag": "v2026.06.17-planes-readsb-prod-0",
+"aircraft": 158,
+"landings": 179,
+"go_arounds": 12,
+"lowcov": 126,
+"at": 1793695259,
+"v": 3
+},
+"2026-06-16": {
+"tag": "v2026.06.16-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 179,
+"go_arounds": 8,
+"lowcov": 126,
+"at": 1793696272,
+"v": 3
+},
+"2026-06-15": {
+"tag": "v2026.06.15-planes-readsb-prod-0",
+"aircraft": 160,
+"landings": 172,
+"go_arounds": 3,
+"lowcov": 108,
+"at": 1793698053,
+"v": 3
+},
+"2026-06-14": {
+"tag": "v2026.06.14-planes-readsb-prod-0",
+"aircraft": 182,
+"landings": 195,
+"go_arounds": 0,
+"lowcov": 131,
+"at": 1793698900,
+"v": 3
+},
+"2026-06-13": {
+"tag": "v2026.06.13-planes-readsb-prod-0",
+"aircraft": 102,
+"landings": 100,
+"go_arounds": 1,
+"lowcov": 65,
+"at": 1793699729,
+"v": 3
+},
+"2026-06-12": {
+"tag": "v2026.06.12-planes-readsb-prod-0",
+"aircraft": 130,
+"landings": 129,
+"go_arounds": 4,
+"lowcov": 93,
+"at": 1793700128,
+"v": 3
+},
+"2026-06-10": {
+"tag": "v2026.06.10-planes-readsb-prod-0",
+"aircraft": 162,
+"landings": 161,
+"go_arounds": 20,
+"lowcov": 97,
+"at": 1793700822,
+"v": 3
+},
+"2026-06-09": {
+"tag": "v2026.06.09-planes-readsb-prod-0",
+"aircraft": 131,
+"landings": 139,
+"go_arounds": 7,
+"lowcov": 91,
+"at": 1793700863,
+"v": 3
+},
+"2026-06-08": {
+"tag": "v2026.06.08-planes-readsb-prod-0",
+"aircraft": 143,
+"landings": 162,
+"go_arounds": 1,
+"lowcov": 105,
+"at": 1793700903,
+"v": 3
+},
+"2026-06-07": {
+"tag": "v2026.06.07-planes-readsb-prod-0",
+"aircraft": 129,
+"landings": 129,
+"go_arounds": 4,
+"lowcov": 86,
+"at": 1793701994,
+"v": 3
+},
+"2026-06-06": {
+"tag": "v2026.06.06-planes-readsb-prod-0",
+"aircraft": 89,
+"landings": 84,
+"go_arounds": 0,
+"lowcov": 56,
+"at": 1793703191,
+"v": 3
+},
+"2026-06-05": {
+"tag": "v2026.06.05-planes-readsb-prod-0",
+"aircraft": 147,
+"landings": 164,
+"go_arounds": 7,
+"lowcov": 124,
+"at": 1793703947,
+"v": 3
+},
+"2026-06-04": {
+"tag": "v2026.06.04-planes-readsb-prod-0",
+"aircraft": 153,
+"landings": 156,
+"go_arounds": 7,
+"lowcov": 101,
+"at": 1793704943,
+"v": 3
+},
+"2026-06-03": {
+"tag": "v2026.06.03-planes-readsb-prod-0",
+"aircraft": 138,
+"landings": 142,
+"go_arounds": 3,
+"lowcov": 103,
+"at": 1793706061,
+"v": 3
+},
+"2026-06-02": {
+"tag": "v2026.06.02-planes-readsb-prod-0",
+"aircraft": 142,
+"landings": 151,
+"go_arounds": 20,
+"lowcov": 99,
+"at": 1793706983,
+"v": 3
+},
+"2026-06-01": {
+"tag": "v2026.06.01-planes-readsb-prod-0",
+"aircraft": 131,
+"landings": 147,
+"go_arounds": 4,
+"lowcov": 99,
+"at": 1793708169,
+"v": 3
+},
+"2026-05-31": {
+"tag": "v2026.05.31-planes-readsb-prod-0",
+"aircraft": 128,
+"landings": 129,
+"go_arounds": 6,
+"lowcov": 90,
+"at": 1793709127,
+"v": 3
+},
+"2026-05-30": {
+"tag": "v2026.05.30-planes-readsb-prod-0",
+"aircraft": 93,
+"landings": 102,
+"go_arounds": 3,
+"lowcov": 68,
+"at": 1793709868,
+"v": 3
+},
+"2026-05-29": {
+"tag": "v2026.05.29-planes-readsb-prod-0",
+"aircraft": 143,
+"landings": 158,
+"go_arounds": 6,
+"lowcov": 111,
+"at": 1793710497,
+"v": 3
+},
+"2026-05-28": {
+"tag": "v2026.05.28-planes-readsb-prod-0",
+"aircraft": 143,
+"landings": 146,
+"go_arounds": 7,
+"lowcov": 96,
+"at": 1793712798,
+"v": 3
+},
+"2026-05-27": {
+"tag": "v2026.05.27-planes-readsb-prod-0",
+"aircraft": 122,
+"landings": 121,
+"go_arounds": 3,
+"lowcov": 94,
+"at": 1793713769,
+"v": 3
+},
+"2026-05-24": {
+"tag": "v2026.05.24-planes-readsb-prod-0",
+"aircraft": 85,
+"landings": 101,
+"go_arounds": 3,
+"lowcov": 70,
+"at": 1793714626,
+"v": 3
+},
+"2026-05-23": {
+"tag": "v2026.05.23-planes-readsb-prod-0",
+"aircraft": 84,
+"landings": 88,
+"go_arounds": 8,
+"lowcov": 59,
+"at": 1793715187,
+"v": 3
+},
+"2026-05-22": {
+"tag": "v2026.05.22-planes-readsb-prod-0",
+"aircraft": 164,
+"landings": 154,
+"go_arounds": 9,
+"lowcov": 107,
+"at": 1793716220,
+"v": 3
+},
+"2026-05-21": {
+"tag": "v2026.05.21-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 151,
+"go_arounds": 2,
+"lowcov": 96,
+"at": 1793717325,
+"v": 3
+},
+"2026-05-20": {
+"tag": "v2026.05.20-planes-readsb-prod-0",
+"aircraft": 142,
+"landings": 131,
+"go_arounds": 5,
+"lowcov": 81,
+"at": 1793718136,
+"v": 3
+},
+"2026-05-19": {
+"tag": "v2026.05.19-planes-readsb-prod-0",
+"aircraft": 126,
+"landings": 118,
+"go_arounds": 3,
+"lowcov": 76,
+"at": 1793718895,
+"v": 3
+},
+"2026-05-18": {
+"tag": "v2026.05.18-planes-readsb-prod-0",
+"aircraft": 110,
+"landings": 117,
+"go_arounds": 4,
+"lowcov": 78,
+"at": 1793719437,
+"v": 3
+},
+"2026-05-17": {
+"tag": "v2026.05.17-planes-readsb-prod-0",
+"aircraft": 142,
+"landings": 149,
+"go_arounds": 2,
+"lowcov": 113,
+"at": 1793719942,
+"v": 3
+},
+"2026-05-16": {
+"tag": "v2026.05.16-planes-readsb-prod-0",
+"aircraft": 119,
+"landings": 131,
+"go_arounds": 4,
+"lowcov": 84,
+"at": 1793721759,
+"v": 3
+},
+"2026-05-15": {
+"tag": "v2026.05.15-planes-readsb-prod-0",
+"aircraft": 166,
+"landings": 170,
+"go_arounds": 11,
+"lowcov": 123,
+"at": 1793722658,
+"v": 3
+},
+"2026-05-14": {
+"tag": "v2026.05.14-planes-readsb-prod-0",
+"aircraft": 165,
+"landings": 172,
+"go_arounds": 7,
+"lowcov": 118,
+"at": 1793723874,
+"v": 3
+},
+"2026-05-10": {
+"tag": "v2026.05.10-planes-readsb-prod-0",
+"aircraft": 113,
+"landings": 103,
+"go_arounds": 2,
+"lowcov": 70,
+"at": 1793724861,
+"v": 3
+},
+"2026-05-09": {
+"tag": "v2026.05.09-planes-readsb-prod-0",
+"aircraft": 106,
+"landings": 110,
+"go_arounds": 8,
+"lowcov": 72,
+"at": 1793725720,
+"v": 3
+},
+"2026-05-08": {
+"tag": "v2026.05.08-planes-readsb-prod-0",
+"aircraft": 176,
+"landings": 183,
+"go_arounds": 8,
+"lowcov": 141,
+"at": 1793726654,
+"v": 3
+},
+"2026-05-04": {
+"tag": "v2026.05.04-planes-readsb-prod-0",
+"aircraft": 101,
+"landings": 113,
+"go_arounds": 3,
+"lowcov": 73,
+"at": 1793727963,
+"v": 3
+},
+"2026-05-03": {
+"tag": "v2026.05.03-planes-readsb-prod-0",
+"aircraft": 141,
+"landings": 150,
+"go_arounds": 3,
+"lowcov": 98,
+"at": 1793728945,
+"v": 3
+},
+"2026-05-02": {
+"tag": "v2026.05.02-planes-readsb-prod-0",
+"aircraft": 97,
+"landings": 97,
+"go_arounds": 2,
+"lowcov": 61,
+"at": 1793729899,
+"v": 3
+},
+"2026-05-01": {
+"tag": "v2026.05.01-planes-readsb-prod-0",
+"aircraft": 153,
+"landings": 168,
+"go_arounds": 4,
+"lowcov": 117,
+"at": 1793730603,
+"v": 3
+},
+"2026-04-30": {
+"tag": "v2026.04.30-planes-readsb-prod-0",
+"aircraft": 69,
+"landings": 83,
+"go_arounds": 2,
+"lowcov": 60,
+"at": 1793732672,
+"v": 3
+},
+"2026-04-29": {
+"tag": "v2026.04.29-planes-readsb-prod-0",
+"aircraft": 133,
+"landings": 151,
+"go_arounds": 6,
+"lowcov": 99,
+"at": 1793733113,
+"v": 3
+},
+"2026-04-28": {
+"tag": "v2026.04.28-planes-readsb-prod-0",
+"aircraft": 129,
+"landings": 130,
+"go_arounds": 5,
+"lowcov": 91,
+"at": 1793733694,
+"v": 3
+},
+"2026-04-27": {
+"tag": "v2026.04.27-planes-readsb-prod-0",
+"aircraft": 111,
+"landings": 116,
+"go_arounds": 6,
+"lowcov": 79,
+"at": 1793734465,
+"v": 3
+},
+"2026-04-26": {
+"tag": "v2026.04.26-planes-readsb-prod-0",
+"aircraft": 121,
+"landings": 121,
+"go_arounds": 3,
+"lowcov": 88,
+"at": 1793735193,
+"v": 3
+},
+"2026-04-25": {
+"tag": "v2026.04.25-planes-readsb-prod-0",
+"aircraft": 92,
+"landings": 92,
+"go_arounds": 3,
+"lowcov": 55,
+"at": 1793735870,
+"v": 3
+},
+"2026-04-24": {
+"tag": "v2026.04.24-planes-readsb-prod-0",
+"aircraft": 146,
+"landings": 138,
+"go_arounds": 5,
+"lowcov": 95,
+"at": 1793736240,
+"v": 3
+},
+"2026-04-23": {
+"tag": "v2026.04.23-planes-readsb-prod-0",
+"aircraft": 153,
+"landings": 156,
+"go_arounds": 7,
+"lowcov": 99,
+"at": 1793736877,
+"v": 3
+},
+"2026-04-22": {
+"tag": "v2026.04.22-planes-readsb-prod-0",
+"aircraft": 141,
+"landings": 147,
+"go_arounds": 4,
+"lowcov": 115,
+"at": 1793737458,
+"v": 3
+},
+"2026-04-21": {
+"tag": "v2026.04.21-planes-readsb-prod-0",
+"aircraft": 125,
+"landings": 133,
+"go_arounds": 3,
+"lowcov": 98,
+"at": 1793738383,
+"v": 3
+},
+"2026-04-20": {
+"tag": "v2026.04.20-planes-readsb-prod-0",
+"aircraft": 146,
+"landings": 162,
+"go_arounds": 6,
+"lowcov": 117,
+"at": 1793740104,
+"v": 3
+},
+"2026-04-19": {
+"tag": "v2026.04.19-planes-readsb-prod-0",
+"aircraft": 147,
+"landings": 156,
+"go_arounds": 7,
+"lowcov": 105,
+"at": 1793740815,
+"v": 3
+},
+"2026-04-18": {
+"tag": "v2026.04.18-planes-readsb-prod-0",
+"aircraft": 131,
+"landings": 146,
+"go_arounds": 6,
+"lowcov": 103,
+"at": 1793741385,
+"v": 3
+},
+"2026-04-17": {
+"tag": "v2026.04.17-planes-readsb-prod-0",
+"aircraft": 150,
+"landings": 162,
+"go_arounds": 10,
+"lowcov": 118,
+"at": 1793741894,
+"v": 3
+},
+"2026-04-16": {
+"tag": "v2026.04.16-planes-readsb-prod-0",
+"aircraft": 149,
+"landings": 157,
+"go_arounds": 14,
+"lowcov": 107,
+"at": 1793742402,
+"v": 3
+},
+"2026-04-15": {
+"tag": "v2026.04.15-planes-readsb-prod-0",
+"aircraft": 129,
+"landings": 131,
+"go_arounds": 8,
+"lowcov": 98,
+"at": 1793743044,
+"v": 3
+},
+"2026-04-14": {
+"tag": "v2026.04.14-planes-readsb-prod-0",
+"aircraft": 114,
+"landings": 131,
+"go_arounds": 3,
+"lowcov": 86,
+"at": 1793743552,
+"v": 3
+},
+"2026-04-13": {
+"tag": "v2026.04.13-planes-readsb-prod-0",
+"aircraft": 150,
+"landings": 177,
+"go_arounds": 2,
+"lowcov": 130,
+"at": 1793743987,
+"v": 3
+},
+"2026-04-12": {
+"tag": "v2026.04.12-planes-readsb-prod-0",
+"aircraft": 129,
+"landings": 117,
+"go_arounds": 0,
+"lowcov": 87,
+"at": 1793744625,
+"v": 3
+},
+"2026-04-11": {
+"tag": "v2026.04.11-planes-readsb-prod-0",
+"aircraft": 114,
+"landings": 128,
+"go_arounds": 2,
+"lowcov": 89,
+"at": 1793745065,
+"v": 3
+},
+"2026-04-10": {
+"tag": "v2026.04.10-planes-readsb-prod-0",
+"aircraft": 168,
+"landings": 153,
+"go_arounds": 12,
+"lowcov": 109,
+"at": 1793746689,
+"v": 3
+},
+"2026-04-09": {
+"tag": "v2026.04.09-planes-readsb-prod-0",
+"aircraft": 156,
+"landings": 170,
+"go_arounds": 7,
+"lowcov": 106,
+"at": 1793747430,
+"v": 3
+},
+"2026-04-08": {
+"tag": "v2026.04.08-planes-readsb-prod-0",
+"aircraft": 134,
+"landings": 149,
+"go_arounds": 8,
+"lowcov": 97,
+"at": 1793748098,
+"v": 3
+},
+"2026-04-07": {
+"tag": "v2026.04.07-planes-readsb-prod-0",
+"aircraft": 120,
+"landings": 132,
+"go_arounds": 2,
+"lowcov": 81,
+"at": 1793748696,
+"v": 3
+},
+"2026-04-06": {
+"tag": "v2026.04.06-planes-readsb-prod-0",
+"aircraft": 132,
+"landings": 154,
+"go_arounds": 0,
+"lowcov": 112,
+"at": 1793749211,
+"v": 3
+},
+"2026-04-05": {
+"tag": "v2026.04.05-planes-readsb-prod-0",
+"aircraft": 88,
+"landings": 82,
+"go_arounds": 1,
+"lowcov": 59,
+"at": 1793749855,
+"v": 3
+},
+"2026-04-04": {
+"tag": "v2026.04.04-planes-readsb-prod-0",
+"aircraft": 89,
+"landings": 96,
+"go_arounds": 0,
+"lowcov": 61,
+"at": 1793750233,
+"v": 3
+},
+"2026-04-03": {
+"tag": "v2026.04.03-planes-readsb-prod-0",
+"aircraft": 143,
+"landings": 147,
+"go_arounds": 5,
+"lowcov": 95,
+"at": 1793750825,
+"v": 3
+},
+"2026-04-02": {
+"tag": "v2026.04.02-planes-readsb-prod-0",
+"aircraft": 107,
+"landings": 95,
+"go_arounds": 7,
+"lowcov": 67,
+"at": 1793751703,
+"v": 3
+},
+"2026-04-01": {
+"tag": "v2026.04.01-planes-readsb-prod-0",
+"aircraft": 101,
+"landings": 96,
+"go_arounds": 1,
+"lowcov": 71,
+"at": 1793752234,
+"v": 3
+},
+"2026-03-31": {
+"tag": "v2026.03.31-planes-readsb-prod-0",
+"aircraft": 123,
+"landings": 153,
+"go_arounds": 1,
+"lowcov": 105,
+"at": 1793753852,
+"v": 3
+},
+"2026-10-14": {
+"tag": "v2026.10.14-planes-readsb-prod-0",
+"aircraft": 145,
+"landings": 168,
+"go_arounds": 18,
+"lowcov": 109,
+"at": 1793586056,
+"v": 3
+},
+"2026-03-30": {
+"tag": "v2026.03.30-planes-readsb-prod-0",
+"aircraft": 142,
+"landings": 169,
+"go_arounds": 0,
+"lowcov": 106,
+"at": 1793754562,
+"v": 3
+},
+"2026-03-29": {
+"tag": "v2026.03.29-planes-readsb-prod-0",
+"aircraft": 122,
+"landings": 132,
+"go_arounds": 0,
+"lowcov": 87,
+"at": 1793755036,
+"v": 3
+},
+"2026-03-28": {
+"tag": "v2026.03.28-planes-readsb-prod-0",
+"aircraft": 117,
+"landings": 118,
+"go_arounds": 2,
+"lowcov": 71,
+"at": 1793755633,
+"v": 3
+},
+"2026-03-27": {
+"tag": "v2026.03.27-planes-readsb-prod-0",
+"aircraft": 174,
+"landings": 211,
+"go_arounds": 5,
+"lowcov": 131,
+"at": 1793756151,
+"v": 3
+},
+"2026-03-26": {
+"tag": "v2026.03.26-planes-readsb-prod-0",
+"aircraft": 161,
+"landings": 181,
+"go_arounds": 9,
+"lowcov": 118,
+"at": 1793756951,
+"v": 3
+},
+"2026-03-25": {
+"tag": "v2026.03.25-planes-readsb-prod-0",
+"aircraft": 128,
+"landings": 131,
+"go_arounds": 10,
+"lowcov": 79,
+"at": 1793757525,
+"v": 3
+},
+"2026-03-24": {
+"tag": "v2026.03.24-planes-readsb-prod-0",
+"aircraft": 119,
+"landings": 99,
+"go_arounds": 6,
+"lowcov": 69,
+"at": 1793757956,
+"v": 3
+},
+"2026-03-23": {
+"tag": "v2026.03.23-planes-readsb-prod-0",
+"aircraft": 134,
+"landings": 132,
+"go_arounds": 9,
+"lowcov": 83,
+"at": 1793758334,
+"v": 3
+},
+"2026-03-22": {
+"tag": "v2026.03.22-planes-readsb-prod-0",
+"aircraft": 123,
+"landings": 137,
+"go_arounds": 3,
+"lowcov": 91,
+"at": 1793760085,
+"v": 3
+},
+"2026-03-21": {
+"tag": "v2026.03.21-planes-readsb-prod-0",
+"aircraft": 96,
+"landings": 115,
+"go_arounds": 1,
+"lowcov": 77,
+"at": 1793760661,
+"v": 3
+},
+"2026-03-20": {
+"tag": "v2026.03.20-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 180,
+"go_arounds": 9,
+"lowcov": 120,
+"at": 1793761174,
+"v": 3
+},
+"2026-03-19": {
+"tag": "v2026.03.19-planes-readsb-prod-0",
+"aircraft": 134,
+"landings": 163,
+"go_arounds": 12,
+"lowcov": 106,
+"at": 1793761894,
+"v": 3
+},
+"2026-03-18": {
+"tag": "v2026.03.18-planes-readsb-prod-0",
+"aircraft": 122,
+"landings": 140,
+"go_arounds": 10,
+"lowcov": 92,
+"at": 1793762471,
+"v": 3
+},
+"2026-03-17": {
+"tag": "v2026.03.17-planes-readsb-prod-0",
+"aircraft": 114,
+"landings": 146,
+"go_arounds": 7,
+"lowcov": 83,
+"at": 1793763036,
+"v": 3
+},
+"2026-03-16": {
+"tag": "v2026.03.16-planes-readsb-prod-0",
+"aircraft": 94,
+"landings": 86,
+"go_arounds": 6,
+"lowcov": 45,
+"at": 1793763604,
+"v": 3
+},
+"2026-03-15": {
+"tag": "v2026.03.15-planes-readsb-prod-0",
+"aircraft": 109,
+"landings": 117,
+"go_arounds": 3,
+"lowcov": 83,
+"at": 1793763954,
+"v": 3
+},
+"2026-03-14": {
+"tag": "v2026.03.14-planes-readsb-prod-0",
+"aircraft": 114,
+"landings": 135,
+"go_arounds": 4,
+"lowcov": 90,
+"at": 1793764518,
+"v": 3
+},
+"2026-03-13": {
+"tag": "v2026.03.13-planes-readsb-prod-0",
+"aircraft": 125,
+"landings": 150,
+"go_arounds": 5,
+"lowcov": 105,
+"at": 1793766823,
+"v": 3
+},
+"2026-03-12": {
+"tag": "v2026.03.12-planes-readsb-prod-0",
+"aircraft": 120,
+"landings": 141,
+"go_arounds": 9,
+"lowcov": 88,
+"at": 1793767260,
+"v": 3
+},
+"2026-03-11": {
+"tag": "v2026.03.11-planes-readsb-prod-0",
+"aircraft": 109,
+"landings": 132,
+"go_arounds": 8,
+"lowcov": 91,
+"at": 1793767704,
+"v": 3
+},
+"2026-03-10": {
+"tag": "v2026.03.10-planes-readsb-prod-0",
+"aircraft": 117,
+"landings": 139,
+"go_arounds": 4,
+"lowcov": 79,
+"at": 1793768083,
+"v": 3
+},
+"2026-03-09": {
+"tag": "v2026.03.09-planes-readsb-prod-0",
+"aircraft": 119,
+"landings": 142,
+"go_arounds": 0,
+"lowcov": 87,
+"at": 1793768672,
+"v": 3
+},
+"2026-03-08": {
+"tag": "v2026.03.08-planes-readsb-prod-0",
+"aircraft": 128,
+"landings": 131,
+"go_arounds": 6,
+"lowcov": 92,
+"at": 1793769740,
+"v": 3
+},
+"2026-03-07": {
+"tag": "v2026.03.07-planes-readsb-prod-0",
+"aircraft": 90,
+"landings": 92,
+"go_arounds": 0,
+"lowcov": 64,
+"at": 1793770172,
+"v": 3
+},
+"2026-03-06": {
+"tag": "v2026.03.06-planes-readsb-prod-0",
+"aircraft": 126,
+"landings": 122,
+"go_arounds": 4,
+"lowcov": 77,
+"at": 1793770449,
+"v": 3
+},
+"2026-03-05": {
+"tag": "v2026.03.05-planes-readsb-prod-0",
+"aircraft": 119,
+"landings": 137,
+"go_arounds": 7,
+"lowcov": 90,
+"at": 1793770712,
+"v": 3
+},
+"2026-03-04": {
+"tag": "v2026.03.04-planes-readsb-prod-0",
+"aircraft": 126,
+"landings": 144,
+"go_arounds": 4,
+"lowcov": 96,
+"at": 1793772305,
+"v": 3
+},
+"2026-03-03": {
+"tag": "v2026.03.03-planes-readsb-prod-0",
+"aircraft": 109,
+"landings": 105,
+"go_arounds": 9,
+"lowcov": 70,
+"at": 1793772816,
+"v": 3
+},
+"2026-03-02": {
+"tag": "v2026.03.02-planes-readsb-prod-0",
+"aircraft": 123,
+"landings": 112,
+"go_arounds": 4,
+"lowcov": 71,
+"at": 1793773203,
+"v": 3
+},
+"2026-03-01": {
+"tag": "v2026.03.01-planes-readsb-prod-0",
+"aircraft": 108,
+"landings": 105,
+"go_arounds": 3,
+"lowcov": 69,
+"at": 1793773634,
+"v": 3
+},
+"2026-02-28": {
+"tag": "v2026.02.28-planes-readsb-prod-0",
+"aircraft": 111,
+"landings": 117,
+"go_arounds": 5,
+"lowcov": 80,
+"at": 1793774170,
+"v": 3
+},
+"2026-02-27": {
+"tag": "v2026.02.27-planes-readsb-prod-0",
+"aircraft": 146,
+"landings": 141,
+"go_arounds": 5,
+"lowcov": 80,
+"at": 1793774622,
+"v": 3
+},
+"2026-02-26": {
+"tag": "v2026.02.26-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 153,
+"go_arounds": 5,
+"lowcov": 98,
+"at": 1793775260,
+"v": 3
+},
+"2026-02-25": {
+"tag": "v2026.02.25-planes-readsb-prod-0",
+"aircraft": 129,
+"landings": 145,
+"go_arounds": 3,
+"lowcov": 91,
+"at": 1793775904,
+"v": 3
+},
+"2026-02-24": {
+"tag": "v2026.02.24-planes-readsb-prod-0",
+"aircraft": 118,
+"landings": 149,
+"go_arounds": 9,
+"lowcov": 94,
+"at": 1793776415,
+"v": 3
+},
+"2026-02-23": {
+"tag": "v2026.02.23-planes-readsb-prod-0",
+"aircraft": 103,
+"landings": 112,
+"go_arounds": 6,
+"lowcov": 71,
+"at": 1793776981,
+"v": 3
+},
+"2026-02-22": {
+"tag": "v2026.02.22-planes-readsb-prod-0",
+"aircraft": 126,
+"landings": 135,
+"go_arounds": 2,
+"lowcov": 90,
+"at": 1793778655,
+"v": 3
+},
+"2026-02-21": {
+"tag": "v2026.02.21-planes-readsb-prod-0",
+"aircraft": 119,
+"landings": 110,
+"go_arounds": 6,
+"lowcov": 75,
+"at": 1793778721,
+"v": 3
+},
+"2026-02-20": {
+"tag": "v2026.02.20-planes-readsb-prod-0",
+"aircraft": 133,
+"landings": 135,
+"go_arounds": 0,
+"lowcov": 105,
+"at": 1793778824,
+"v": 3
+},
+"2026-02-19": {
+"tag": "v2026.02.19-planes-readsb-prod-0",
+"aircraft": 122,
+"landings": 139,
+"go_arounds": 5,
+"lowcov": 103,
+"at": 1793778923,
+"v": 3
+},
+"2026-02-18": {
+"tag": "v2026.02.18-planes-readsb-prod-0",
+"aircraft": 119,
+"landings": 117,
+"go_arounds": 11,
+"lowcov": 97,
+"at": 1793779005,
+"v": 3
+},
+"2026-02-17": {
+"tag": "v2026.02.17-planes-readsb-prod-0",
+"aircraft": 136,
+"landings": 160,
+"go_arounds": 4,
+"lowcov": 117,
+"at": 1793779102,
+"v": 3
+},
+"2026-02-16": {
+"tag": "v2026.02.16-planes-readsb-prod-0",
+"aircraft": 140,
+"landings": 125,
+"go_arounds": 4,
+"lowcov": 72,
+"at": 1793779199,
+"v": 3
+},
+"2026-02-15": {
+"tag": "v2026.02.15-planes-readsb-prod-0",
+"aircraft": 88,
+"landings": 74,
+"go_arounds": 0,
+"lowcov": 41,
+"at": 1793779248,
+"v": 3
+},
+"2026-02-14": {
+"tag": "v2026.02.14-planes-readsb-prod-0",
+"aircraft": 93,
+"landings": 97,
+"go_arounds": 8,
+"lowcov": 68,
+"at": 1793779336,
+"v": 3
+},
+"2026-02-13": {
+"tag": "v2026.02.13-planes-readsb-prod-0",
+"aircraft": 168,
+"landings": 175,
+"go_arounds": 6,
+"lowcov": 113,
+"at": 1793779448,
+"v": 3
+},
+"2026-02-12": {
+"tag": "v2026.02.12-planes-readsb-prod-0",
+"aircraft": 158,
+"landings": 159,
+"go_arounds": 9,
+"lowcov": 107,
+"at": 1793786067,
+"v": 3
+},
+"2026-02-11": {
+"tag": "v2026.02.11-planes-readsb-prod-0",
+"aircraft": 136,
+"landings": 116,
+"go_arounds": 10,
+"lowcov": 74,
+"at": 1793786571,
+"v": 3
+},
+"2026-02-10": {
+"tag": "v2026.02.10-planes-readsb-prod-0",
+"aircraft": 114,
+"landings": 128,
+"go_arounds": 8,
+"lowcov": 82,
+"at": 1793786958,
+"v": 3
+},
+"2026-02-09": {
+"tag": "v2026.02.09-planes-readsb-prod-0",
+"aircraft": 124,
+"landings": 134,
+"go_arounds": 9,
+"lowcov": 89,
+"at": 1793787396,
+"v": 3
+},
+"2026-02-08": {
+"tag": "v2026.02.08-planes-readsb-prod-0",
+"aircraft": 98,
+"landings": 99,
+"go_arounds": 0,
+"lowcov": 68,
+"at": 1793787832,
+"v": 3
+},
+"2026-02-07": {
+"tag": "v2026.02.07-planes-readsb-prod-0",
+"aircraft": 90,
+"landings": 97,
+"go_arounds": 3,
+"lowcov": 62,
+"at": 1793788206,
+"v": 3
+},
+"2026-02-06": {
+"tag": "v2026.02.06-planes-readsb-prod-0",
+"aircraft": 125,
+"landings": 132,
+"go_arounds": 4,
+"lowcov": 87,
+"at": 1793788578,
+"v": 3
+},
+"2026-02-05": {
+"tag": "v2026.02.05-planes-readsb-prod-0",
+"aircraft": 130,
+"landings": 138,
+"go_arounds": 10,
+"lowcov": 67,
+"at": 1793789015,
+"v": 3
+},
+"2026-02-04": {
+"tag": "v2026.02.04-planes-readsb-prod-0",
+"aircraft": 122,
+"landings": 132,
+"go_arounds": 4,
+"lowcov": 81,
+"at": 1793789389,
+"v": 3
+},
+"2026-02-03": {
+"tag": "v2026.02.03-planes-readsb-prod-0",
+"aircraft": 105,
+"landings": 118,
+"go_arounds": 17,
+"lowcov": 74,
+"at": 1793789833,
+"v": 3
+},
+"2026-02-02": {
+"tag": "v2026.02.02-planes-readsb-prod-0",
+"aircraft": 120,
+"landings": 124,
+"go_arounds": 6,
+"lowcov": 68,
+"at": 1793795414,
+"v": 3
+},
+"2026-02-01": {
+"tag": "v2026.02.01-planes-readsb-prod-0",
+"aircraft": 98,
+"landings": 100,
+"go_arounds": 3,
+"lowcov": 57,
+"at": 1793795842,
+"v": 3
+},
+"2026-01-31": {
+"tag": "v2026.01.31-planes-readsb-prod-0",
+"aircraft": 79,
+"landings": 75,
+"go_arounds": 0,
+"lowcov": 41,
+"at": 1793796199,
+"v": 3
+},
+"2026-01-30": {
+"tag": "v2026.01.30-planes-readsb-prod-0",
+"aircraft": 125,
+"landings": 141,
+"go_arounds": 6,
+"lowcov": 88,
+"at": 1793796426,
+"v": 3
+},
+"2026-01-29": {
+"tag": "v2026.01.29-planes-readsb-prod-0",
+"aircraft": 127,
+"landings": 137,
+"go_arounds": 2,
+"lowcov": 82,
+"at": 1793797028,
+"v": 3
+},
+"2026-01-28": {
+"tag": "v2026.01.28-planes-readsb-prod-0",
+"aircraft": 101,
+"landings": 100,
+"go_arounds": 2,
+"lowcov": 66,
+"at": 1793797461,
+"v": 3
+},
+"2026-01-27": {
+"tag": "v2026.01.27-planes-readsb-prod-0",
+"aircraft": 77,
+"landings": 71,
+"go_arounds": 4,
+"lowcov": 43,
+"at": 1793797900,
+"v": 3
+},
+"2026-01-26": {
+"tag": "v2026.01.26-planes-readsb-prod-0",
+"aircraft": 70,
+"landings": 89,
+"go_arounds": 2,
+"lowcov": 48,
+"at": 1793798128,
+"v": 3
+},
+"2026-01-25": {
+"tag": "v2026.01.25-planes-readsb-prod-0",
+"aircraft": 56,
+"landings": 55,
+"go_arounds": 2,
+"lowcov": 27,
+"at": 1793798417,
+"v": 3
+},
+"2026-01-24": {
+"tag": "v2026.01.24-planes-readsb-prod-0",
+"aircraft": 78,
+"landings": 82,
+"go_arounds": 1,
+"lowcov": 44,
+"at": 1793798509,
+"v": 3
+},
+"2026-01-23": {
+"tag": "v2026.01.23-planes-readsb-prod-0",
+"aircraft": 89,
+"landings": 99,
+"go_arounds": 2,
+"lowcov": 67,
+"at": 1793805984,
+"v": 3
+},
+"2026-01-22": {
+"tag": "v2026.01.22-planes-readsb-prod-0",
+"aircraft": 125,
+"landings": 136,
+"go_arounds": 4,
+"lowcov": 86,
+"at": 1793806366,
+"v": 3
+},
+"2026-01-21": {
+"tag": "v2026.01.21-planes-readsb-prod-0",
+"aircraft": 106,
+"landings": 110,
+"go_arounds": 8,
+"lowcov": 56,
+"at": 1793806872,
+"v": 3
+},
+"2026-01-20": {
+"tag": "v2026.01.20-planes-readsb-prod-0",
+"aircraft": 126,
+"landings": 136,
+"go_arounds": 2,
+"lowcov": 90,
+"at": 1793807236,
+"v": 3
+},
+"2026-01-19": {
+"tag": "v2026.01.19-planes-readsb-prod-0",
+"aircraft": 141,
+"landings": 134,
+"go_arounds": 3,
+"lowcov": 70,
+"at": 1793807672,
+"v": 3
+},
+"2026-01-18": {
+"tag": "v2026.01.18-planes-readsb-prod-0",
+"aircraft": 89,
+"landings": 87,
+"go_arounds": 4,
+"lowcov": 48,
+"at": 1793808040,
+"v": 3
+},
+"2026-01-17": {
+"tag": "v2026.01.17-planes-readsb-prod-0",
+"aircraft": 105,
+"landings": 110,
+"go_arounds": 3,
+"lowcov": 62,
+"at": 1793808410,
+"v": 3
+},
+"2026-01-16": {
+"tag": "v2026.01.16-planes-readsb-prod-0",
+"aircraft": 143,
+"landings": 140,
+"go_arounds": 3,
+"lowcov": 84,
+"at": 1793808786,
+"v": 3
+},
+"2026-01-15": {
+"tag": "v2026.01.15-planes-readsb-prod-0",
+"aircraft": 119,
+"landings": 121,
+"go_arounds": 5,
+"lowcov": 85,
+"at": 1793809435,
+"v": 3
+},
+"2026-01-14": {
+"tag": "v2026.01.14-planes-readsb-prod-0",
+"aircraft": 114,
+"landings": 117,
+"go_arounds": 4,
+"lowcov": 71,
+"at": 1793809953,
+"v": 3
+},
+"2026-01-13": {
+"tag": "v2026.01.13-planes-readsb-prod-0",
+"aircraft": 103,
+"landings": 109,
+"go_arounds": 4,
+"lowcov": 65,
+"at": 1793816891,
+"v": 3
+},
+"2026-01-12": {
+"tag": "v2026.01.12-planes-readsb-prod-0",
+"aircraft": 120,
+"landings": 135,
+"go_arounds": 4,
+"lowcov": 85,
+"at": 1793817247,
+"v": 3
+},
+"2026-01-11": {
+"tag": "v2026.01.11-planes-readsb-prod-0",
+"aircraft": 100,
+"landings": 96,
+"go_arounds": 0,
+"lowcov": 65,
+"at": 1793817676,
+"v": 3
+},
+"2026-01-10": {
+"tag": "v2026.01.10-planes-readsb-prod-0",
+"aircraft": 86,
+"landings": 85,
+"go_arounds": 3,
+"lowcov": 56,
+"at": 1793818031,
+"v": 3
+},
+"2026-01-09": {
+"tag": "v2026.01.09-planes-readsb-prod-0",
+"aircraft": 139,
+"landings": 136,
+"go_arounds": 3,
+"lowcov": 95,
+"at": 1793818455,
+"v": 3
+},
+"2026-01-08": {
+"tag": "v2026.01.08-planes-readsb-prod-0",
+"aircraft": 123,
+"landings": 141,
+"go_arounds": 8,
+"lowcov": 94,
+"at": 1793818951,
+"v": 3
+},
+"2026-01-07": {
+"tag": "v2026.01.07-planes-readsb-prod-0",
+"aircraft": 116,
+"landings": 142,
+"go_arounds": 3,
+"lowcov": 95,
+"at": 1793819444,
+"v": 3
+},
+"2026-01-06": {
+"tag": "v2026.01.06-planes-readsb-prod-0",
+"aircraft": 100,
+"landings": 91,
+"go_arounds": 3,
+"lowcov": 53,
+"at": 1793820001,
+"v": 3
+},
+"2026-01-05": {
+"tag": "v2026.01.05-planes-readsb-prod-0",
+"aircraft": 102,
+"landings": 94,
+"go_arounds": 5,
+"lowcov": 65,
+"at": 1793820358,
+"v": 3
+},
+"2026-01-04": {
+"tag": "v2026.01.04-planes-readsb-prod-0",
+"aircraft": 115,
+"landings": 96,
+"go_arounds": 5,
+"lowcov": 71,
+"at": 1793820718,
+"v": 3
+},
+"2026-01-03": {
+"tag": "v2026.01.03-planes-readsb-prod-0",
+"aircraft": 105,
+"landings": 107,
+"go_arounds": 1,
+"lowcov": 82,
+"at": 1793827603,
+"v": 3
+},
+"2026-01-02": {
+"tag": "v2026.01.02-planes-readsb-prod-0",
+"aircraft": 94,
+"landings": 95,
+"go_arounds": 6,
+"lowcov": 63,
+"at": 1793828136,
+"v": 3
+},
+"2026-01-01": {
+"tag": "v2026.01.01-planes-readsb-prod-0",
+"aircraft": 42,
+"landings": 47,
+"go_arounds": 0,
+"lowcov": 32,
+"at": 1793828491,
+"v": 3
+},
+"2025-12-30": {
+"tag": "v2025.12.30-planes-readsb-prod-0",
+"aircraft": 105,
+"landings": 114,
+"go_arounds": 4,
+"lowcov": 68,
+"at": 1793828717,
+"v": 3
+},
+"2025-12-29": {
+"tag": "v2025.12.29-planes-readsb-prod-0",
+"aircraft": 95,
+"landings": 100,
+"go_arounds": 0,
+"lowcov": 64,
+"at": 1793829071,
+"v": 3
+},
+"2025-12-28": {
+"tag": "v2025.12.28-planes-readsb-prod-0",
+"aircraft": 95,
+"landings": 91,
+"go_arounds": 0,
+"lowcov": 61,
+"at": 1793829492,
+"v": 3
+},
+"2025-12-27": {
+"tag": "v2025.12.27-planes-readsb-prod-0",
+"aircraft": 98,
+"landings": 101,
+"go_arounds": 0,
+"lowcov": 67,
+"at": 1793829785,
+"v": 3
+},
+"2025-12-26": {
+"tag": "v2025.12.26-planes-readsb-prod-0",
+"aircraft": 84,
+"landings": 84,
+"go_arounds": 1,
+"lowcov": 54,
+"at": 1793830204,
+"v": 3
+},
+"2025-12-24": {
+"tag": "v2025.12.24-planes-readsb-prod-0",
+"aircraft": 57,
+"landings": 69,
+"go_arounds": 1,
+"lowcov": 50,
+"at": 1793830491,
+"v": 3
+},
+"2025-12-23": {
+"tag": "v2025.12.23-planes-readsb-prod-0",
+"aircraft": 113,
+"landings": 111,
+"go_arounds": 2,
+"lowcov": 70,
+"at": 1793830812,
+"v": 3
+},
+"2025-12-22": {
+"tag": "v2025.12.22-planes-readsb-prod-0",
+"aircraft": 127,
+"landings": 131,
+"go_arounds": 2,
+"lowcov": 82,
+"at": 1793839401,
+"v": 3
+},
+"2025-12-21": {
+"tag": "v2025.12.21-planes-readsb-prod-0",
+"aircraft": 101,
+"landings": 105,
+"go_arounds": 1,
+"lowcov": 66,
+"at": 1793840271,
+"v": 3
+},
+"2025-12-20": {
+"tag": "v2025.12.20-planes-readsb-prod-0",
+"aircraft": 100,
+"landings": 94,
+"go_arounds": 0,
+"lowcov": 57,
+"at": 1793840920,
+"v": 3
+},
+"2025-12-19": {
+"tag": "v2025.12.19-planes-readsb-prod-0",
+"aircraft": 145,
+"landings": 168,
+"go_arounds": 4,
+"lowcov": 101,
+"at": 1793841474,
+"v": 3
+},
+"2025-12-18": {
+"tag": "v2025.12.18-planes-readsb-prod-0",
+"aircraft": 132,
+"landings": 127,
+"go_arounds": 6,
+"lowcov": 90,
+"at": 1793842192,
+"v": 3
+},
+"2025-12-17": {
+"tag": "v2025.12.17-planes-readsb-prod-0",
+"aircraft": 132,
+"landings": 144,
+"go_arounds": 6,
+"lowcov": 101,
+"at": 1793842933,
+"v": 3
+},
+"2025-12-16": {
+"tag": "v2025.12.16-planes-readsb-prod-0",
+"aircraft": 128,
+"landings": 134,
+"go_arounds": 5,
+"lowcov": 93,
+"at": 1793843621,
+"v": 3
+},
+"2025-12-15": {
+"tag": "v2025.12.15-planes-readsb-prod-0",
+"aircraft": 122,
+"landings": 125,
+"go_arounds": 8,
+"lowcov": 80,
+"at": 1793844537,
+"v": 3
+},
+"2025-12-14": {
+"tag": "v2025.12.14-planes-readsb-prod-0",
+"aircraft": 103,
+"landings": 92,
+"go_arounds": 5,
+"lowcov": 50,
+"at": 1793845220,
+"v": 3
+},
+"2025-12-13": {
+"tag": "v2025.12.13-planes-readsb-prod-0",
+"aircraft": 111,
+"landings": 110,
+"go_arounds": 3,
+"lowcov": 70,
+"at": 1793849309,
+"v": 3
+},
+"2025-12-12": {
+"tag": "v2025.12.12-planes-readsb-prod-0",
+"aircraft": 135,
+"landings": 134,
+"go_arounds": 1,
+"lowcov": 88,
+"at": 1793849754,
+"v": 3
+},
+"2025-12-11": {
+"tag": "v2025.12.11-planes-readsb-prod-0",
+"aircraft": 135,
+"landings": 143,
+"go_arounds": 2,
+"lowcov": 89,
+"at": 1793850267,
+"v": 3
+},
+"2025-12-10": {
+"tag": "v2025.12.10-planes-readsb-prod-0",
+"aircraft": 115,
+"landings": 126,
+"go_arounds": 3,
+"lowcov": 70,
+"at": 1793850649,
+"v": 3
+},
+"2025-12-09": {
+"tag": "v2025.12.09-planes-readsb-prod-0",
+"aircraft": 113,
+"landings": 130,
+"go_arounds": 3,
+"lowcov": 95,
+"at": 1793851099,
+"v": 3
+},
+"2025-12-08": {
+"tag": "v2025.12.08-planes-readsb-prod-0",
+"aircraft": 117,
+"landings": 117,
+"go_arounds": 4,
+"lowcov": 71,
+"at": 1793851547,
+"v": 3
+},
+"2025-12-07": {
+"tag": "v2025.12.07-planes-readsb-prod-0",
+"aircraft": 100,
+"landings": 109,
+"go_arounds": 3,
+"lowcov": 74,
+"at": 1793851924,
+"v": 3
+},
+"2025-12-06": {
+"tag": "v2025.12.06-planes-readsb-prod-0",
+"aircraft": 85,
+"landings": 105,
+"go_arounds": 4,
+"lowcov": 71,
+"at": 1793852357,
+"v": 3
+},
+"2025-12-05": {
+"tag": "v2025.12.05-planes-readsb-prod-0",
+"aircraft": 123,
+"landings": 148,
+"go_arounds": 2,
+"lowcov": 100,
+"at": 1793852793,
+"v": 3
+},
+"2025-12-04": {
+"tag": "v2025.12.04-planes-readsb-prod-0",
+"aircraft": 147,
+"landings": 161,
+"go_arounds": 9,
+"lowcov": 102,
+"at": 1793861439,
+"v": 3
+},
+"2025-12-03": {
+"tag": "v2025.12.03-planes-readsb-prod-0",
+"aircraft": 132,
+"landings": 142,
+"go_arounds": 4,
+"lowcov": 80,
+"at": 1793862368,
+"v": 3
+},
+"2025-12-02": {
+"tag": "v2025.12.02-planes-readsb-prod-0",
+"aircraft": 121,
+"landings": 125,
+"go_arounds": 4,
+"lowcov": 64,
+"at": 1793863040,
+"v": 3
+},
+"2025-12-01": {
+"tag": "v2025.12.01-planes-readsb-prod-0",
+"aircraft": 132,
+"landings": 127,
+"go_arounds": 2,
+"lowcov": 76,
+"at": 1793863734,
+"v": 3
+},
+"2025-11-30": {
+"tag": "v2025.11.30-planes-readsb-prod-0",
+"aircraft": 132,
+"landings": 141,
+"go_arounds": 7,
+"lowcov": 89,
+"at": 1793864465,
+"v": 3
+},
+"2025-11-29": {
+"tag": "v2025.11.29-planes-readsb-prod-0",
+"aircraft": 87,
+"landings": 92,
+"go_arounds": 1,
+"lowcov": 55,
+"at": 1793865216,
+"v": 3
+},
+"2025-11-28": {
+"tag": "v2025.11.28-planes-readsb-prod-0",
+"aircraft": 86,
+"landings": 92,
+"go_arounds": 3,
+"lowcov": 61,
+"at": 1793865742,
+"v": 3
+},
+"2025-11-27": {
+"tag": "v2025.11.27-planes-readsb-prod-0",
+"aircraft": 47,
+"landings": 53,
+"go_arounds": 1,
+"lowcov": 34,
+"at": 1793866712,
+"v": 3
+},
+"2025-11-26": {
+"tag": "v2025.11.26-planes-readsb-prod-0",
+"aircraft": 120,
+"landings": 124,
+"go_arounds": 5,
+"lowcov": 84,
+"at": 1793867072,
+"v": 3
+},
+"2025-11-25": {
+"tag": "v2025.11.25-planes-readsb-prod-0",
+"aircraft": 126,
+"landings": 157,
+"go_arounds": 8,
+"lowcov": 104,
+"at": 1793870841,
+"v": 3
+},
+"2025-11-24": {
+"tag": "v2025.11.24-planes-readsb-prod-0",
+"aircraft": 117,
+"landings": 118,
+"go_arounds": 4,
+"lowcov": 66,
+"at": 1793871731,
+"v": 3
+},
+"2025-11-23": {
+"tag": "v2025.11.23-planes-readsb-prod-0",
+"aircraft": 137,
+"landings": 146,
+"go_arounds": 1,
+"lowcov": 90,
+"at": 1793872118,
+"v": 3
+},
+"2025-11-22": {
+"tag": "v2025.11.22-planes-readsb-prod-0",
+"aircraft": 121,
+"landings": 133,
+"go_arounds": 0,
+"lowcov": 82,
+"at": 1793872651,
+"v": 3
+},
+"2025-11-21": {
+"tag": "v2025.11.21-planes-readsb-prod-0",
+"aircraft": 166,
+"landings": 178,
+"go_arounds": 10,
+"lowcov": 122,
+"at": 1793873310,
+"v": 3
+},
+"2025-11-20": {
+"tag": "v2025.11.20-planes-readsb-prod-0",
+"aircraft": 132,
+"landings": 170,
+"go_arounds": 5,
+"lowcov": 116,
+"at": 1793874214,
+"v": 3
+},
+"2026-10-15": {
+"tag": "v2026.10.15-planes-readsb-prod-0",
+"aircraft": 172,
+"landings": 196,
+"go_arounds": 6,
+"lowcov": 109,
+"at": 1793585186,
+"v": 3
+},
+"2025-11-19": {
+"tag": "v2025.11.19-planes-readsb-prod-0",
+"aircraft": 137,
+"landings": 140,
+"go_arounds": 4,
+"lowcov": 94,
+"at": 1793874966,
+"v": 3
+},
+"2025-11-18": {
+"tag": "v2025.11.18-planes-readsb-prod-0",
+"aircraft": 140,
+"landings": 158,
+"go_arounds": 8,
+"lowcov": 119,
+"at": 1793875496,
+"v": 3
+},
+"2025-11-17": {
+"tag": "v2025.11.17-planes-readsb-prod-0",
+"aircraft": 131,
+"landings": 136,
+"go_arounds": 7,
+"lowcov": 86,
+"at": 1793876125,
+"v": 3
+},
+"2025-11-16": {
+"tag": "v2025.11.16-planes-readsb-prod-0",
+"aircraft": 111,
+"landings": 122,
+"go_arounds": 3,
+"lowcov": 87,
+"at": 1793876505,
+"v": 3
+},
+"2025-11-15": {
+"tag": "v2025.11.15-planes-readsb-prod-0",
+"aircraft": 104,
+"landings": 106,
+"go_arounds": 10,
+"lowcov": 78,
+"at": 1793881926,
+"v": 3
+},
+"2025-11-14": {
+"tag": "v2025.11.14-planes-readsb-prod-0",
+"aircraft": 140,
+"landings": 163,
+"go_arounds": 5,
+"lowcov": 103,
+"at": 1793882711,
+"v": 3
+},
+"2025-11-13": {
+"tag": "v2025.11.13-planes-readsb-prod-0",
+"aircraft": 128,
+"landings": 135,
+"go_arounds": 6,
+"lowcov": 89,
+"at": 1793883375,
+"v": 3
+},
+"2025-11-12": {
+"tag": "v2025.11.12-planes-readsb-prod-0",
+"aircraft": 127,
+"landings": 131,
+"go_arounds": 4,
+"lowcov": 95,
+"at": 1793884028,
+"v": 3
+},
+"2025-11-11": {
+"tag": "v2025.11.11-planes-readsb-prod-0",
+"aircraft": 113,
+"landings": 134,
+"go_arounds": 2,
+"lowcov": 83,
+"at": 1793884699,
+"v": 3
+},
+"2025-11-10": {
+"tag": "v2025.11.10-planes-readsb-prod-0",
+"aircraft": 121,
+"landings": 122,
+"go_arounds": 5,
+"lowcov": 81,
+"at": 1793885222,
+"v": 3
+},
+"2025-11-09": {
+"tag": "v2025.11.09-planes-readsb-prod-0",
+"aircraft": 127,
+"landings": 135,
+"go_arounds": 2,
+"lowcov": 94,
+"at": 1793885814,
+"v": 3
+},
+"2025-11-08": {
+"tag": "v2025.11.08-planes-readsb-prod-0",
+"aircraft": 100,
+"landings": 115,
+"go_arounds": 5,
+"lowcov": 79,
+"at": 1793886394,
+"v": 3
+},
+"2025-11-07": {
+"tag": "v2025.11.07-planes-readsb-prod-0",
+"aircraft": 158,
+"landings": 168,
+"go_arounds": 4,
+"lowcov": 121,
+"at": 1793886980,
+"v": 3
+},
+"2025-11-06": {
+"tag": "v2025.11.06-planes-readsb-prod-0",
+"aircraft": 143,
+"landings": 146,
+"go_arounds": 8,
+"lowcov": 92,
+"at": 1793887764,
+"v": 3
+},
+"2025-11-05": {
+"tag": "v2025.11.05-planes-readsb-prod-0",
+"aircraft": 136,
+"landings": 151,
+"go_arounds": 4,
+"lowcov": 94,
+"at": 1793892448,
+"v": 3
+},
+"2025-11-04": {
+"tag": "v2025.11.04-planes-readsb-prod-0",
+"aircraft": 113,
+"landings": 104,
+"go_arounds": 6,
+"lowcov": 66,
+"at": 1793893132,
+"v": 3
+},
+"2025-11-03": {
+"tag": "v2025.11.03-planes-readsb-prod-0",
+"aircraft": 110,
+"landings": 113,
+"go_arounds": 5,
+"lowcov": 70,
+"at": 1793893653,
+"v": 3
+},
+"2025-11-02": {
+"tag": "v2025.11.02-planes-readsb-prod-0",
+"aircraft": 120,
+"landings": 110,
+"go_arounds": 1,
+"lowcov": 77,
+"at": 1793894087,
+"v": 3
+},
+"2025-11-01": {
+"tag": "v2025.11.01-planes-readsb-prod-0",
+"aircraft": 97,
+"landings": 103,
+"go_arounds": 5,
+"lowcov": 73,
+"at": 1793894592,
+"v": 3
+},
+"2025-10-31": {
+"tag": "v2025.10.31-planes-readsb-prod-0",
+"aircraft": 128,
+"landings": 147,
+"go_arounds": 4,
+"lowcov": 114,
+"at": 1793895116,
+"v": 3
+},
+"2025-10-30": {
+"tag": "v2025.10.30-planes-readsb-prod-0",
+"aircraft": 116,
+"landings": 119,
+"go_arounds": 2,
+"lowcov": 76,
+"at": 1793895690,
+"v": 3
+},
+"2025-10-29": {
+"tag": "v2025.10.29-planes-readsb-prod-0",
+"aircraft": 111,
+"landings": 104,
+"go_arounds": 1,
+"lowcov": 75,
+"at": 1793896195,
+"v": 3
+},
+"2025-10-28": {
+"tag": "v2025.10.28-planes-readsb-prod-0",
+"aircraft": 120,
+"landings": 110,
+"go_arounds": 4,
+"lowcov": 70,
+"at": 1793896698,
+"v": 3
+},
+"2025-10-27": {
+"tag": "v2025.10.27-planes-readsb-prod-0",
+"aircraft": 117,
+"landings": 121,
+"go_arounds": 9,
+"lowcov": 83,
+"at": 1793897135,
+"v": 3
+},
+"2025-10-26": {
+"tag": "v2025.10.26-planes-readsb-prod-0",
+"aircraft": 122,
+"landings": 106,
+"go_arounds": 1,
+"lowcov": 64,
+"at": 1793903420,
+"v": 3
+},
+"2025-10-25": {
+"tag": "v2025.10.25-planes-readsb-prod-0",
+"aircraft": 91,
+"landings": 100,
+"go_arounds": 2,
+"lowcov": 65,
+"at": 1793903971,
+"v": 3
+},
+"2025-10-24": {
+"tag": "v2025.10.24-planes-readsb-prod-0",
+"aircraft": 140,
+"landings": 139,
+"go_arounds": 2,
+"lowcov": 85,
+"at": 1793904470,
+"v": 3
+},
+"2025-10-23": {
+"tag": "v2025.10.23-planes-readsb-prod-0",
+"aircraft": 141,
+"landings": 149,
+"go_arounds": 11,
+"lowcov": 95,
+"at": 1793905114,
+"v": 3
+},
+"2025-10-22": {
+"tag": "v2025.10.22-planes-readsb-prod-0",
+"aircraft": 119,
+"landings": 127,
+"go_arounds": 3,
+"lowcov": 91,
+"at": 1793905886,
+"v": 3
+},
+"2025-10-21": {
+"tag": "v2025.10.21-planes-readsb-prod-0",
+"aircraft": 115,
+"landings": 113,
+"go_arounds": 7,
+"lowcov": 74,
+"at": 1793906656,
+"v": 3
+},
+"2026-10-16": {
+"tag": "v2026.10.16-planes-readsb-prod-0",
+"aircraft": 155,
+"landings": 202,
+"go_arounds": 6,
+"lowcov": 127,
+"at": 1793584262,
+"v": 3
+},
+"2025-10-20": {
+"tag": "v2025.10.20-planes-readsb-prod-0",
+"aircraft": 139,
+"landings": 137,
+"go_arounds": 4,
+"lowcov": 102,
+"at": 1793907221,
+"v": 3
+},
+"2025-10-19": {
+"tag": "v2025.10.19-planes-readsb-prod-0",
+"aircraft": 127,
+"landings": 118,
+"go_arounds": 0,
+"lowcov": 82,
+"at": 1793907911,
+"v": 3
+},
+"2025-10-18": {
+"tag": "v2025.10.18-planes-readsb-prod-0",
+"aircraft": 96,
+"landings": 104,
+"go_arounds": 2,
+"lowcov": 78,
+"at": 1793908538,
+"v": 3
+},
+"2026-10-17": {
+"tag": "v2026.10.17-planes-readsb-prod-0",
+"aircraft": 100,
+"landings": 116,
+"go_arounds": 5,
+"lowcov": 65,
+"at": 1793583715,
+"v": 3
+},
+"2025-10-17": {
+"tag": "v2025.10.17-planes-readsb-prod-0",
+"aircraft": 157,
+"landings": 166,
+"go_arounds": 4,
+"lowcov": 107,
+"at": 1793909112,
+"v": 3
+},
+"2025-10-16": {
+"tag": "v2025.10.16-planes-readsb-prod-0",
+"aircraft": 143,
+"landings": 150,
+"go_arounds": 3,
+"lowcov": 107,
+"at": 1793914082,
+"v": 3
+},
+"2026-10-21": {
+"tag": "v2026.10.21-planes-readsb-prod-0",
+"aircraft": 135,
+"landings": 166,
+"go_arounds": 11,
+"lowcov": 99,
+"at": 1793570740,
+"v": 3
+},
+"2026-10-20": {
+"tag": "v2026.10.20-planes-readsb-prod-0",
+"aircraft": 151,
+"landings": 167,
+"go_arounds": 13,
+"lowcov": 111,
+"at": 1793581224,
+"v": 3
+},
+"2026-10-19": {
+"tag": "v2026.10.19-planes-readsb-prod-0",
+"aircraft": 159,
+"landings": 181,
+"go_arounds": 3,
+"lowcov": 116,
+"at": 1793582236,
+"v": 3
+},
+"2026-10-18": {
+"tag": "v2026.10.18-planes-readsb-prod-0",
+"aircraft": 135,
+"landings": 143,
+"go_arounds": 0,
+"lowcov": 83,
+"at": 1793583109,
+"v": 3
+},
+"2026-10-24": {
+"tag": "v2026.10.24-planes-readsb-prod-0",
+"aircraft": 112,
+"landings": 129,
+"go_arounds": 6,
+"lowcov": 82,
+"at": 1793570384,
+"v": 3
+},
+"2026-10-23": {
+"tag": "v2026.10.23-planes-readsb-prod-0",
+"aircraft": 168,
+"landings": 186,
+"go_arounds": 4,
+"lowcov": 111,
+"at": 1793570504,
+"v": 3
+},
+"2026-10-22": {
+"tag": "v2026.10.22-planes-readsb-prod-0",
+"aircraft": 171,
+"landings": 183,
+"go_arounds": 13,
+"lowcov": 115,
+"at": 1793570638,
+"v": 3
+},
+"2026-10-27": {
+"tag": "v2026.10.27-planes-readsb-prod-0",
+"aircraft": 137,
+"landings": 170,
+"go_arounds": 6,
+"lowcov": 112,
+"at": 1793570135,
+"v": 3
+},
+"2026-10-26": {
+"tag": "v2026.10.26-planes-readsb-prod-0",
+"aircraft": 146,
+"landings": 165,
+"go_arounds": 5,
+"lowcov": 110,
+"at": 1793570235,
+"v": 3
+},
+"2026-10-25": {
+"tag": "v2026.10.25-planes-readsb-prod-0",
+"aircraft": 134,
+"landings": 137,
+"go_arounds": 4,
+"lowcov": 65,
+"at": 1793570277,
+"v": 3
+},
+"2026-10-31": {
+"tag": "v2026.10.31-planes-readsb-prod-0",
+"aircraft": 87,
+"landings": 94,
+"go_arounds": 1,
+"lowcov": 66,
+"at": 1793562792,
+"v": 3
+},
+"2026-10-30": {
+"tag": "v2026.10.30-planes-readsb-prod-0",
+"aircraft": 142,
+"landings": 170,
+"go_arounds": 4,
+"lowcov": 96,
+"at": 1793568428,
+"v": 3
+},
+"2026-10-29": {
+"tag": "v2026.10.29-planes-readsb-prod-0",
+"aircraft": 159,
+"landings": 182,
+"go_arounds": 9,
+"lowcov": 118,
+"at": 1793568977,
+"v": 3
+},
+"2026-10-28": {
+"tag": "v2026.10.28-planes-readsb-prod-0",
+"aircraft": 139,
+"landings": 163,
+"go_arounds": 13,
+"lowcov": 104,
+"at": 1793570051,
+"v": 3
+},
+"2026-06-11": {
+"missing": true,
+"at": 1793561340,
+"v": 3
+},
+"2026-05-07": {
+"missing": true,
+"at": 1793561342,
+"v": 3
+},
+"2026-05-06": {
+"missing": true,
+"at": 1793561344,
+"v": 3
+},
+"2026-05-05": {
+"missing": true,
+"at": 1793561346,
+"v": 3
+},
+"2025-12-31": {
+"missing": true,
+"at": 1793561348,
+"v": 3
+},
+"2025-12-25": {
+"missing": true,
+"at": 1793561350,
+"v": 3
+},
+"2025-10-15": {
+"tag": "v2025.10.15-planes-readsb-prod-0",
+"aircraft": 85,
+"landings": 102,
+"go_arounds": 3,
+"lowcov": 68,
+"at": 1793561366,
+"v": 3
+},
+"2025-10-14": {
+"tag": "v2025.10.14-planes-readsb-prod-0",
+"aircraft": 106,
+"landings": 95,
+"go_arounds": 2,
+"lowcov": 56,
+"at": 1793561822,
+"v": 3
+},
+"2025-10-13": {
+"tag": "v2025.10.13-planes-readsb-prod-0",
+"aircraft": 117,
+"landings": 111,
+"go_arounds": 1,
+"lowcov": 71,
+"at": 1793562275,
+"v": 3
+},
+"2026-11-01": {
+"tag": "v2026.11.01-planes-readsb-staging-0",
+"aircraft": 87,
+"landings": 91,
+"go_arounds": 1,
+"lowcov": 57,
+"at": 1793580370,
+"v": 3
+},
+"2026-11-02": {
+"tag": "v2026.11.02-planes-readsb-staging-0",
+"aircraft": 124,
+"landings": 125,
+"go_arounds": 6,
+"lowcov": 76,
+"at": 1793669284,
+"v": 3
+},
+"2026-11-03": {
+"tag": "v2026.11.03-planes-readsb-prod-0",
+"aircraft": 112,
+"landings": 126,
+"go_arounds": 3,
+"lowcov": 80,
+"at": 1793766164,
+"v": 3
+},
+"2026-11-04": {
+"tag": "v2026.11.04-planes-readsb-prod-0",
+"aircraft": 135,
+"landings": 152,
+"go_arounds": 6,
+"lowcov": 95,
+"at": 1793860483,
+"v": 3
+},
+"2026-11-05": {
+"tag": "v2026.11.05-planes-readsb-prod-0",
+"aircraft": 148,
+"landings": 183,
+"go_arounds": 5,
+"lowcov": 120,
+"at": 1793946853,
+"v": 3
+},
+"2026-11-06": {
+"tag": "v2026.11.06-planes-readsb-prod-0",
+"aircraft": 159,
+"landings": 159,
+"go_arounds": 3,
+"lowcov": 94,
+"at": 1794033028,
+"v": 3
+},
+"2026-11-07": {
+"tag": "v2026.11.07-planes-readsb-prod-0",
+"aircraft": 106,
+"landings": 114,
+"go_arounds": 4,
+"lowcov": 65,
+"at": 1794119475,
+"v": 3
+},
+"2026-11-08": {
+"tag": "v2026.11.08-planes-readsb-staging-0",
+"aircraft": 115,
+"landings": 127,
+"go_arounds": 5,
+"lowcov": 81,
+"at": 1794185176,
+"v": 3
+},
+"2026-11-09": {
+"tag": "v2026.11.09-planes-readsb-prod-0",
+"aircraft": 134,
+"landings": 147,
+"go_arounds": 1,
+"lowcov": 103,
+"at": 1794292394,
+"v": 3
+},
+"2026-11-10": {
+"failed": "ReadError",
+"at": 1794367787,
+"v": 3
+},
+"2026-11-11": {
+"tag": "v2026.11.11-planes-readsb-prod-0",
+"aircraft": 158,
+"landings": 176,
+"go_arounds": 9,
+"lowcov": 111,
+"at": 1794465271,
+"v": 3
+},
+"2026-11-12": {
+"tag": "v2026.11.12-planes-readsb-prod-0",
+"aircraft": 165,
+"landings": 205,
+"go_arounds": 14,
+"lowcov": 121,
+"at": 1794551675,
+"v": 3
+},
+"2026-11-13": {
+"tag": "v2026.11.13-planes-readsb-prod-0",
+"aircraft": 143,
+"landings": 156,
+"go_arounds": 9,
+"lowcov": 104,
+"at": 1794637919,
+"v": 3
+}
+}
